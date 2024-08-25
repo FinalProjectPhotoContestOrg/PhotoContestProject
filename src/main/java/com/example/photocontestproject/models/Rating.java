@@ -13,8 +13,8 @@ public class Rating {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "photo_id", nullable = false)
-    private Entry photo;
+    @JoinColumn(name = "entry_id", nullable = false)
+    private Entry entry;
 
     @ManyToOne
     @JoinColumn(name = "juror_id", nullable = false)
@@ -43,12 +43,12 @@ public class Rating {
         this.id = id;
     }
 
-    public Entry getPhoto() {
-        return photo;
+    public Entry getEntry() {
+        return entry;
     }
 
-    public void setPhoto(Entry photo) {
-        this.photo = photo;
+    public void setEntry(Entry entry) {
+        this.entry = entry;
     }
 
     public User getJuror() {

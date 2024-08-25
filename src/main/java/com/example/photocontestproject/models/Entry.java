@@ -3,6 +3,8 @@ package com.example.photocontestproject.models;
 import jakarta.persistence.*;
 
 import java.security.Timestamp;
+import java.util.Set;
+
 @Entity
 @Table(name = "entries")
 public class Entry {
@@ -31,7 +33,18 @@ public class Entry {
     @Column(name = "uploaded_at")
     private Timestamp uploadedAt;
 
+    @OneToMany(mappedBy = "entry", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Rating> ratings;
+
     public Entry() {
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
     }
 
     public int getId() {

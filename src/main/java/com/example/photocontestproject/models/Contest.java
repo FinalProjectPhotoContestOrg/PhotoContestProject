@@ -5,7 +5,6 @@ import com.example.photocontestproject.enums.ContestType;
 import jakarta.persistence.*;
 
 import java.security.Timestamp;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,32 +14,40 @@ public class Contest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name="title")
+
+    @Column(name = "title")
     private String title;
-    @Column(name="category")
+
+    @Column(name = "category")
     private String category;
+
     @Enumerated(EnumType.STRING)
-    @Column(name="type")
+    @Column(name = "type")
     private ContestType contestType;
+
     @Enumerated(EnumType.STRING)
-    @Column(name="phase")
+    @Column(name = "phase")
     private ContestPhase contestPhase;
+
     @Column(name = "phase_1_end")
     private Timestamp phase1End;
+
     @Column(name = "phase_2_end")
     private Timestamp phase2End;
-    @Column(name="cover_photo_url")
+
+    @Column(name = "cover_photo_url")
     private String coverPhotoUrl;
+
     @ManyToOne
-    @JoinColumn(name="organizer_id")
+    @JoinColumn(name = "organizer_id")
     private User organizer;
+
     @Column(name = "created_at")
     private Timestamp createdAt;
+
     @OneToMany(mappedBy = "contest")
     private Set<Entry> entries;
 
-    @OneToMany(mappedBy = "contest")
-    private Set<Rating> ratings;
 
     public Contest() {
     }
@@ -133,11 +140,4 @@ public class Contest {
         this.entries = entries;
     }
 
-    public Set<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings;
-    }
 }
