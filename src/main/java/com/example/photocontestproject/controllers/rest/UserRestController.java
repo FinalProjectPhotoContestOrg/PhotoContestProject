@@ -6,9 +6,7 @@ import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,9 +26,15 @@ public class UserRestController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+
     @GetMapping("/username/{username}")
-    public User getByUsername(@PathVariable String username){
+    public User getByUsername(@PathVariable String username) {
         return userService.getByUsername(username);
+    }
+
+    @GetMapping("/{id}")
+    public User getById(@PathVariable int id) {
+        return userService.getUserById(id);
     }
 
     @PostMapping

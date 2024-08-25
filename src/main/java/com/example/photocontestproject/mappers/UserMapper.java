@@ -24,6 +24,7 @@ public class UserMapper {
         user.setRanking(Ranking.Junkie);
         user.setPoints(0);
         user.setUsername(userInDto.getUsername());
+        user.setEmail(userInDto.getEmail());
         return user;
     }
 }
