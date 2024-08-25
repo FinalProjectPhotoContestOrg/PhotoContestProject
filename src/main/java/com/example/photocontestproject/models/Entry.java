@@ -1,5 +1,6 @@
 package com.example.photocontestproject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -28,6 +29,7 @@ public class Entry {
 
     @ManyToOne
     @JoinColumn(name = "contest_id", nullable = false)
+    @JsonBackReference
     private Contest contest;
 
     @Column(name = "uploaded_at")

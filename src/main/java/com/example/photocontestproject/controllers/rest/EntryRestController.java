@@ -44,4 +44,9 @@ public class EntryRestController {
         }
         return entryService.createEntry(entry);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteEntryById(@PathVariable int id) {
+        entryService.deleteEntryById(id);
+    }
 }
