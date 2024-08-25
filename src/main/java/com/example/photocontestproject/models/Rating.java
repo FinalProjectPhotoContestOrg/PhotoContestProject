@@ -2,7 +2,7 @@ package com.example.photocontestproject.models;
 
 import jakarta.persistence.*;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "ratings")
