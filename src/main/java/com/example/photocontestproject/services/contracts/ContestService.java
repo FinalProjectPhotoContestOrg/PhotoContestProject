@@ -1,8 +1,15 @@
 package com.example.photocontestproject.services.contracts;
 
-import org.springframework.stereotype.Service;
+import com.example.photocontestproject.models.Contest;
 
+import java.util.List;
 
 public interface ContestService {
-    //TODO
+    List<Contest> getAllContests();
+
+    Contest getContestById(int id);
+
+    Contest createContest(Contest contest);
+
+    void deleteContest(int id);
 }
