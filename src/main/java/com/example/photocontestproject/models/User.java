@@ -2,9 +2,11 @@ package com.example.photocontestproject.models;
 
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 
 @Entity
@@ -43,6 +45,9 @@ public class User {
 
     @Column(name = "created_at")
     private Timestamp createdAt;
+    @JsonIgnore
+    @OneToMany(mappedBy = "juror", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Rating> ratings;
 
     public User() {
     }
@@ -125,5 +130,13 @@ public class User {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.photocontestproject.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -35,6 +36,7 @@ public class Entry {
     @Column(name = "uploaded_at")
     private Timestamp uploadedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "entry", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
 

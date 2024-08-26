@@ -4,5 +4,5 @@ public enum Ranking {
     Junkie,
     Enthusiast,
     Master,
-    WiseAndBenevolentPhotoDictator
+    WiseAndBenevolentPhotoDictator;
 }
