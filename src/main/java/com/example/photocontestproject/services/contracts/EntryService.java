@@ -9,6 +9,8 @@ public interface EntryService {
 
     Entry getEntryById(int id);
 
+    Entry updateEntry(Entry entry);
+
     List<Entry> getAllEntries();
 
     void deleteEntryById(int id);

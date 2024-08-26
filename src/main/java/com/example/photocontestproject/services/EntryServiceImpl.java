@@ -28,6 +28,11 @@ public class EntryServiceImpl implements EntryService {
     }
 
     @Override
+    public Entry updateEntry(Entry entry) {
+        return entryRepository.save(entry);
+    }
+
+    @Override
     public List<Entry> getAllEntries() {
         return entryRepository.findAll();
     }

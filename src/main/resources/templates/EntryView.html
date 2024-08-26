@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .entry-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .entry-story {
+            margin-bottom: 20px;
+        }
+        .entry-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .entry-info {
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" th:object="${entry}">
+    <h1 class="entry-title" th:text="${entry.title}">Entry Title</h1>
+
+    <div class="entry-story" th:text="${entry.story}">
+        This is the story of the entry.
+    </div>
+
+    <div>
+        <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}" alt="Entry Image" class="entry-image"/>
+    </div>
+
+    <div class="entry-info">
+        <p><strong>Uploaded by:</strong> <span th:text="${entry.participant.username}">Participant Name</span></p>
+        <p><strong>Contest:</strong> <span th:text="${entry.contest.title}">Contest Name</span></p>
+        <p><strong>Uploaded at:</strong> <span th:text="${#dates.format(entry.uploadedAt, 'dd-MM-yyyy HH:mm')}">Upload Date</span></p>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/entries/upload}" method="post" enctype="multipart/form-data" th:object="${entry}">
+
+
+
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" th:field="*{title}" required>
+        </div>
+
+
+        <div>
+            <label for="story">Story:</label>
+            <textarea id="story" th:field="*{story}" required></textarea>
+        </div>
+
+
+        <div>
+            <label for="participantId">Participant ID:</label>
+            <input type="number" id="participantId" th:field="*{participantId}" required>
+        </div>
+
+
+        <div>
+            <label for="contestId">Contest ID:</label>
+            <input type="number" id="contestId" th:field="*{contestId}" required>
+        </div>
+
+
+
+
+    <input type="file" name="image" accept="image/*" required/>
+    <button type="submit">Upload</button>
+</form>
+</body>
+</html>
