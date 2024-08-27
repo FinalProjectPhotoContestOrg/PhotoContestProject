@@ -48,6 +48,21 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "juror", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
+    @ManyToMany
+    @JoinTable(
+            name = "contest_jurors",
+            joinColumns = @JoinColumn(name = "juror_id"),
+            inverseJoinColumns = @JoinColumn(name = "contest_id")
+    )
+    private Set<Contest> jurorContests;
+
+    @ManyToMany
+    @JoinTable(
+            name = "contest_participants",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "contest_id")
+    )
+    private Set<Contest> participantContests;
 
     public User() {
     }
@@ -138,5 +153,21 @@ public class User {
 
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    public Set<Contest> getJurorContests() {
+        return jurorContests;
+    }
+
+    public void setJurorContests(Set<Contest> jurorContests) {
+        this.jurorContests = jurorContests;
+    }
+
+    public Set<Contest> getParticipantContests() {
+        return participantContests;
+    }
+
+    public void setParticipantContests(Set<Contest> participantContests) {
+        this.participantContests = participantContests;
     }
 }

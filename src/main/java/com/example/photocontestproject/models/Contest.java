@@ -48,7 +48,20 @@ public class Contest {
     @OneToMany(mappedBy = "contest")
     private Set<Entry> entries;
 
-
+    @ManyToMany
+    @JoinTable(
+            name = "contest_jurors",
+            joinColumns =@JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "juror_id")
+    )
+    private Set<User> jurors;
+    @ManyToMany
+    @JoinTable(
+            name = "contest_participants",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> participants;
     public Contest() {
     }
 
@@ -140,4 +153,19 @@ public class Contest {
         this.entries = entries;
     }
 
+    public Set<User> getJurors() {
+        return jurors;
+    }
+
+    public void setJurors(Set<User> jurors) {
+        this.jurors = jurors;
+    }
+
+    public Set<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(Set<User> participants) {
+        this.participants = participants;
+    }
 }
