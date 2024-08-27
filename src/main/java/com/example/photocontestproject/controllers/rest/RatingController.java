@@ -68,6 +68,7 @@ public class RatingController {
         Rating rating = ratingMapper.fromDto(ratingDto, entryId, jurorId);
         return ratingService.createRating(rating);
         //TODO implement authorization
+        //TODO move to ContestRestController
     }
     @PutMapping("/{id}")
     public Rating updateRating(@PathVariable int id, @Valid @RequestBody RatingDto ratingDto){
