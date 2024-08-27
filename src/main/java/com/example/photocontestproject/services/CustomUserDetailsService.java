@@ -1,3 +1,4 @@
+/*
 package com.example.photocontestproject.services;
 
 import com.example.photocontestproject.models.User;
@@ -31,3 +32,4 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 }
+*/

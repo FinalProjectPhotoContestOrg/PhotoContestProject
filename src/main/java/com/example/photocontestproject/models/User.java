@@ -48,6 +48,7 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "juror", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "contest_jurors",
@@ -56,6 +57,7 @@ public class User {
     )
     private Set<Contest> jurorContests;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "contest_participants",
