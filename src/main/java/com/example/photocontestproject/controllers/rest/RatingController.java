@@ -1,16 +1,15 @@
 package com.example.photocontestproject.controllers.rest;
 
 import com.example.photocontestproject.dtos.in.RatingDto;
+import com.example.photocontestproject.exceptions.AuthorizationException;
+import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.mappers.RatingMapper;
 import com.example.photocontestproject.models.Rating;
+import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.models.options.RatingFilterOptions;
-import com.example.photocontestproject.services.RatingServiceImpl;
 import com.example.photocontestproject.services.contracts.RatingService;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -25,25 +24,33 @@ import java.util.Set;
 public class RatingController {
     private final RatingService ratingService;
     private final RatingMapper ratingMapper;
+    private final AuthenticationHelper authenticationHelper;
+
     @Autowired
-    public RatingController(RatingService ratingService, RatingMapper ratingMapper) {
+    public RatingController(RatingService ratingService, RatingMapper ratingMapper, AuthenticationHelper authenticationHelper) {
         this.ratingService = ratingService;
         this.ratingMapper = ratingMapper;
+        this.authenticationHelper = authenticationHelper;
     }
     @GetMapping
-    public Set<Rating> getAllRatings(
-            @RequestParam(required = false) Integer minScore,
-            @RequestParam(required = false) Integer maxScore,
-            @RequestParam(required = false) String comment,
-            @RequestParam(required = false) Boolean categoryMismatch,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String sortOrder,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size){
-        RatingFilterOptions ratingFilterOptions = new RatingFilterOptions(
-                minScore, maxScore, comment, categoryMismatch, sortBy,sortOrder,page, size);
-        Pageable pageable = PageRequest.of(page, size);
-        return ratingService.getAllRatings(ratingFilterOptions, pageable);
+    public Set<Rating> getAllRatings(@RequestHeader HttpHeaders headers,
+                                     @RequestParam(required = false) Integer minScore,
+                                     @RequestParam(required = false) Integer maxScore,
+                                     @RequestParam(required = false) String comment,
+                                     @RequestParam(required = false) Boolean categoryMismatch,
+                                     @RequestParam(required = false) String sortBy,
+                                     @RequestParam(required = false) String sortOrder,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size){
+        try {
+            authenticationHelper.tryGetUser(headers);
+            RatingFilterOptions ratingFilterOptions = new RatingFilterOptions(
+                    minScore, maxScore, comment, categoryMismatch, sortBy,sortOrder,page, size);
+            Pageable pageable = PageRequest.of(page, size);
+            return ratingService.getAllRatings(ratingFilterOptions, pageable);
+        } catch (AuthorizationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
     }
     @GetMapping("/{ratingId}")
     public Rating getRatingById(@PathVariable int ratingId){
