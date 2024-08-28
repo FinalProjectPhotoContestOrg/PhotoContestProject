@@ -8,10 +8,12 @@ import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.mappers.ContestMapper;
+import com.example.photocontestproject.mappers.RatingMapper;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.ContestService;
+import com.example.photocontestproject.services.contracts.RatingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -70,13 +72,6 @@ public class ContestController {
         return contestService.getContestById(id);
     }
 
-//    @PostMapping("/entry/{entryId}/{jurorId}")
-//    public Rating rateEntry(@PathVariable int entryId, @PathVariable int jurorId, @Valid @RequestBody RatingDto ratingDto) {
-//        Rating rating = ratingMapper.fromDto(ratingDto, entryId, jurorId);
-//        return ratingService.createRating(rating);
-//        //TODO implement authorization and fix url and method
-//
-//    }
 
     @DeleteMapping("/{id}")
     public void deleteContest(@PathVariable int id, @RequestHeader HttpHeaders headers) {
@@ -88,6 +83,15 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
-    //TODO ADD SWITCH PHASE ENDPOINT
-    //TODO DON'T FORGET ENTRY ENDPOINT FROM RatingController to move here
+
+    @PostMapping("/{id}/phase")
+    public Contest changePhase(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(headers);
+            return contestService.changePhase(id, user);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

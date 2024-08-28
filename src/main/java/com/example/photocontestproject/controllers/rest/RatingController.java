@@ -25,12 +25,14 @@ public class RatingController {
     private final RatingService ratingService;
     private final RatingMapper ratingMapper;
     private final AuthenticationHelper authenticationHelper;
+    private final UserRestController userRestController;
 
     @Autowired
-    public RatingController(RatingService ratingService, RatingMapper ratingMapper, AuthenticationHelper authenticationHelper) {
+    public RatingController(RatingService ratingService, RatingMapper ratingMapper, AuthenticationHelper authenticationHelper, UserRestController userRestController) {
         this.ratingService = ratingService;
         this.ratingMapper = ratingMapper;
         this.authenticationHelper = authenticationHelper;
+        this.userRestController = userRestController;
     }
     @GetMapping
     public Set<Rating> getAllRatings(@RequestHeader HttpHeaders headers,
@@ -53,15 +55,24 @@ public class RatingController {
         }
     }
     @GetMapping("/{ratingId}")
-    public Rating getRatingById(@PathVariable int ratingId){
-        return ratingService.getRatingById(ratingId);
-        //TODO implement authorization
+    public Rating getRatingById(@PathVariable int ratingId, @RequestHeader HttpHeaders headers){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return ratingService.getRatingById(ratingId, user);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+
 
     }
     @GetMapping("/entry/{entryId}")
-    public Set<Rating> getRatingsForEntry(@PathVariable int entryId){
-        return ratingService.getRatingsForEntry(entryId);
-        //TODO implement authorization
+    public Set<Rating> getRatingsForEntry(@PathVariable int entryId, @RequestHeader HttpHeaders headers){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return ratingService.getRatingsForEntry(entryId, user);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

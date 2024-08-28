@@ -50,7 +50,15 @@ public class ContestServiceImpl implements ContestService {
     public Contest getContestById(int id) {
         return contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
     }
-
+    @Override
+    public Contest changePhase(int id, User user) {
+        throwIfUserIsNotOrganizer(user);
+        Contest contest = getContestById(id);
+        ContestPhase currentPhase = contest.getContestPhase();
+        currentPhase = currentPhase.ordinal() == ContestPhase.values().length - 1 ? ContestPhase.values()[0] : ContestPhase.values()[currentPhase.ordinal() + 1];
+        contest.setContestPhase(currentPhase);
+        return contestRepository.save(contest);
+    }
     @Override
     public Contest createContest(Contest contest, User user) {
         throwIfUserIsNotOrganizer(user);

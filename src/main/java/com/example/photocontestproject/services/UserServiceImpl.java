@@ -30,6 +30,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public User getUserById(int id) {
         return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }

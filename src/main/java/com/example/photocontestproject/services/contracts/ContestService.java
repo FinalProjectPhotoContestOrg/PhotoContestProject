@@ -12,6 +12,8 @@ public interface ContestService {
 
     Contest getContestById(int id);
 
+    Contest changePhase(int id, User user);
+
     Contest createContest(Contest contest, User user);
 
     void deleteContest(int id, User user);
