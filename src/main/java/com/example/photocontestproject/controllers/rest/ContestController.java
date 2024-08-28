@@ -77,4 +77,6 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
+    //TODO ADD SWITCH PHASE ENDPOINT
+    //TODO DON'T FORGET ENTRY ENDPOINT FROM RatingController to move here
 }
