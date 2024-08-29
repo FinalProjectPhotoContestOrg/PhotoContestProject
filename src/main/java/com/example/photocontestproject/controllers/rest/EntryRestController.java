@@ -70,20 +70,6 @@ public class EntryRestController {
         //TODO move this operation to ContestController like create entry to contest
     }
 
-    @PostMapping("/{entryId}/ratings")
-    public Rating rateEntry(@PathVariable int entryId, @Valid @RequestBody RatingDto ratingDto, @RequestHeader HttpHeaders headers) {
-        try {
-            User user = authenticationHelper.tryGetUser(headers);
-            int jurorId = user.getId();
-            Rating rating = ratingMapper.fromDto(ratingDto, entryId, jurorId);
-            return ratingService.createRating(rating);
-        } catch (AuthorizationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
     @GetMapping("/{entryId}/ratings")
     public List<Rating> getEntryRatings(@PathVariable int entryId, @RequestHeader HttpHeaders headers) {
         try {

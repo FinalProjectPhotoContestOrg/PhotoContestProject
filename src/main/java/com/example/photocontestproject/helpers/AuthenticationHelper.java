@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -41,12 +44,22 @@ public class AuthenticationHelper {
             String username = values[0];
             String password = values[1];
             User user = userService.getByUsername(username);
-            if (!user.getPasswordHash().equals(password)) {
+            String hashedPassword = hashPassword(password);
+            if (!user.getPasswordHash().equals(hashedPassword)) {
                 throw new AuthorizationException(INVALID_AUTHENTICATION_ERROR);
             }
             return user;
         } catch (EntityNotFoundException e) {
             throw new AuthorizationException(INVALID_AUTHENTICATION_ERROR);
+        }
+    }
+    private String hashPassword(String password)  {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e){
+            throw new RuntimeException("Error hashing password", e);
         }
     }
     /*public User tryGetUser(Authentication authentication){

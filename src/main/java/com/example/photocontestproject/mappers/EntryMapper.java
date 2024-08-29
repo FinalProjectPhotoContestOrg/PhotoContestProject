@@ -17,11 +17,9 @@ import java.time.Instant;
 @Component
 public class EntryMapper {
     private final UserService userService;
-    private final ContestService contestService;
     @Autowired
-    public EntryMapper(UserService userService, ContestService contestService) {
+    public EntryMapper(UserService userService) {
         this.userService = userService;
-        this.contestService = contestService;
     }
 
     public Entry fromDto(EntryInDto entryInDto) {
@@ -32,8 +30,9 @@ public class EntryMapper {
             entry.setTitle(entryInDto.getTitle());
             entry.setUploadedAt(Timestamp.from(Instant.now()));
             entry.setStory(entryInDto.getStory());
-            Contest contest = contestService.getContestById(entryInDto.getContestId());
-            entry.setContest(contest);
+            entry.setPhotoUrl("http://example.com/photo6.jpg");
+            /*Contest contest = contestService.getContestById(entryInDto.getContestId());
+            entry.setContest(contest);*/
             return entry;
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException(e.getMessage());

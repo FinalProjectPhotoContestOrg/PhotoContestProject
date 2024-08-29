@@ -1,5 +1,4 @@
-/*
-package com.example.photocontestproject.services;
+/*package com.example.photocontestproject.services;
 
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
@@ -9,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,14 +23,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPasswordHash())
-                .roles(user.getRole().name())
-                .build();
+        List<User> user = userRepository.findListByUsername(username);
+        if (user.size() == 0) {
+            throw new UsernameNotFoundException("User details not found for the user : " + username);
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.get(0).getUsername(),
+                user.get(0).getPasswordHash(),
+                user.get(0).getAuthorities()
+        );
     }
-}
-*/
+}*/

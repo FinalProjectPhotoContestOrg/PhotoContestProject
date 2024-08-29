@@ -32,7 +32,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/entries").hasRole("Junkie")
                 )
                 .httpBasic(withDefaults())
                 .userDetailsService(customUserDetailsService)
