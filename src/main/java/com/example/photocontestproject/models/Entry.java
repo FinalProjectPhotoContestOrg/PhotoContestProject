@@ -24,6 +24,8 @@ public class Entry {
     @Column(name = "photo_url")
     private String photoUrl;
 
+    @Column(name = "entryTotalScore")
+    private int entryTotalScore;
     @ManyToOne
     @JoinColumn(name = "participant_id", nullable = false)
     private User participant;
@@ -105,5 +107,13 @@ public class Entry {
 
     public void setUploadedAt(Timestamp uploadedAt) {
         this.uploadedAt = uploadedAt;
+    }
+
+    public int getEntryTotalScore() {
+        return entryTotalScore;
+    }
+
+    public void setEntryTotalScore(int entryTotalScore) {
+        this.entryTotalScore = entryTotalScore;
     }
 }

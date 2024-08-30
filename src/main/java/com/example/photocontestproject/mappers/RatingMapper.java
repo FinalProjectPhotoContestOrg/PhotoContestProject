@@ -43,12 +43,18 @@ public class RatingMapper {
         User juror = userService.getUserById(jurorId);
         Timestamp timestamp = Timestamp.from(Instant.now());
         Rating rating = new Rating();
-        rating.setScore(ratingDto.getScore());
-        rating.setComment(ratingDto.getComment());
-        rating.setCategoryMismatch(ratingDto.isCategoryMismatch());
         rating.setEntry(entry);
         rating.setJuror(juror);
         rating.setReviewedAt(timestamp);
+        if (ratingDto.isCategoryMismatch()){
+            rating.setScore(0);
+            rating.setComment("Category is wrong");
+            rating.setCategoryMismatch(true);
+        } else {
+            rating.setScore(ratingDto.getScore());
+            rating.setComment(ratingDto.getComment());
+            rating.setCategoryMismatch(false);
+        }
         return rating;
     }
 }
