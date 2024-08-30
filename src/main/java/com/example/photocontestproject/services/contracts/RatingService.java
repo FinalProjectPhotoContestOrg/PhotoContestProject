@@ -16,9 +16,9 @@ public interface RatingService {
 
     Set<Rating> getAllRatings(RatingFilterOptions ratingFilterOptions, Pageable pageable);
 
-    Rating updateRating(Rating ratingDetails);
+    Rating updateRating(int oldScore, Rating ratingDetails, User user);
 
-    void deleteRating(int id);
+    void deleteRating(int id, User user);
 
     Set<Rating> getRatingsForEntry(int entryId, User user);
 }

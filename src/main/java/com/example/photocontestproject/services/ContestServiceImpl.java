@@ -5,8 +5,10 @@ import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
+import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.ContestRepository;
+import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.services.contracts.ContestService;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,12 @@ import java.util.List;
 public class ContestServiceImpl implements ContestService {
     public static final String ERROR_NO_PERMISSION_MESSAGE = "You do not have permission to perform this operation";
 
-    private ContestRepository contestRepository;
+    private final ContestRepository contestRepository;
+    private final EntryRepository entryRepository;
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository, EntryRepository entryRepository) {
         this.contestRepository = contestRepository;
+        this.entryRepository = entryRepository;
     }
 
     @Override
@@ -66,12 +70,24 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
+    public Entry createEntryForContest(Entry entry, User user, Contest contest) {
+        throwIfUserIsOrganizer(user);
+        entry.setContest(contest);
+        return entryRepository.save(entry);
+    }
+
+    @Override
     public void deleteContest(int id, User user) {
         throwIfUserIsNotOrganizer(user);
         contestRepository.deleteById(id);
     }
     private void throwIfUserIsNotOrganizer(User user) {
         if (user.getRole().name().equals("Junkie")) {
+            throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
+        }
+    }
+    private void throwIfUserIsOrganizer(User user) {
+        if (user.getRole().name().equals("Organizer")) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }

@@ -1,6 +1,7 @@
 package com.example.photocontestproject.mappers;
 
 import com.example.photocontestproject.dtos.in.RatingDto;
+import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
@@ -17,16 +18,28 @@ import java.time.Instant;
 @Component
 public class RatingMapper {
     private final RatingService ratingService;
-    private final EntryService entryService;
+
     private final UserService userService;
     @Autowired
-    public RatingMapper(RatingService ratingService, EntryService entryService, UserService userService) {
+    public RatingMapper(RatingService ratingService, UserService userService) {
         this.ratingService = ratingService;
-        this.entryService = entryService;
         this.userService = userService;
     }
-    public Rating fromDto(RatingDto ratingDto, int entryId, int jurorId){
-        Entry entry = entryService.getEntryById(entryId);
+    public Rating fromDto(Rating existingRating, RatingDto ratingDto){
+        existingRating.setScore(ratingDto.getScore());
+        existingRating.setComment(ratingDto.getComment());
+        existingRating.setCategoryMismatch(ratingDto.isCategoryMismatch());
+        return existingRating;
+    }
+    public RatingDto toDto(Rating rating){
+        RatingDto ratingDto = new RatingDto();
+        ratingDto.setScore(rating.getScore());
+        ratingDto.setComment(rating.getComment());
+        ratingDto.setCategoryMismatch(rating.isCategoryMismatch());
+        return ratingDto;
+    }
+
+    public Rating fromDto(RatingDto ratingDto, Entry entry, int jurorId) {
         User juror = userService.getUserById(jurorId);
         Timestamp timestamp = Timestamp.from(Instant.now());
         Rating rating = new Rating();
@@ -38,19 +51,4 @@ public class RatingMapper {
         rating.setReviewedAt(timestamp);
         return rating;
     }
-    public Rating fromDto(int id, RatingDto ratingDto){
-        Rating existRating = ratingService.getRatingById(id);
-        existRating.setScore(ratingDto.getScore());
-        existRating.setComment(ratingDto.getComment());
-        existRating.setCategoryMismatch(ratingDto.isCategoryMismatch());
-        return existRating;
-    }
-    public RatingDto toDto(Rating rating){
-        RatingDto ratingDto = new RatingDto();
-        ratingDto.setScore(rating.getScore());
-        ratingDto.setComment(rating.getComment());
-        ratingDto.setCategoryMismatch(rating.isCategoryMismatch());
-        return ratingDto;
-    }
-
 }

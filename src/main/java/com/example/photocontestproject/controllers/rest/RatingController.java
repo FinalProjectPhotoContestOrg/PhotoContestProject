@@ -23,16 +23,12 @@ import java.util.Set;
 @RequestMapping("/api/ratings")
 public class RatingController {
     private final RatingService ratingService;
-    private final RatingMapper ratingMapper;
     private final AuthenticationHelper authenticationHelper;
-    private final UserRestController userRestController;
 
     @Autowired
-    public RatingController(RatingService ratingService, RatingMapper ratingMapper, AuthenticationHelper authenticationHelper, UserRestController userRestController) {
+    public RatingController(RatingService ratingService, AuthenticationHelper authenticationHelper) {
         this.ratingService = ratingService;
-        this.ratingMapper = ratingMapper;
         this.authenticationHelper = authenticationHelper;
-        this.userRestController = userRestController;
     }
     @GetMapping
     public Set<Rating> getAllRatings(@RequestHeader HttpHeaders headers,
@@ -62,10 +58,8 @@ public class RatingController {
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
-
-
     }
-    @GetMapping("/entry/{entryId}")
+    @GetMapping("/entries/{entryId}")
     public Set<Rating> getRatingsForEntry(@PathVariable int entryId, @RequestHeader HttpHeaders headers){
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -74,14 +68,13 @@ public class RatingController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
-    @PutMapping("/{id}")
-    public Rating updateRating(@PathVariable int id, @Valid @RequestBody RatingDto ratingDto){
-        Rating updateRating = ratingMapper.fromDto(id, ratingDto);
-        return ratingService.updateRating(updateRating);
-    }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        ratingService.deleteRating(id);
+    public void delete(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            ratingService.deleteRating(id, user);
+        }catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 }

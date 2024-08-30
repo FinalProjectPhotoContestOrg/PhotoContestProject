@@ -1,5 +1,6 @@
 package com.example.photocontestproject.services;
 
+import com.example.photocontestproject.dtos.in.RatingDto;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
@@ -40,6 +41,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Rating createRating(Rating rating) {
         User user = userService.getUserById(rating.getEntry().getParticipant().getId());
+        throwIfNotOrganizer(user);
         int currentPoints = user.getPoints();
         currentPoints += rating.getScore();
         user.setPoints(currentPoints);
@@ -72,21 +74,35 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public Rating updateRating(Rating ratingDetails) {
+    public Rating updateRating(int oldScore, Rating ratingDetails, User user) {
+        throwIfNotOrganizer(user);
+        User participant = ratingDetails.getEntry().getParticipant();
+        int currentPoints = participant.getPoints();
+        currentPoints -= oldScore;
+        currentPoints += ratingDetails.getScore();
+        participant.setPoints(currentPoints);
+        updateRanking(participant);
+        userRepository.save(participant);
         return ratingRepository.save(ratingDetails);
+        //TODO add for juror too somehow using the contest...
     }
 
     @Override
     @Transactional
-    public void deleteRating(int id) {
+    public void deleteRating(int id, User user) {
+        throwIfNotOrganizer(user);
         Rating ratingToDelete = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rating"));
-        Entry entry = ratingToDelete.getEntry();
-        entry.getRatings().removeIf(rating -> rating.getId() == id);
-        User juror = ratingToDelete.getJuror();
-        juror.getRatings().removeIf(rating -> rating.getId() == id);
-        userRepository.save(juror);
-        entryRepository.save(entry);
+        User participant = ratingToDelete.getEntry().getParticipant();
+        int currentPoints = participant.getPoints();
+        currentPoints -= ratingToDelete.getScore();
+        participant.setPoints(currentPoints);
+        updateRanking(participant);
+        ratingToDelete.getEntry().getRatings().removeIf(rating -> rating.getId() == id);
+        ratingToDelete.getJuror().getRatings().removeIf(rating -> rating.getId() == id);
+        userRepository.save(participant);
+        entryRepository.save(ratingToDelete.getEntry());
         ratingRepository.delete(ratingToDelete);
+        //TODO add for juror too somehow using the contest...
     }
 
     @Override
@@ -100,4 +116,17 @@ public class RatingServiceImpl implements RatingService {
             throw new AuthorizationException("You do not have access.");
         }
     }
+    private void updateRanking(User participant) {
+        int currentPoints = participant.getPoints();
+        if (currentPoints >= 1001) {
+            participant.setRanking(Ranking.WiseAndBenevolentPhotoDictator);
+        } else if (currentPoints >= 151) {
+            participant.setRanking(Ranking.Master);
+        } else if (currentPoints >= 51) {
+            participant.setRanking(Ranking.Enthusiast);
+        } else {
+            participant.setRanking(Ranking.Junkie);
+        }
+    }
+
 }
