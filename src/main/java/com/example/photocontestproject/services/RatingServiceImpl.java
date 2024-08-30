@@ -55,6 +55,7 @@ public class RatingServiceImpl implements RatingService {
         }
         userService.updateUser(user);
         return ratingRepository.save(rating);
+        //TODO default 0 for mismatch
     }
 
     @Override
@@ -77,6 +78,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Rating updateRating(int oldScore, Rating ratingDetails, User user) {
         throwIfNotOrganizer(user);
+        ratingDetails.getEntry().getContest().getJurors(); //TODO check using this type of ckecking through all jurors to check if the user is cocrect for checking
         User participant = ratingDetails.getEntry().getParticipant();
         int currentPoints = participant.getPoints();
         currentPoints -= oldScore;
