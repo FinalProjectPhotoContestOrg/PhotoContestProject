@@ -23,7 +23,7 @@ public class ContestMapper {
         this.userService = userService;
     }
 
-    public Contest fromDto(ContestInDto contestInDto) {
+    public Contest fromDto(ContestInDto contestInDto, User user) {
         Contest contest = new Contest();
         contest.setTitle(contestInDto.getTitle());
         contest.setCategory(contestInDto.getCategory());
@@ -33,7 +33,6 @@ public class ContestMapper {
         contest.setPhase2End(contestInDto.getPhase2End());
         contest.setCreatedAt(Timestamp.from(Instant.now()));
         try {
-            User user = userService.getUserById(contestInDto.getOrganizerId());
             if (user.getRole().equals(Role.Junkie)) {
                 throw new AuthorizationException("You are not authorized to organize this contest");
             }

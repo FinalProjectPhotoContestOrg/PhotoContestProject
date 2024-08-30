@@ -1,8 +1,10 @@
 package com.example.photocontestproject.controllers.mvc;
 
 import com.example.photocontestproject.dtos.in.EntryInDto;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.mappers.EntryMapper;
 import com.example.photocontestproject.models.Entry;
+import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,8 +35,15 @@ public class PhotoController {
 
     @PostMapping("/upload")
     public String handlePhotoUpload(@RequestParam("image") MultipartFile file, @ModelAttribute("entry") EntryInDto entryInDto) {
-
-        Entry entry = entryMapper.fromDto(entryInDto);
+        User user = new User();
+        user.setId(11);
+        user.setUsername("test");
+        user.setEmail("example@example.com");
+        user.setPasswordHash("password123");
+        user.setRole(Role.Junkie);
+        user.setPoints(0);
+        //TODO DON'T FORGET TO CHANGE THIS!!!!!!!!!!!!!!!!!!!!!!!
+        Entry entry = entryMapper.fromDto(entryInDto, user);
         try {
 
             String base64Image = Base64.getEncoder().encodeToString(file.getBytes());

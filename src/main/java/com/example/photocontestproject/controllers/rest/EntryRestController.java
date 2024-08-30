@@ -2,6 +2,7 @@ package com.example.photocontestproject.controllers.rest;
 
 import com.example.photocontestproject.dtos.in.EntryInDto;
 import com.example.photocontestproject.dtos.in.RatingDto;
+import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
@@ -60,7 +61,10 @@ public class EntryRestController {
         User user;
         try {
             user = authenticationHelper.tryGetUser(headers);
-            entry = entryMapper.fromDto(entryInDto);
+            entry = entryMapper.fromDto(entryInDto, user);
+            if (entry.getContest().getContestPhase() != ContestPhase.PhaseI){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entries can only be created during PhaseI.");
+            }
             return entryService.createEntry(entry, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

@@ -5,7 +5,7 @@ public class EntryInDto {
 
     private String story;
 
-    private int participantId;
+    //private int participantId;
 
     private int contestId;
 
@@ -29,6 +29,7 @@ public class EntryInDto {
         this.story = story;
     }
 
+/*
     public int getParticipantId() {
         return participantId;
     }
@@ -36,6 +37,7 @@ public class EntryInDto {
     public void setParticipantId(int participantId) {
         this.participantId = participantId;
     }
+*/
 
     public int getContestId() {
         return contestId;

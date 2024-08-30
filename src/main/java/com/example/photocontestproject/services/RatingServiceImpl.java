@@ -5,6 +5,7 @@ import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.specifications.RatingSpecification;
+import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.models.options.RatingFilterOptions;
@@ -42,6 +43,10 @@ public class RatingServiceImpl implements RatingService {
         User juror = userService.getUserById(rating.getJuror().getId());
         User user = userService.getUserById(rating.getEntry().getParticipant().getId());
         throwIfNotOrganizer(juror);
+        Entry entry = rating.getEntry();
+        int entryScore = entry.getEntryTotalScore();
+        entryScore += rating.getScore();
+        entry.setEntryTotalScore(entryScore);
         int currentPoints = user.getPoints();
         currentPoints += rating.getScore();
         user.setPoints(currentPoints);
@@ -52,9 +57,10 @@ public class RatingServiceImpl implements RatingService {
         } else if (currentPoints > 51) {
             user.setRanking(Ranking.Enthusiast);
         }
+        entryRepository.save(entry);
         userService.updateUser(user);
         return ratingRepository.save(rating);
-        //TODO default 0 for mismatch
+        //TODO add for juror too somehow using the contest...
     }
 
     @Override
@@ -77,13 +83,19 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Rating updateRating(int oldScore, Rating ratingDetails, User user) {
         throwIfNotOrganizer(user);
-        ratingDetails.getEntry().getContest().getJurors(); //TODO check using this type of ckecking through all jurors to check if the user is cocrect for checking
+        //ratingDetails.getEntry().getContest().getJurors(); //TODO check using this type of ckecking through all jurors to check if the user is cocrect for checking
+        Entry entry = ratingDetails.getEntry();
+        int entryScore = entry.getEntryTotalScore();
+        entryScore -= oldScore;
+        entryScore += ratingDetails.getScore();
+        entry.setEntryTotalScore(entryScore);
         User participant = ratingDetails.getEntry().getParticipant();
         int currentPoints = participant.getPoints();
         currentPoints -= oldScore;
         currentPoints += ratingDetails.getScore();
         participant.setPoints(currentPoints);
         updateRanking(participant);
+        entryRepository.save(entry);
         userRepository.save(participant);
         return ratingRepository.save(ratingDetails);
         //TODO add for juror too somehow using the contest...
@@ -94,6 +106,10 @@ public class RatingServiceImpl implements RatingService {
     public void deleteRating(int id, User user) {
         throwIfNotOrganizer(user);
         Rating ratingToDelete = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rating"));
+        Entry entry = ratingToDelete.getEntry();
+        int entryScore = entry.getEntryTotalScore();
+        entryScore -= ratingToDelete.getScore();
+        entry.setEntryTotalScore(entryScore);
         User participant = ratingToDelete.getEntry().getParticipant();
         int currentPoints = participant.getPoints();
         currentPoints -= ratingToDelete.getScore();
@@ -102,7 +118,7 @@ public class RatingServiceImpl implements RatingService {
         ratingToDelete.getEntry().getRatings().removeIf(rating -> rating.getId() == id);
         ratingToDelete.getJuror().getRatings().removeIf(rating -> rating.getId() == id);
         userRepository.save(participant);
-        entryRepository.save(ratingToDelete.getEntry());
+        entryRepository.save(entry);
         ratingRepository.delete(ratingToDelete);
         //TODO add for juror too somehow using the contest...
     }

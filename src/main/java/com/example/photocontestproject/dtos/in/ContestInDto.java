@@ -10,7 +10,7 @@ public class ContestInDto {
     private String category;
     private Timestamp phase1End;
     private Timestamp phase2End;
-    private int organizerId;
+    //private int organizerId;
 
 
     public ContestInDto() {
@@ -48,11 +48,11 @@ public class ContestInDto {
         this.phase2End = phase2End;
     }
 
-    public int getOrganizerId() {
+    /*public int getOrganizerId() {
         return organizerId;
     }
 
     public void setOrganizerId(int organizerId) {
         this.organizerId = organizerId;
-    }
+    }*/
 }

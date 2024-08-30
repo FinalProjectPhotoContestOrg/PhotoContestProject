@@ -58,7 +58,7 @@ public class ContestController {
         User user;
         try {
             user = authenticationHelper.tryGetUser(headers);
-            contest = contestMapper.fromDto(contestInDto);
+            contest = contestMapper.fromDto(contestInDto, user);
             return contestService.createContest(contest, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
