@@ -16,7 +16,7 @@ public interface ContestService {
     Contest changePhase(int id, User user);
 
     Contest createContest(Contest contest, User user);
-    Entry createEntryForContest(Entry entry, User user, Contest contest);
+    //Entry createEntryForContest(Entry entry, User user/*, Contest contest*/);
 
     void deleteContest(int id, User user);
 }

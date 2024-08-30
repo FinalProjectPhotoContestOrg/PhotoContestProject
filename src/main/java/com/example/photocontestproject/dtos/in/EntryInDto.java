@@ -7,7 +7,7 @@ public class EntryInDto {
 
     private int participantId;
 
-    //private int contestId;
+    private int contestId;
 
     public EntryInDto() {
     }
@@ -37,7 +37,6 @@ public class EntryInDto {
         this.participantId = participantId;
     }
 
-/*
     public int getContestId() {
         return contestId;
     }
@@ -45,5 +44,4 @@ public class EntryInDto {
     public void setContestId(int contestId) {
         this.contestId = contestId;
     }
-*/
 }

@@ -27,17 +27,15 @@ public class EntryRestController {
     private final EntryService entryService;
     private final EntryMapper entryMapper;
     private final AuthenticationHelper authenticationHelper;
-    private final RatingMapper ratingMapper;
     private final RatingService ratingService;
 
 
     @Autowired
     public EntryRestController(EntryService entryService, EntryMapper entryMapper, AuthenticationHelper authenticationHelper,
-                               RatingMapper ratingMapper, RatingService ratingService) {
+                               RatingService ratingService) {
         this.entryService = entryService;
         this.entryMapper = entryMapper;
         this.authenticationHelper = authenticationHelper;
-        this.ratingMapper = ratingMapper;
         this.ratingService = ratingService;
     }
 
@@ -67,7 +65,6 @@ public class EntryRestController {
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-        //TODO move this operation to ContestController like create entry to contest
     }
 
     @GetMapping("/{entryId}/ratings")

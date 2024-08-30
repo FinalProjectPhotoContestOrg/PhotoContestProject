@@ -69,12 +69,12 @@ public class ContestServiceImpl implements ContestService {
         return contestRepository.save(contest);
     }
 
-    @Override
-    public Entry createEntryForContest(Entry entry, User user, Contest contest) {
+    /*@Override
+    public Entry createEntryForContest(Entry entry, User user*//*, Contest contest*//*) {
         throwIfUserIsOrganizer(user);
-        entry.setContest(contest);
+        //entry.setContest(contest);
         return entryRepository.save(entry);
-    }
+    }*/
 
     @Override
     public void deleteContest(int id, User user) {
@@ -86,9 +86,5 @@ public class ContestServiceImpl implements ContestService {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }
-    private void throwIfUserIsOrganizer(User user) {
-        if (user.getRole().name().equals("Organizer")) {
-            throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
-        }
-    }
+
 }

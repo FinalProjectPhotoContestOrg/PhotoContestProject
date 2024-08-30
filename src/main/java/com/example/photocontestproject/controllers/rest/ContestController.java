@@ -115,21 +115,6 @@ public class ContestController {
         }
         return contest.getEntries();
     }
-    @PostMapping("/{contestId}/entries")
-    public Entry createEntryForContest(@PathVariable int contestId, @RequestBody EntryInDto entryInDto,
-                                       @RequestHeader HttpHeaders headers) {
-        Entry entry;
-        User user;
-        Contest contest;
-        try {
-            user = authenticationHelper.tryGetUser(headers);
-            entry = entryMapper.fromDto(entryInDto);
-            contest = contestService.getContestById(contestId);
-            return contestService.createEntryForContest(entry, user, contest);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
     @PostMapping("/{contestId}/entries/{entryId}/ratings")
     public Rating rateEntry(@PathVariable int contestId, @PathVariable int entryId,
                             @Valid @RequestBody RatingDto ratingDto, @RequestHeader HttpHeaders headers) {

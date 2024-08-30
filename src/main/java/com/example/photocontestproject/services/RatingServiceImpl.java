@@ -40,8 +40,9 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating createRating(Rating rating) {
+        User juror = userService.getUserById(rating.getJuror().getId());
         User user = userService.getUserById(rating.getEntry().getParticipant().getId());
-        throwIfNotOrganizer(user);
+        throwIfNotOrganizer(juror);
         int currentPoints = user.getPoints();
         currentPoints += rating.getScore();
         user.setPoints(currentPoints);
