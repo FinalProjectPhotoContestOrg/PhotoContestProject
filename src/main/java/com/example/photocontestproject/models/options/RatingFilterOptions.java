@@ -22,6 +22,17 @@ public class RatingFilterOptions {
         this.size = Optional.ofNullable(size);
     }
 
+    public RatingFilterOptions() {
+        this.minScore = Optional.empty();
+        this.maxScore = Optional.empty();
+        this.comment = Optional.empty();
+        this.categoryMismatch = Optional.empty();
+        this.sortBy = Optional.empty();
+        this.sortOrder = Optional.empty();
+        this.page = Optional.empty();
+        this.size = Optional.empty();
+    }
+
     public Optional<Integer> getMinScore() {
         return minScore;
     }

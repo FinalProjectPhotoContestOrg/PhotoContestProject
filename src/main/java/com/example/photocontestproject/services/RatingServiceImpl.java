@@ -1,12 +1,10 @@
 package com.example.photocontestproject.services;
 
-import com.example.photocontestproject.dtos.in.RatingDto;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.specifications.RatingSpecification;
-import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.models.options.RatingFilterOptions;
@@ -31,7 +29,8 @@ public class RatingServiceImpl implements RatingService {
     private final UserService userService;
 
     @Autowired
-    public RatingServiceImpl(RatingRepository ratingRepository, EntryRepository entryRepository, UserRepository userRepository, UserService userService) {
+    public RatingServiceImpl(RatingRepository ratingRepository, EntryRepository entryRepository,
+                             UserRepository userRepository, UserService userService) {
         this.ratingRepository = ratingRepository;
         this.entryRepository = entryRepository;
         this.userRepository = userRepository;
