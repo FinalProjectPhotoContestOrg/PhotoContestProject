@@ -4,6 +4,7 @@ import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<User> getAllUsers(String username, String firstName, String lastName) {
+        return userRepository.findAll((root, query, cb)->{
+            Predicate predicate = cb.conjunction();
+            if (username != null && !username.isEmpty()){
+                predicate = cb.and(predicate, cb.like(root.get("title"), "%" + username + "%"));
+            }
+            if (firstName != null && !firstName.isEmpty()){
+                predicate = cb.and(predicate, cb.like(root.get("title"), "%" + firstName + "%"));
+            }
+            if (lastName != null && !lastName.isEmpty()){
+                predicate = cb.and(predicate, cb.like(root.get("title"), "%" + lastName + "%"));
+            }
+            return predicate;
+        });
     }
 
     @Override

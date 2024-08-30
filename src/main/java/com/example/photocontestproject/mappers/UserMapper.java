@@ -5,6 +5,7 @@ import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.models.User;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -16,8 +17,10 @@ import java.util.Base64;
 
 @Component
 public class UserMapper {
+    //private final PasswordEncoder passwordEncoder;
 
-    public UserMapper() {
+    public UserMapper(/*PasswordEncoder passwordEncoder*/) {
+        //this.passwordEncoder = passwordEncoder;
     }
 
     public User fromDto(UserInDto userInDto) {
@@ -26,6 +29,8 @@ public class UserMapper {
         user.setLastName(userInDto.getLastName());
         String hashedPassword = hashPassword(userInDto.getPassword());
         user.setPasswordHash(hashedPassword);
+        /*String hashedPassword = passwordEncoder.encode(userInDto.getPassword());
+        user.setPasswordHash(hashedPassword);*/
         user.setCreatedAt(Timestamp.from(Instant.now()));
         user.setRole(Role.Junkie);
         user.setRanking(Ranking.Junkie);

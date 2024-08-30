@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpHeaders;
 import java.util.List;
 
 @RestController
@@ -23,8 +24,11 @@ public class UserRestController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<User> getAllUsers(@RequestParam(required = false) String username,
+                                  @RequestParam(required = false) String firstName,
+                                  @RequestParam(required = false) String lastName,
+                                  @RequestHeader HttpHeaders headers) {
+        return userService.getAllUsers(username, firstName, lastName);
     }
 
     @GetMapping("/username/{username}")

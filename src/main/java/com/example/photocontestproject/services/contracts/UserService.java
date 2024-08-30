@@ -5,7 +5,7 @@ import com.example.photocontestproject.models.User;
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers();
+    List<User> getAllUsers(String username, String firstname, String lastName);
 
     User getByUsername(String username);
 
