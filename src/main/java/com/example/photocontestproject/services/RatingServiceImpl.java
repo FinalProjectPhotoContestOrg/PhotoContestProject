@@ -5,6 +5,7 @@ import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.specifications.RatingSpecification;
+import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
@@ -42,7 +43,7 @@ public class RatingServiceImpl implements RatingService {
     public Rating createRating(Rating rating) {
         User juror = userService.getUserById(rating.getJuror().getId());
         User user = userService.getUserById(rating.getEntry().getParticipant().getId());
-        throwIfNotOrganizer(juror);
+        throwIfNotOrganizerOrJuror(juror, rating.getEntry().getContest());
         Entry entry = rating.getEntry();
         int entryScore = entry.getEntryTotalScore();
         entryScore += rating.getScore();
@@ -65,7 +66,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating getRatingById(int id, User user) {
-        throwIfNotOrganizer(user);
+        //throwIfNotOrganizer(user);
         return ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rating"));
     }
 
@@ -82,8 +83,8 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating updateRating(int oldScore, Rating ratingDetails, User user) {
-        throwIfNotOrganizer(user);
-        //ratingDetails.getEntry().getContest().getJurors(); //TODO check using this type of ckecking through all jurors to check if the user is cocrect for checking
+        throwIfNotOrganizerOrJuror(user, ratingDetails.getEntry().getContest());
+        //TODO check using this type of ckecking through all jurors to check if the user is cocrect for checking
         Entry entry = ratingDetails.getEntry();
         int entryScore = entry.getEntryTotalScore();
         entryScore -= oldScore;
@@ -104,8 +105,8 @@ public class RatingServiceImpl implements RatingService {
     @Override
     @Transactional
     public void deleteRating(int id, User user) {
-        throwIfNotOrganizer(user);
         Rating ratingToDelete = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rating"));
+        throwIfNotOrganizerOrJuror(user, ratingToDelete.getEntry().getContest());
         Entry entry = ratingToDelete.getEntry();
         int entryScore = entry.getEntryTotalScore();
         entryScore -= ratingToDelete.getScore();
@@ -125,12 +126,15 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Set<Rating> getRatingsForEntry(int entryId, User user) {
-        throwIfNotOrganizer(user);
+        //throwIfNotOrganizer(user);
         return ratingRepository.findByEntryId(entryId);
     }
 
-    private void throwIfNotOrganizer(User user) {
-        if (user.getRole() != Role.Organizer) {
+    private void throwIfNotOrganizerOrJuror(User user, Contest contest) {
+        boolean isJuror = user.getJurorContests()
+                .stream()
+                .anyMatch(jurorContest -> jurorContest.getId().equals(contest.getId()));
+        if (user.getRole() != Role.Organizer && !isJuror) {
             throw new AuthorizationException("You do not have access.");
         }
     }
