@@ -34,7 +34,7 @@ public class EntryMapper {
             entry.setPhotoUrl("http://example.com/photo6.jpg");
             Contest contest = contestService.getContestById(entryInDto.getContestId());
             entry.setContest(contest);
-            contest.getParticipants().add(user);
+//            contest.getParticipants().add(user);
             return entry;
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException(e.getMessage());
