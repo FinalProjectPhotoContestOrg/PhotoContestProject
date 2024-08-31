@@ -2,15 +2,18 @@ package com.example.photocontestproject.services;
 
 import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.ContestType;
+import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
-import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.ContestRepository;
 import com.example.photocontestproject.repositories.EntryRepository;
+import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.ContestService;
+import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +25,15 @@ public class ContestServiceImpl implements ContestService {
 
     private final ContestRepository contestRepository;
     private final EntryRepository entryRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
+
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, EntryRepository entryRepository) {
+    public ContestServiceImpl(ContestRepository contestRepository, EntryRepository entryRepository, UserRepository userRepository, UserService userService) {
         this.contestRepository = contestRepository;
         this.entryRepository = entryRepository;
+        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -54,6 +62,7 @@ public class ContestServiceImpl implements ContestService {
     public Contest getContestById(int id) {
         return contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
     }
+
     @Override
     public Contest changePhase(int id, User user) {
         throwIfUserIsNotOrganizer(user);
@@ -63,6 +72,28 @@ public class ContestServiceImpl implements ContestService {
         contest.setContestPhase(currentPhase);
         return contestRepository.save(contest);
     }
+
+    @Transactional
+    @Override
+    public Contest addJuror(int id, int userId, User loggedInUser) {
+        throwIfUserIsNotOrganizer(loggedInUser);
+        User userToAdd = userService.getUserById(userId);
+        throwIfUserCantBeJuror(userToAdd);
+        Contest contestToUpdate = contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
+        contestToUpdate.getJurors().add(userToAdd);
+
+        contestRepository.save(contestToUpdate);
+        userRepository.save(userToAdd);
+        return contestToUpdate;
+    }
+
+    @Override
+    public List<User> getJurors(int id, User loggedInUser) {
+        throwIfUserIsNotOrganizer(loggedInUser);
+        Contest contest = contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
+        return contest.getJurors().stream().toList();
+    }
+
     @Override
     public Contest createContest(Contest contest, User user) {
         throwIfUserIsNotOrganizer(user);
@@ -81,9 +112,17 @@ public class ContestServiceImpl implements ContestService {
         throwIfUserIsNotOrganizer(user);
         contestRepository.deleteById(id);
     }
+
     private void throwIfUserIsNotOrganizer(User user) {
         if (user.getRole().name().equals("Junkie")) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
+        }
+    }
+
+    private void throwIfUserCantBeJuror(User user) {
+        Ranking userRanking = user.getRanking();
+        if (userRanking.equals(Ranking.Junkie) || userRanking.equals(Ranking.Enthusiast)) {
+            throw new AuthorizationException("Only a user with a rank of Master or above to be a juror.");
         }
     }
 

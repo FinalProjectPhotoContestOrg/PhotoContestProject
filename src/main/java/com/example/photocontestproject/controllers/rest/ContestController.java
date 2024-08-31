@@ -2,6 +2,7 @@ package com.example.photocontestproject.controllers.rest;
 
 import com.example.photocontestproject.dtos.in.ContestInDto;
 import com.example.photocontestproject.dtos.in.EntryInDto;
+import com.example.photocontestproject.dtos.in.IdDto;
 import com.example.photocontestproject.dtos.in.RatingDto;
 import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.ContestType;
@@ -83,6 +84,32 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         return contestService.getContestById(id);
+    }
+
+    @GetMapping("/{id}/jury")
+    public List<User> getJurors(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            return contestService.getJurors(id, loggedInUser);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/jury")
+    public Contest addJuror(@PathVariable int id, @RequestBody IdDto idDto, @RequestHeader HttpHeaders headers) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            int userId = idDto.getId();
+            return contestService.addJuror(id, userId, loggedInUser);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
     }
 
 
