@@ -19,8 +19,11 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -44,6 +47,10 @@ public class RatingServiceImpl implements RatingService {
         User juror = userService.getUserById(rating.getJuror().getId());
         User user = userService.getUserById(rating.getEntry().getParticipant().getId());
         throwIfNotOrganizerOrJuror(juror, rating.getEntry().getContest());
+        Optional<Rating> existingRating = ratingRepository.findByJurorAndEntry(juror, rating.getEntry());
+        if (existingRating.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You have already rated this entry.");
+        }
         Entry entry = rating.getEntry();
         int entryScore = entry.getEntryTotalScore();
         entryScore += rating.getScore();
@@ -85,7 +92,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating updateRating(int oldScore, Rating ratingDetails, User user) {
-        throwIfNotOrganizerOrJuror(user, ratingDetails.getEntry().getContest());
+        throwIfNotAuthor(user, ratingDetails);
         Entry entry = ratingDetails.getEntry();
         int entryScore = entry.getEntryTotalScore();
         entryScore -= oldScore;
@@ -106,7 +113,7 @@ public class RatingServiceImpl implements RatingService {
     @Transactional
     public void deleteRating(int id, User user) {
         Rating ratingToDelete = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rating"));
-        throwIfNotOrganizerOrJuror(user, ratingToDelete.getEntry().getContest());
+        throwIfNotAuthorOrOrganizer(user, ratingToDelete);
         Entry entry = ratingToDelete.getEntry();
         int entryScore = entry.getEntryTotalScore();
         entryScore -= ratingToDelete.getScore();
@@ -149,5 +156,17 @@ public class RatingServiceImpl implements RatingService {
             participant.setRanking(Ranking.Junkie);
         }
     }
-
+    private void throwIfNotAuthor(User user, Rating rating){
+        boolean isOwner = user.getId().equals(rating.getJuror().getId());
+        if (!isOwner){
+            throw new AuthorizationException("You do not have access.");
+        }
+    }
+    private void throwIfNotAuthorOrOrganizer(User user, Rating rating){
+        boolean isOwner = user.getId().equals(rating.getJuror().getId());
+        boolean isOrganizer = user.getRole().equals(Role.Organizer);
+        if (!isOwner && !isOrganizer){
+            throw new AuthorizationException("You do not have access.");
+        }
+    }
 }
