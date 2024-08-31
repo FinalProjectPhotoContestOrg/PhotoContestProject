@@ -118,7 +118,6 @@ public class ContestServiceImpl implements ContestService {
         throwIfUserIsNotOrganizer(loggedInUser);
         Contest contest = contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
         throwIfContestIsOpen(contest);
-
         return contest.getParticipants().stream().toList();
     }
 
