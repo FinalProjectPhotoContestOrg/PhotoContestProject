@@ -1,10 +1,10 @@
 
 INSERT INTO users (username, first_name, last_name, email, password_hash, role, ranking, points)
 VALUES
-    ('john', 'John', 'Doe', 'john.doe@example.com', 'hash1', 'Organizer', 'WiseAndBenevolentPhotoDictator', 1000),
-    ('jane', 'Jane', 'Smith', 'jane.smith@example.com', 'hash2', 'Junkie', 'Junkie', 50),
-    ('alice', 'Alice', 'Brown', 'alice.brown@example.com', 'hash3', 'Junkie', 'Enthusiast', 200),
-    ('bobby', 'Bob', 'Johnson', 'bob.johnson@example.com', 'hash4', 'Junkie', 'Master', 500);
+    ('john', 'John', 'Doe', 'john.doe@example.com', '75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8=', 'Organizer', 'WiseAndBenevolentPhotoDictator', 2000),
+    ('jane', 'Jane', 'Smith', 'jane.smith@example.com', '75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8=', 'Junkie', 'Junkie', 45),
+    ('alice', 'Alice', 'Brown', 'alice.brown@example.com', '75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8=', 'Junkie', 'Enthusiast', 140),
+    ('bobby', 'Bob', 'Johnson', 'bob.johnson@example.com', '75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8=', 'Junkie', 'Master', 500);
 
 -- Insert sample data into the `contests` table
 INSERT INTO contests (title, category, type, phase, phase_1_end, phase_2_end, organizer_id, cover_photo_url)
@@ -15,8 +15,6 @@ VALUES
 -- Insert sample data into the `contest_participants` table
 INSERT INTO contest_participants (contest_id, user_id)
 VALUES
-    (1, 2),  -- Jane Smith in Nature Photography
-    (1, 3),  -- Alice Brown in Nature Photography
     (2, 3),  -- Alice Brown in Urban Exploration
     (2, 4);  -- Bob Johnson in Urban Exploration
 
@@ -35,4 +33,4 @@ VALUES
     (2, 1, 8, 'Great depth and atmosphere.', 0),
     (3, 1, 7, 'Captivating night shot.', 0),
     (4, 1, 6, 'Interesting subject, but lacks focus.', 0),
-    (4, 3, 0, 'Does not fit the contest theme.', 1);
+    (4, 4, 0, 'Does not fit the contest theme.', 1);
