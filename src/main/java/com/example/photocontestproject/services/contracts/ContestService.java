@@ -20,6 +20,10 @@ public interface ContestService {
 
     List<User> getJurors(int id, User loggedInUser);
 
+    Contest addParticipant(int id, int userId, User loggedInUser);
+
+    List<User> getParticipants(int id, int userId, User loggedInUser);
+
     //Entry createEntryForContest(Entry entry, User user/*, Contest contest*/);
 
     void deleteContest(int id, User user);

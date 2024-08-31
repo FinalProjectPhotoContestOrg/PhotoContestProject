@@ -1,7 +1,6 @@
 package com.example.photocontestproject.controllers.rest;
 
 import com.example.photocontestproject.dtos.in.ContestInDto;
-import com.example.photocontestproject.dtos.in.EntryInDto;
 import com.example.photocontestproject.dtos.in.IdDto;
 import com.example.photocontestproject.dtos.in.RatingDto;
 import com.example.photocontestproject.enums.ContestPhase;
@@ -109,7 +108,32 @@ public class ContestController {
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
+    }
 
+    @GetMapping("/{id}/participants")
+    public List<User> getParticipants(@PathVariable int id, @RequestBody IdDto idDto, @RequestHeader HttpHeaders headers) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            int userId = idDto.getId();
+            return contestService.getParticipants(id, userId, loggedInUser);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping("{id}/participants")
+    public Contest addParticipant(@PathVariable int id, @RequestBody IdDto idDto, @RequestHeader HttpHeaders headers) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUser(headers);
+            int userId = idDto.getId();
+            return contestService.addParticipant(id, userId, loggedInUser);
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
 
@@ -134,14 +158,16 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
+
     @GetMapping("/{contestId}/entries")
-    public Set<Entry> getEntriesByContest(@PathVariable int contestId){
+    public Set<Entry> getEntriesByContest(@PathVariable int contestId) {
         Contest contest = contestService.getContestById(contestId);
         if (contest.getEntries().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
         return contest.getEntries();
     }
+
     @PostMapping("/{contestId}/entries/{entryId}/ratings")
     public Rating rateEntry(@PathVariable int contestId, @PathVariable int entryId,
                             @Valid @RequestBody RatingDto ratingDto, @RequestHeader HttpHeaders headers) {
@@ -153,7 +179,7 @@ public class ContestController {
             if (!entry.getContest().getId().equals(contest.getId())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The entry does not belong to the specified contest.");
             }
-            if (contest.getContestPhase() != ContestPhase.PhaseII){
+            if (contest.getContestPhase() != ContestPhase.PhaseII) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entries can only be rated during PhaseII.");
             }
             Rating rating = ratingMapper.fromDto(ratingDto, entry, jurorId);
@@ -167,8 +193,8 @@ public class ContestController {
 
     @PutMapping("/{contestId}/entries/{entryId}/ratings/{ratingId}")
     public Rating updateRatingToEntry(@PathVariable int contestId, @PathVariable int entryId,
-                               @PathVariable int ratingId, @Valid @RequestBody RatingDto ratingDto,
-                               @RequestHeader HttpHeaders headers) {
+                                      @PathVariable int ratingId, @Valid @RequestBody RatingDto ratingDto,
+                                      @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Contest contest = contestService.getContestById(contestId);
@@ -179,7 +205,7 @@ public class ContestController {
             Rating existingRating = ratingService.getRatingById(ratingId);
             int oldScore = existingRating.getScore();
             if (existingRating.getEntry().getId() != entryId) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rating does not belong to the specified entry.");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rating does not belong to the specified entry.");
             }
             if (!existingRating.getEntry().getContest().getId().equals(contestId)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entry does not belong to the specified contest.");
@@ -192,9 +218,10 @@ public class ContestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @DeleteMapping("/{contestId}/entries/{entryId}/ratings/{ratingId}")
     public void deleteRatingToEntry(@PathVariable int contestId, @PathVariable int entryId,
-                              @PathVariable int ratingId, @RequestHeader HttpHeaders headers) {
+                                    @PathVariable int ratingId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Contest contest = contestService.getContestById(contestId);

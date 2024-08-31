@@ -22,6 +22,7 @@ import java.util.List;
 @Service
 public class ContestServiceImpl implements ContestService {
     public static final String ERROR_NO_PERMISSION_MESSAGE = "You do not have permission to perform this operation";
+    public static final String ERROR_WRONG_CONTEST_TYPE_MESSAGE = "This Operation is for Invitational contests only.";
 
     private final ContestRepository contestRepository;
     private final EntryRepository entryRepository;
@@ -95,6 +96,33 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
+    public Contest addParticipant(int id, int userId, User loggedInUser) {
+        throwIfUserIsNotOrganizer(loggedInUser);
+        User userToAdd = userService.getUserById(userId);
+        Contest contestToUpdate = contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
+        throwIfContestIsOpen(contestToUpdate);
+
+        contestToUpdate.getParticipants().add(userToAdd);
+        int points = userToAdd.getPoints();
+        points += 3;
+        userToAdd.setPoints(points);
+
+        contestRepository.save(contestToUpdate);
+        userRepository.save(userToAdd);
+
+        return contestToUpdate;
+    }
+
+    @Override
+    public List<User> getParticipants(int id, int userId, User loggedInUser) {
+        throwIfUserIsNotOrganizer(loggedInUser);
+        Contest contest = contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
+        throwIfContestIsOpen(contest);
+
+        return contest.getParticipants().stream().toList();
+    }
+
+    @Override
     public Contest createContest(Contest contest, User user) {
         throwIfUserIsNotOrganizer(user);
         return contestRepository.save(contest);
@@ -123,6 +151,12 @@ public class ContestServiceImpl implements ContestService {
         Ranking userRanking = user.getRanking();
         if (userRanking.equals(Ranking.Junkie) || userRanking.equals(Ranking.Enthusiast)) {
             throw new AuthorizationException("Only a user with a rank of Master or above to be a juror.");
+        }
+    }
+
+    private void throwIfContestIsOpen(Contest contest) {
+        if (contest.getContestType().equals(ContestType.Open)) {
+            throw new AuthorizationException(ERROR_WRONG_CONTEST_TYPE_MESSAGE);
         }
     }
 
