@@ -33,11 +33,14 @@ public class EntryServiceImpl implements EntryService {
     public Entry createEntry(Entry entry, User user) {
         throwIfUserIsOrganizer(user);
         throwIfUserIsNotInvitedToContest(user, entry);
-        int points = user.getPoints();
-        points += 1;
-        user.setPoints(points);
 
-        userRepository.save(user);
+        if (entry.getContest().getContestType().equals(ContestType.Open)) {
+            int points = user.getPoints();
+            points += 1;
+            user.setPoints(points);
+            userRepository.save(user);
+        }
+
         return entryRepository.save(entry);
     }
 
