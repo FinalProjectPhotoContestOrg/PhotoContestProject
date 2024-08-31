@@ -1,12 +1,15 @@
 package com.example.photocontestproject.servicetests;
 
 import com.example.photocontestproject.TestHelper;
+import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
+import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.EntryRepository;
+import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.EntryServiceImpl;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -20,9 +23,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +34,8 @@ public class EntryServiceTests {
     @Mock
     private EntryRepository entryRepository;
 
+    @Mock
+    private UserRepository userRepository;
     @InjectMocks
     private EntryServiceImpl entryService;
 
@@ -43,14 +46,44 @@ public class EntryServiceTests {
 
     @Test
     public void create_Entry_When_User_Is_Junkie_Should_Create_Entry() {
+        Contest contest = new Contest();
+        contest.setContestType(ContestType.Open);
+        contest.setId(1);
         User user = TestHelper.createJunkieUser();
+        user.setJurorContests(Set.of(contest));
+        user.setPoints(50);
+
         Entry entry = new Entry();
+        entry.setContest(contest);
         when(entryRepository.save(any(Entry.class))).thenReturn(entry);
+        when(userRepository.save(any(User.class))).thenReturn(user);
 
         Entry result = entryService.createEntry(entry, user);
 
         assertNotNull(result);
         verify(entryRepository, times(1)).save(entry);
+    }
+    @Test
+    public void create_Entry_ShouldThrow_When_User_Is_Not_Invited() {
+        Contest contest = new Contest();
+        contest.setContestType(ContestType.Invitational);
+        contest.setId(1);
+        contest.setParticipants(Collections.emptySet());
+
+        User user = TestHelper.createJunkieUser();
+        user.setParticipantContests(Set.of());
+        user.setPoints(50);
+
+        Entry entry = new Entry();
+        entry.setContest(contest);
+        when(entryRepository.save(any(Entry.class))).thenReturn(entry);
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        assertThrows(AuthorizationException.class, () -> {
+            entryService.createEntry(entry, user);
+        });
+        verify(entryRepository, never()).save(any(Entry.class));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
