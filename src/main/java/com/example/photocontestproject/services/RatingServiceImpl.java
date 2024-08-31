@@ -61,12 +61,14 @@ public class RatingServiceImpl implements RatingService {
         entryRepository.save(entry);
         userService.updateUser(user);
         return ratingRepository.save(rating);
-        //TODO add for juror too somehow using the contest...
+        //TODO separate the logic for the user and the juror into methods
     }
 
     @Override
     public Rating getRatingById(int id, User user) {
-        //throwIfNotOrganizer(user);
+        /*Rating rating = getRatingById(id);
+        Contest contest = rating.getEntry().getContest();
+        throwIfNotOrganizerOrJuror(user, contest);*/
         return ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rating"));
     }
 
@@ -84,7 +86,6 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Rating updateRating(int oldScore, Rating ratingDetails, User user) {
         throwIfNotOrganizerOrJuror(user, ratingDetails.getEntry().getContest());
-        //TODO check using this type of ckecking through all jurors to check if the user is cocrect for checking
         Entry entry = ratingDetails.getEntry();
         int entryScore = entry.getEntryTotalScore();
         entryScore -= oldScore;
@@ -99,7 +100,6 @@ public class RatingServiceImpl implements RatingService {
         entryRepository.save(entry);
         userRepository.save(participant);
         return ratingRepository.save(ratingDetails);
-        //TODO add for juror too somehow using the contest...
     }
 
     @Override
@@ -121,7 +121,6 @@ public class RatingServiceImpl implements RatingService {
         userRepository.save(participant);
         entryRepository.save(entry);
         ratingRepository.delete(ratingToDelete);
-        //TODO add for juror too somehow using the contest...
     }
 
     @Override
