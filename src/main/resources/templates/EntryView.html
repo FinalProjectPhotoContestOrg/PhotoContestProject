@@ -1,52 +1,75 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entry View - Photography Contest</title>
+    <!-- Bootstrap CSS from local file -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
     <style>
-        .container {
+        body {
+            background-color: #f8f9fa;
+        }
+        .entry-container, .rating-container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 50px auto;
             padding: 20px;
-            font-family: Arial, sans-serif;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .entry-title {
-            font-size: 2em;
+        .entry-container h2 {
             margin-bottom: 20px;
         }
-        .entry-story {
+        .rating-container h3 {
             margin-bottom: 20px;
-        }
-        .entry-image {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 20px;
-        }
-        .entry-info {
-            font-size: 0.9em;
-            color: #555;
         }
     </style>
 </head>
 <body>
 
-<div class="container" th:object="${entry}">
-    <h1 class="entry-title" th:text="${entry.title}">Entry Title</h1>
+<!-- Navigation Bar -->
+<nav th:replace="~{ForumForms :: navbar}"></nav>
 
-    <div class="entry-story" th:text="${entry.story}">
-        This is the story of the entry.
+<!-- Entry View Section -->
+<div class="entry-container">
+    <h2 class="text-center">Entry Title Here</h2>
+    <div class="text-center">
+        <img src="images/sample-photo.jpg" alt="Sample Photo" class="img-fluid rounded">
     </div>
-
-    <div>
-        <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}" alt="Entry Image" class="entry-image"/>
-    </div>
-
-    <div class="entry-info">
-        <p><strong>Uploaded by:</strong> <span th:text="${entry.participant.username}">Participant Name</span></p>
-        <p><strong>Contest:</strong> <span th:text="${entry.contest.title}">Contest Name</span></p>
-        <p><strong>Uploaded at:</strong> <span th:text="${#dates.format(entry.uploadedAt, 'dd-MM-yyyy HH:mm')}">Upload Date</span></p>
-    </div>
+    <p class="mt-4"><strong>Description:</strong> This is a description of the entry, highlighting the photographer's intent, techniques used, and other relevant details.</p>
+    <p><strong>Category:</strong> Landscapes</p>
+    <p><strong>Submitted by:</strong> Photographer's Name</p>
 </div>
 
+<!-- Rating Form Section -->
+<div class="rating-container">
+    <h3 class="text-center">Rate This Entry</h3>
+    <form action="submit_rating" method="POST">
+        <div class="mb-3">
+            <label for="score" class="form-label">Rating Score (1-10)</label>
+            <input type="number" class="form-control" id="score" name="score" min="1" max="10" required>
+        </div>
+        <div class="mb-3">
+            <label for="comment" class="form-label">Comment</label>
+            <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Enter your comment here..." required></textarea>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="categoryMismatch" name="categoryMismatch">
+            <label class="form-check-label" for="categoryMismatch">Category Mismatch</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Rating</button>
+    </form>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+        <p>&copy; 2024 Photography Contest. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
