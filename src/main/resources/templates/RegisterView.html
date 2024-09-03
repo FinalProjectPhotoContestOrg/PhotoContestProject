@@ -46,6 +46,7 @@
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input th:field="*{username}" type="text" class="form-control" id="username" placeholder="Enter your username" required>
+            <div class="error" style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
@@ -54,6 +55,7 @@
         <div class="mb-3">
             <label for="confirm-password" class="form-label">Confirm Password</label>
             <input th:field="*{confirmPassword}" type="password" class="form-control" id="confirm-password" placeholder="Confirm your password" required>
+            <div class="error" style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
         </div>
         <div class="d-grid">
             <button type="submit" class="btn btn-primary">Register</button>

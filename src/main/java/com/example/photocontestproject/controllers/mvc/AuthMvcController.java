@@ -2,21 +2,23 @@ package com.example.photocontestproject.controllers.mvc;
 
 import com.example.photocontestproject.dtos.in.LogInDto;
 import com.example.photocontestproject.dtos.in.RegisterDto;
-import com.example.photocontestproject.dtos.in.UserInDto;
 import com.example.photocontestproject.exceptions.AuthenticationFailureException;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.mappers.UserMapper;
 import com.example.photocontestproject.models.User;
+import com.example.photocontestproject.services.EntityAlreadyExistsException;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
@@ -62,20 +64,20 @@ public class AuthMvcController {
     }
 
     @PostMapping("/register")
-    public String handleRegister(@Valid @ModelAttribute("register")RegisterDto registerDto, BindingResult bindingResult, HttpSession session) {
+    public String handleRegister(@Valid @ModelAttribute("register") RegisterDto registerDto, BindingResult bindingResult, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "RegisterView";
         }
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
             bindingResult.rejectValue("password", "confirm_password_error", "Passwords should match.");
-            return "SignUpView";
+            return "RegisterView";
         }
         try {
             User user = userMapper.fromDto(registerDto);
             userService.createUser(user);
-        } catch (DuplicateEntityException e) {
+        } catch (EntityAlreadyExistsException e) {
             bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
-            return "SignUpView";
+            return "RegisterView";
         }
         return "redirect:/login";
     }

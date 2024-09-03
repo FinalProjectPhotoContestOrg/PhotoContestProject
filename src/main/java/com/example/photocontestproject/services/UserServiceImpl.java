@@ -54,11 +54,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        throwIfUserIsDuplicate(user.getUsername());
         return userRepository.save(user);
     }
 
     @Override
     public void deleteUserById(int id) {
         userRepository.deleteById(id);
+    }
+
+    public void throwIfUserIsDuplicate(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            throw new EntityAlreadyExistsException("User with this username already exists");
+        }
     }
 }
