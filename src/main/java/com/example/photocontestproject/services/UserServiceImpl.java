@@ -61,10 +61,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
         throwIfUserIsDuplicate(user.getUsername());
-        if (!EmailValidator.validateEmail(user.getEmail())) {
+        /*if (!EmailValidator.validateEmail(user.getEmail())) {
             throw new EmailException("Invalid email");
         }
-        emailService.sendEmail(user.getEmail(), user.getUsername());
+        emailService.sendEmail(user.getEmail(), user.getUsername());*/
         return userRepository.save(user);
     }
 
