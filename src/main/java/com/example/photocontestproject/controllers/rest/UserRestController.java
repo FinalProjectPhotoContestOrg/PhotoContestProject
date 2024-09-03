@@ -1,12 +1,16 @@
 package com.example.photocontestproject.controllers.rest;
 
 import com.example.photocontestproject.dtos.in.UserInDto;
+import com.example.photocontestproject.exceptions.DuplicateEntityException;
+import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.mappers.UserMapper;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.http.HttpHeaders;
 import java.util.List;
@@ -43,8 +47,14 @@ public class UserRestController {
 
     @PostMapping
     public User createUser(@RequestBody @Valid UserInDto userInDto) {
-        User user = userMapper.fromDto(userInDto);
-        return userService.createUser(user);
+        try {
+            User user = userMapper.fromDto(userInDto);
+            return userService.createUser(user);
+        }catch (EmailException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (DuplicateEntityException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

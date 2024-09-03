@@ -1,6 +1,9 @@
 package com.example.photocontestproject.services;
 
+import com.example.photocontestproject.exceptions.DuplicateEntityException;
+import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
+import com.example.photocontestproject.external.EmailValidator;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.UserService;
@@ -54,6 +57,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        if (!EmailValidator.validateEmail(user.getEmail())) {
+            throw new EmailException("Invalid email");
+        }
         throwIfUserIsDuplicate(user.getUsername());
         return userRepository.save(user);
     }
@@ -66,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public void throwIfUserIsDuplicate(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
-            throw new EntityAlreadyExistsException("User with this username already exists");
+            throw new DuplicateEntityException("User", "username", userOptional.get().getUsername());
         }
     }
 }

@@ -4,6 +4,7 @@ import com.example.photocontestproject.dtos.in.LogInDto;
 import com.example.photocontestproject.dtos.in.RegisterDto;
 import com.example.photocontestproject.exceptions.AuthenticationFailureException;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
+import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.mappers.UserMapper;
 import com.example.photocontestproject.models.User;
@@ -75,8 +76,11 @@ public class AuthMvcController {
         try {
             User user = userMapper.fromDto(registerDto);
             userService.createUser(user);
-        } catch (EntityAlreadyExistsException e) {
+        } catch (DuplicateEntityException e) {
             bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
+            return "RegisterView";
+        } catch (EmailException e) {
+            bindingResult.rejectValue("email", "email_error", e.getMessage());
             return "RegisterView";
         }
         return "redirect:/login";
