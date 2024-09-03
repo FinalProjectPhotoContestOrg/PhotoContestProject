@@ -1,4 +1,5 @@
 package com.example.photocontestproject.helpers;
+import com.example.photocontestproject.exceptions.AuthenticationFailureException;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.User;
@@ -11,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
-import java.util.Optional;
 
 @Component
 public class AuthenticationHelper {
@@ -61,6 +61,20 @@ public class AuthenticationHelper {
         } catch (NoSuchAlgorithmException e){
             throw new RuntimeException("Error hashing password", e);
         }
+    }
+
+    public User throwIfWrongAuthentication(String username, String password) {
+        User user = null;
+        try {
+            user = userService.getByUsername(username);
+        } catch (EntityNotFoundException e) {
+            throw new AuthenticationFailureException("Wrong username or password.");
+        }
+        String passwordHash = hashPassword(password);
+        if (!user.getPasswordHash().equals(passwordHash)) {
+            throw new AuthenticationFailureException("Wrong username or password.");
+        }
+        return user;
     }
     /*public User tryGetUser(Authentication authentication){
         if (authentication != null && authentication.isAuthenticated()){

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Photography Contest</title>
   <!-- Bootstrap CSS from local file -->
-  <link href="/static/css/bootstrap.css" rel="stylesheet">
+  <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
   <style>
     body {
       background-color: #f8f9fa;
@@ -25,56 +25,33 @@
 </head>
 <body>
 
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="index.html">PhotoContest</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact">Contact</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="login.html">Login</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+
+<nav th:replace="~{ForumForms.html :: navbar}"></nav>
 
 <!-- Login Form -->
 <div class="login-container">
   <h2 class="text-center">Login</h2>
-  <form>
+  <form action="#" th:action="@{/login}" th:method="post" th:object="${login}">
     <div class="mb-3">
-      <label for="email" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+      <label for="username" class="form-label">Username</label>
+      <input th:field="*{username}" type="text" class="form-control" id="username" placeholder="Enter your username" required>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+      <input th:field="*{password}" type="password" class="form-control" id="password" placeholder="Enter your password" required>
     </div>
     <div class="d-grid">
       <button type="submit" class="btn btn-primary">Login</button>
     </div>
     <div class="text-center mt-3">
-      <p>Don't have an account? <a href="register.html">Register here</a></p>
+      <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
     </div>
   </form>
 </div>
 
+<div style="height: 300px"></div>
 <!-- Footer -->
-<footer class="bg-dark text-white text-center py-3 mt-5">
-  <div class="container">
-    <p>&copy; 2024 Photography Contest. All Rights Reserved.</p>
-  </div>
-</footer>
+<footer th:replace="~{ForumForms.html :: footer}"></footer>
 
 <!-- Bootstrap JS -->
 <script src="js/bootstrap.bundle.min.js"></script>
