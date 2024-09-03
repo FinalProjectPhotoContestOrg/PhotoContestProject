@@ -75,7 +75,7 @@ create table entries
         primary key,
     title           varchar(255)                          not null,
     story           text                                  not null,
-    photo_url       varchar(255)                          not null,
+    photo_url       mediumtext                            not null,
     participant_id  int                                   not null,
     contest_id      int                                   not null,
     uploaded_at     timestamp default current_timestamp() null,
@@ -121,4 +121,3 @@ create index photo_id
 create index idx_username
     on users (username);
 
- 
