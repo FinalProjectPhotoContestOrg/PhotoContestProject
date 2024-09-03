@@ -8,7 +8,6 @@ import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.mappers.UserMapper;
 import com.example.photocontestproject.models.User;
-import com.example.photocontestproject.services.EntityAlreadyExistsException;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

@@ -4,6 +4,7 @@ import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.external.EmailValidator;
+import com.example.photocontestproject.external.service.EmailService;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.UserService;
@@ -17,10 +18,12 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -57,10 +60,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        throwIfUserIsDuplicate(user.getUsername());
         if (!EmailValidator.validateEmail(user.getEmail())) {
             throw new EmailException("Invalid email");
         }
-        throwIfUserIsDuplicate(user.getUsername());
+        emailService.sendEmail(user.getEmail(), user.getUsername());
         return userRepository.save(user);
     }
 
