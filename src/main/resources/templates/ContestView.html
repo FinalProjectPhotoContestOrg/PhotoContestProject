@@ -6,14 +6,62 @@
     <title th:text="${contest.title} + ' - Photography Contest'">Contest Details - Photography Contest</title>
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
+    <style>
+        .header-bg {
+            background-size: cover;
+            background-position: center;
+            height: 400px; /* Adjust height as needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+
+        .header-bg h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 0;
+        }
+
+        .section-title {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-content {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .entry-form label {
+            font-weight: 600;
+        }
+
+        .entry-form .form-control,
+        .entry-form .form-select,
+        .entry-form .form-text {
+            border-radius: 5px;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 <!-- Navigation Bar -->
 <nav th:replace="~{ForumForms.html :: navbar}"></nav>
 
 <!-- Contest Details Header -->
-<header class="bg-dark text-white text-center py-5">
-    <div class="container">
+<header class="bg-dark text-white text-center header-bg"
+        th:style="'background-image: url(\'data:image/jpeg;base64,' + ${contest.coverPhotoUrl} + '\')'">
+    <div>
         <h1 th:text="${contest.title}">Nature Photography Contest</h1>
     </div>
 </header>
@@ -21,31 +69,35 @@
 <!-- Contest Details Section -->
 <section id="contest-details" class="py-5">
     <div class="container">
-        <h2 class="text-center">Contest Details</h2>
-        <div class="row mt-4">
+        <h2 class="text-center section-title">Contest Details</h2>
+        <div class="row">
             <div class="col-md-6">
-                <h5><strong>Submission Dates:</strong></h5>
-                <p th:text="${#dates.format(contest.phase1End, 'MMMM d')} + ' - ' + ${#dates.format(contest.phase2End, 'MMMM d')}">October 1 - November 30</p>
+                <div class="section-content">
+                    <h5><strong>Submission Dates:</strong></h5>
+                    <p th:text="${#dates.format(contest.phase1End, 'MMMM d')} + ' - ' + ${#dates.format(contest.phase2End, 'MMMM d')}">October 1 - November 30</p>
 
-                <h5><strong>Category:</strong></h5>
-                <p th:text="${contest.category}">Wildlife, Landscapes, Plants</p>
+                    <h5><strong>Category:</strong></h5>
+                    <p th:text="${contest.category}">Wildlife, Landscapes, Plants</p>
 
-                <h5><strong>Submission Guidelines:</strong></h5>
-                <ul>
-                    <li>Maximum of 5 entries per participant</li>
-                    <li>Images must be in JPEG format</li>
-                    <li>File size should not exceed 10 MB per image</li>
-                    <li>Entries must be original and not previously published</li>
-                </ul>
+                    <h5><strong>Submission Guidelines:</strong></h5>
+                    <ul>
+                        <li>Maximum of 5 entries per participant</li>
+                        <li>Images must be in JPEG format</li>
+                        <li>File size should not exceed 10 MB per image</li>
+                        <li>Entries must be original and not previously published</li>
+                    </ul>
+                </div>
             </div>
             <div class="col-md-6">
-                <h5><strong>Judging Criteria:</strong></h5>
-                <ul>
-                    <li>Originality and creativity</li>
-                    <li>Technical excellence</li>
-                    <li>Composition and artistic merit</li>
-                    <li>Overall impact</li>
-                </ul>
+                <div class="section-content">
+                    <h5><strong>Judging Criteria:</strong></h5>
+                    <ul>
+                        <li>Originality and creativity</li>
+                        <li>Technical excellence</li>
+                        <li>Composition and artistic merit</li>
+                        <li>Overall impact</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -54,9 +106,9 @@
 <!-- Entry Form Section -->
 <section id="enter-contest" class="bg-light py-5">
     <div class="container">
-        <h2 class="text-center">Enter the Contest</h2>
+        <h2 class="text-center section-title">Enter the Contest</h2>
         <p class="lead text-center">Submit your entries using the form below.</p>
-        <form th:action="@{/contests/{contestId}/entries}" th:object="${contest}" th:method="post">
+        <form th:action="@{/contests/{contestId}/entries}" th:object="${contest}" th:method="post" class="entry-form">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
@@ -92,10 +144,14 @@
             <button type="submit" class="btn btn-primary">Submit Entry</button>
         </form>
     </div>
+    <div style="height:500px">
+        <p></p>
+    </div>
 </section>
-
 <!-- Footer -->
-<footer th:replace="~{ForumForms.html :: footer}"></footer>
+<footer class="footer">
+    <div th:replace="~{ForumForms.html :: footer}"></div>
+</footer>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

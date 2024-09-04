@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Contest</title>
+    <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+<nav th:replace="~{ForumForms.html :: navbar}"></nav>
+
+<div class="container mt-5">
+    <h2>Create a New Contest</h2>
+
+    <!-- Form to create a new contest -->
+    <form th:action="@{/contests/create}" method="post" th:object="${contest}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" th:value="${contest.title}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <input type="text" class="form-control" id="category" name="category" th:value="${contest.category}" required>
+        </div>
+        <div class="form-group">
+            <label for="contestType">Contest Type:</label>
+            <select class="form-control" id="contestType" name="contestType" required>
+                <option th:each="type : ${T(com.example.photocontestproject.enums.ContestType).values()}"
+                        th:value="${type}"
+                        th:text="${type}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="phase1End">Phase 1 End Date:</label>
+            <input type="datetime-local" class="form-control" id="phase1End" name="phase1End" th:value="${contest.phase1End}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phase2End">Phase 2 End Date:</label>
+            <input type="datetime-local" class="form-control" id="phase2End" name="phase2End" th:value="${contest.phase2End}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="coverPhoto">Cover Photo:</label>
+            <input type="file" class="form-control-file" id="coverPhoto" name="coverPhoto" accept="image/*" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Contest</button>
+    </form>
+</div>
+
+<footer th:replace="~{ForumForms.html :: footer}"></footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
