@@ -4,6 +4,7 @@ import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,9 @@ public class AuthenticationHelper {
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String INVALID_AUTHENTICATION_ERROR = "Invalid authentication.";
 
-
     private final UserService userService;
     @Autowired
     public AuthenticationHelper(UserService userService){
-
-
         this.userService = userService;
     }
     public User tryGetUser(HttpHeaders headers) {
@@ -53,6 +51,16 @@ public class AuthenticationHelper {
             throw new AuthorizationException(INVALID_AUTHENTICATION_ERROR);
         }
     }
+    public User tryGetCurrentUser(HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+
+        if (currentUser == null) {
+            throw new AuthorizationException("Invalid authentication. Please log in.");
+        }
+
+        return currentUser;
+    }
+
     private String hashPassword(String password)  {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
