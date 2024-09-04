@@ -61,6 +61,4 @@ public class UserRestController {
     public void deleteUser(@PathVariable int id) {
         userService.deleteUserById(id);
     }
-
-    //TODO user -> changes role to organizer if Photo Master - Тошко
 }

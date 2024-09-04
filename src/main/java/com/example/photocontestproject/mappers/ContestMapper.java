@@ -1,5 +1,6 @@
 package com.example.photocontestproject.mappers;
 
+import com.example.photocontestproject.dtos.ContestDto;
 import com.example.photocontestproject.dtos.in.ContestInDto;
 import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.ContestType;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class ContestMapper {
@@ -42,5 +45,27 @@ public class ContestMapper {
         }
 
         return contest;
+    }
+    public Contest fromDto(ContestDto contestInDto) {
+        Contest contest = new Contest();
+        contest.setTitle(contestInDto.getTitle());
+        contest.setCategory(contestInDto.getCategory());
+        contest.setContestPhase(ContestPhase.PhaseI);
+        contest.setContestType(contestInDto.getContestType());
+        contest.setPhase1End(parseDateTimeToTimestamp(contestInDto.getPhase1End()));
+        contest.setPhase2End(parseDateTimeToTimestamp(contestInDto.getPhase2End()));
+        contest.setCoverPhotoUrl(contestInDto.getCoverPhotoUrl());
+        contest.setCreatedAt(Timestamp.from(Instant.now()));
+        return contest;
+    }
+    private Timestamp parseDateTimeToTimestamp(String dateTime) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            LocalDateTime localDateTime = LocalDateTime.parse(dateTime, formatter);
+            return Timestamp.valueOf(localDateTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Invalid date-time format: " + dateTime);
+        }
     }
 }

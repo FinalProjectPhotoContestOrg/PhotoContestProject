@@ -31,6 +31,7 @@ public class EntryServiceImpl implements EntryService {
     @Transactional
     @Override
     public Entry createEntry(Entry entry, User user) {
+        //TODO check if user is juror to the contest
         throwIfUserIsOrganizer(user);
         throwIfUserIsNotInvitedToContest(user, entry);
 
