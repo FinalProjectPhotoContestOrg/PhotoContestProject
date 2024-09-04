@@ -26,7 +26,7 @@ create table contests
     phase_1_end     timestamp                                                          not null,
     phase_2_end     timestamp                                                          not null,
     organizer_id    int                                                                not null,
-    cover_photo_url varchar(255)                                                       null,
+    cover_photo_url mediumtext                                                         null,
     created_at      timestamp                              default current_timestamp() null,
     constraint title
         unique (title),
