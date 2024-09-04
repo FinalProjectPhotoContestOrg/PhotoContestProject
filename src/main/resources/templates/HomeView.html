@@ -27,53 +27,9 @@
         <p class="lead text-center">Browse our ongoing photography contests and participate now!</p>
         <div class="row mt-4">
 
-            <!-- Contest 1 -->
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Contest 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Nature Photography Contest</h5>
-                        <p class="card-text">Capture the beauty of nature and submit your best shots.</p>
-                        <a href="#contest1-details" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
+            <div class="col-md-4" th:each="contest : ${contests}">
+                <div th:replace="~{ForumForms.html :: contest-view}"></div>
             </div>
-
-            <!-- Contest 2 -->
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Contest 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Portrait Photography Contest</h5>
-                        <p class="card-text">Show your talent in portrait photography and win exciting prizes.</p>
-                        <a href="#contest2-details" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contest 3 -->
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Contest 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Urban Photography Contest</h5>
-                        <p class="card-text">Capture the essence of city life and submit your entries.</p>
-                        <a href="#contest3-details" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Contest 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Urban Photography Contest</h5>
-                        <p class="card-text">Capture the essence of city life and submit your entries.</p>
-                        <a href="#contest3-details" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-
 
         </div>
     </div>
