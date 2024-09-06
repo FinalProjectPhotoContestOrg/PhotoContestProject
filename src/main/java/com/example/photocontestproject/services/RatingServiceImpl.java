@@ -3,6 +3,7 @@ package com.example.photocontestproject.services;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
+import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.specifications.RatingSpecification;
 import com.example.photocontestproject.models.Contest;
@@ -50,7 +51,7 @@ public class RatingServiceImpl implements RatingService {
         throwIfNotOrganizerOrJuror(juror, rating.getEntry().getContest());
         Optional<Rating> existingRating = ratingRepository.findByJurorAndEntry(juror, rating.getEntry());
         if (existingRating.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You have already rated this entry.");
+            throw new DuplicateEntityException("You have already rated this entry.");
         }
         Entry entry = rating.getEntry();
         int entryScore = entry.getEntryTotalScore();
