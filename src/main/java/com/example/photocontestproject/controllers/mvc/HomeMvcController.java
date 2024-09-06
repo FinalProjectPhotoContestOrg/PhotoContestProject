@@ -22,7 +22,7 @@ public class HomeMvcController {
 
     @ModelAttribute("contests")
     public List<Contest> populateContests() {
-        return contestService.getAllContests(null, null, null, ContestPhase.PhaseI).stream().limit(3).toList();
+        return contestService.getAllContests(null, null, null, null);
     }
 
     @GetMapping

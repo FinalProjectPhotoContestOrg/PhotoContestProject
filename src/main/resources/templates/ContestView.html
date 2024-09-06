@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${contest.title} + ' - Photography Contest'">Contest Details - Photography Contest</title>
-    <!-- Bootstrap CSS -->
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <style>
         .header-bg {
@@ -106,7 +105,8 @@
 </section>
 
 <!-- Entry Form Section -->
-<section id="enter-contest" class="bg-light py-5">
+<section id="enter-contest" class="bg-light py-5"
+         th:if="${!isOrganizer && isPhaseI}">
     <div class="container">
         <h2 class="text-center section-title">Enter the Contest</h2>
         <p class="lead text-center">Submit your entries using the form below.</p>
@@ -133,9 +133,6 @@
 
             <button type="submit" class="btn btn-primary">Submit Entry</button>
         </form>
-    </div>
-    <div th:unless="${isOrganizer}" style="height:500px">
-        <p></p>
     </div>
 </section>
 

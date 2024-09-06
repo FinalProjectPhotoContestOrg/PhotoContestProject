@@ -3,6 +3,7 @@ package com.example.photocontestproject.controllers.mvc;
 import com.example.photocontestproject.dtos.ContestDto;
 import com.example.photocontestproject.dtos.EntryDto;
 import com.example.photocontestproject.dtos.in.ContestInDto;
+import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
@@ -56,6 +57,8 @@ public class ContestMvcController {
             Contest contest = contestService.getContestById(contestId);
             model.addAttribute("contest", contest);
             model.addAttribute("entry", new EntryDto());
+            model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
+            model.addAttribute("isPhaseI", contest.getContestPhase().equals(ContestPhase.PhaseI));
             return "ContestView";
         } catch (EntityNotFoundException e){
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -118,13 +121,14 @@ public class ContestMvcController {
             entry.setContest(contestService.getContestById(contestId));
             entryService.createEntry(entry, user);
             return "redirect:/contests/" + contestId;
-        } catch (AuthorizationException e){
+        } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("isOrganizer", e.getMessage());
-            return "ErrorView";
+            return "ErrorView"; // Ensure you have an ErrorView.html template for this.
         } catch (IOException e) {
             e.printStackTrace();
             return "redirect:/contests/" + contestId;
         }
     }
+
 }
