@@ -13,7 +13,7 @@ public class EmailService {
     public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
-    public void sendEmail(String to, String username){
+    public void sendEmailForRegister(String to, String username){
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -37,6 +37,35 @@ public class EmailService {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(text);
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void sendEmailForEnteringInContest(String to, String username, String contestName, String entryName) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            String subject = "🎉 Congratulations, " + username + "! You've Entered the " + contestName + " Contest!";
+
+            String text = "Dear " + username + ",\n\n" +
+                    "We are thrilled to inform you that you have successfully entered the \"" + contestName + "\" contest with your stunning entry titled \"" + entryName + "\".\n\n" +
+                    "Your passion for photography is truly inspiring, and we can’t wait to see how your entry captivates the judges and the community!\n\n" +
+                    "### What’s Next?\n" +
+                    "- **Stay Tuned**: Keep an eye on your email for contest updates and announcements. You never know, your entry might just win!\n" +
+                    "- **Explore More**: Why stop here? Check out other exciting contests on PhotoPulse and keep submitting your amazing work.\n\n" +
+                    "### Need Assistance?\n" +
+                    "If you have any questions or need help with your submissions, feel free to reach out to our support team.\n\n" +
+                    "Thank you for being part of the PhotoPulse community. We wish you the best of luck in the contest!\n\n" +
+                    "Happy Clicking!\n\n" +
+                    "Warm regards,\n\n" +
+                    "Stefan and Todor\n" +
+                    "The PhotoPulse Team\n";
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(text);
+
             javaMailSender.send(message);
         } catch (Exception e) {
             throw new RuntimeException(e);

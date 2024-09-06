@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
         /*if (!EmailValidator.validateEmail(user.getEmail())) {
             throw new EmailException("Invalid email");
         }
-        emailService.sendEmail(user.getEmail(), user.getUsername());*/
+        emailService.sendEmailForRegister(user.getEmail(), user.getUsername());*/
         return userRepository.save(user);
     }
 
