@@ -41,13 +41,16 @@
             <input type="datetime-local" class="form-control" id="phase2End" name="phase2End" th:value="${contest.phase2End}" required>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="margin: 10px">
             <label for="coverPhoto">Cover Photo:</label>
             <input type="file" class="form-control-file" id="coverPhoto" name="coverPhoto" accept="image/*" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Create Contest</button>
     </form>
+
+    <div style="height: 350px">
+    </div>
 </div>
 
 <footer th:replace="~{ForumForms.html :: footer}"></footer>
