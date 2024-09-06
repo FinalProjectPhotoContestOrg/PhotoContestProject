@@ -8,7 +8,7 @@ public class RatingDto {
     @Min(value = 1, message = "Score must be at least 1")
     @Max(value = 11, message = "Score must be at bellow 11")
     private int score;
-    @NotNull(message = "Title can't be empty")
+    @NotNull(message = "Comment can't be empty")
     private String comment;
     private boolean categoryMismatch;
 
