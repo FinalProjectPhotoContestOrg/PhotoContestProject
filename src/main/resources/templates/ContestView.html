@@ -85,7 +85,7 @@
                     <ul>
                         <li>Maximum of 5 entries per participant</li>
                         <li>Images must be in JPEG format</li>
-                        <li>File size should not exceed 10 MB per image</li>
+                        <li>File size should not exceed 3 MB per image</li>
                         <li>Entries must be original and not previously published</li>
                     </ul>
                 </div>
@@ -126,15 +126,15 @@
             </div>
 
             <div class="mb-3">
-                <label for="photo" class="form-label">Upload Photo</label>
-                <input type="file" class="form-control" id="photo" name="photo" accept="image/jpeg" required>
-                <div class="form-text">Maximum file size: 10 MB. JPEG format only.</div>
+                <label for="coverPhoto" class="form-label">Upload Photo</label>
+                <input type="file" class="form-control" id="coverPhoto" name="photo" accept="image/jpeg" required>
+                <div class="form-text">Maximum file size: 3 MB. JPEG format only.</div>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit Entry</button>
         </form>
     </div>
-    <div style="height:500px">
+    <div th:unless="${isOrganizer}" style="height:500px">
         <p></p>
     </div>
 </section>
@@ -146,5 +146,6 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/scripts.js"></script>
 </body>
 </html>
