@@ -59,18 +59,20 @@
 <div th:unless="${isOrganizer}" style="height: 150px"></div>
 <div class="rating-container" th:if="${isOrganizer}">
     <h3 class="text-center">Rate This Entry</h3>
-    <form action="submit_rating" method="POST">
+
+    <form action="#" method="POST" th:action="@{'/entries/' + ${entry.id}}" th:object="${ratingDto}">
+        <div class="error" style="color: red" th:if="${#fields.hasErrors('score')}" th:errors="*{score}"></div>
         <div class="mb-3">
             <label for="score" class="form-label">Rating Score (1-10)</label>
-            <input type="number" class="form-control" id="score" name="score" min="1" max="10" required>
+            <input th:field="*{score}" type="number" class="form-control" id="score" name="score" min="1" max="10" required>
         </div>
         <div class="mb-3">
             <label for="comment" class="form-label">Comment</label>
-            <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Enter your comment here..." required></textarea>
+            <textarea th:field="*{comment}" class="form-control" id="comment" name="comment" rows="4" placeholder="Enter your comment here..." required></textarea>
         </div>
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="categoryMismatch" name="categoryMismatch">
-            <label class="form-check-label" for="categoryMismatch">Category Mismatch</label>
+            <label th:field="*{categoryMismatch}" class="form-check-label" for="categoryMismatch">Category Mismatch</label>
         </div>
         <button type="submit" class="btn btn-primary">Submit Rating</button>
     </form>
