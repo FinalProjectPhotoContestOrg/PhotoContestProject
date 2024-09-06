@@ -1,5 +1,7 @@
 package com.example.photocontestproject.repositories;
 
+import com.example.photocontestproject.enums.Ranking;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.models.User;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +15,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     Optional<User> findByUsername(String username);
     //List<User> findListByUsername(String username);
+    List<User> findByRole(Role role);
+    List<User> findByRanking(Ranking ranking);
 
 }

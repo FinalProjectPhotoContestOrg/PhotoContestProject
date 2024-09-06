@@ -3,6 +3,7 @@ package com.example.photocontestproject.controllers.mvc;
 import com.example.photocontestproject.dtos.ContestDto;
 import com.example.photocontestproject.dtos.EntryDto;
 import com.example.photocontestproject.dtos.in.ContestInDto;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
@@ -13,6 +14,7 @@ import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.EntryService;
+import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 
 @Controller
 @RequestMapping("/contests")
@@ -31,13 +34,15 @@ public class ContestMvcController {
     private final EntryMapper entryMapper;
     private final AuthenticationHelper authenticationHelper;
     private final ContestMapper contestMapper;
+    private final UserService userService;
 
-    public ContestMvcController(ContestService contestService, EntryService entryService, EntryMapper entryMapper, AuthenticationHelper authenticationHelper, ContestMapper contestMapper) {
+    public ContestMvcController(ContestService contestService, EntryService entryService, EntryMapper entryMapper, AuthenticationHelper authenticationHelper, ContestMapper contestMapper, UserService userService) {
         this.contestService = contestService;
         this.entryService = entryService;
         this.entryMapper = entryMapper;
         this.authenticationHelper = authenticationHelper;
         this.contestMapper = contestMapper;
+        this.userService = userService;
     }
     @GetMapping("/{contestId}")
     public String showSingleContest(@PathVariable Integer contestId, Model model, HttpSession session) {
@@ -60,18 +65,22 @@ public class ContestMvcController {
     }
     @GetMapping("/create")
     public String getCreateContestView(Model model, HttpSession session) {
-        User user;
         try {
-            user = authenticationHelper.tryGetCurrentUser(session);
+            authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/login";
         }
+        model.addAttribute("junkies", userService.getUsersByRole(Role.Junkie));
+        model.addAttribute("masters", userService.getMasters());
         model.addAttribute("contest", new ContestDto());
         return "CreateContestView";
     }
     @PostMapping("/create")
     public String handleContestCreation(@RequestParam("coverPhoto") MultipartFile file,
                                         @ModelAttribute("contest") ContestDto contestDto,
+                                        @RequestParam(value = "jurorIds", required = false) List<Integer> jurorIds,
+                                        @RequestParam(value = "participantIds", required = false) List<Integer> participantIds,
+                                        @RequestParam(value = "invitational", defaultValue = "false") boolean isInvitational,
                                         @SessionAttribute("currentUser") User user,
                                         Model model) {
         try {
@@ -80,6 +89,12 @@ public class ContestMvcController {
             Contest contest = contestMapper.fromDto(contestDto);
             contest.setOrganizer(user);
             contestService.createContest(contest, user);
+            for (Integer jurorId : jurorIds) {
+                contestService.addJuror(contest.getId(), jurorId, user);
+            }
+            for (Integer participantId : participantIds) {
+                contestService.addParticipant(contest.getId(), participantId, user);
+            }
             return "redirect:/";
         } catch (IOException e) {
             e.printStackTrace();

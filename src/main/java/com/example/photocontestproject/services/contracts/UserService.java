@@ -1,5 +1,6 @@
 package com.example.photocontestproject.services.contracts;
 
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.models.User;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface UserService {
     User createUser(User user);
 
     public void deleteUserById(int id);
+    List<User> getMasters();
+    List<User> getUsersByRole(Role role);
 }

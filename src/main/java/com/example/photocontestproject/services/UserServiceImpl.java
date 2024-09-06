@@ -1,5 +1,7 @@
 package com.example.photocontestproject.services;
 
+import com.example.photocontestproject.enums.Ranking;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User"));
     }
 
+
     @Override
     public User updateUser(User user) {
         return userRepository.save(user);
@@ -78,5 +81,12 @@ public class UserServiceImpl implements UserService {
         if (userOptional.isPresent()) {
             throw new DuplicateEntityException("User", "username", userOptional.get().getUsername());
         }
+    }
+    public List<User> getUsersByRole(Role role) {
+        return userRepository.findByRole(role);
+    }
+
+    public List<User> getMasters() {
+        return userRepository.findByRanking(Ranking.Master);
     }
 }
