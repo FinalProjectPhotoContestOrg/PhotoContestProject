@@ -10,11 +10,12 @@
         .header-bg {
             background-size: cover;
             background-position: center;
-            height: 400px; /* Adjust height as needed */
+            height: 400px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            z-index: 900;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
         }
 
@@ -58,12 +59,14 @@
 <nav th:replace="~{ForumForms.html :: navbar}"></nav>
 
 <!-- Contest Details Header -->
-<header class="bg-dark text-white text-center header-bg"
-        th:style="'background-image: url(\'data:image/jpeg;base64,' + ${contest.coverPhotoUrl} + '\')'">
-    <div>
-        <h1 th:text="${contest.title}">Nature Photography Contest</h1>
-    </div>
-</header>
+<div style="background-color: rgb(0, 0, 0, 0.5); z-index: 1000">
+    <header class="bg-dark text-white text-center header-bg"
+            th:style="'background-image: url(\'data:image/jpeg;base64,' + ${contest.coverPhotoUrl} + '\')'">
+        <div>
+            <h1 th:text="${contest.title}">Nature Photography Contest</h1>
+        </div>
+    </header>
+</div>
 
 <!-- Contest Details Section -->
 <section id="contest-details" class="py-5">
@@ -107,39 +110,27 @@
     <div class="container">
         <h2 class="text-center section-title">Enter the Contest</h2>
         <p class="lead text-center">Submit your entries using the form below.</p>
-        <form th:action="@{/contests/{contestId}/entries}" th:object="${contest}" th:method="post" class="entry-form">
+        <form th:action="@{/contests/{contestId}/entries(contestId=${contest.id})}" th:method="post" th:object="${entry}" enctype="multipart/form-data" class="entry-form">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" required>
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" th:field="${entry.title}" required>
                     </div>
                 </div>
             </div>
+
             <div class="mb-3">
-                <label for="category" class="form-label">Category</label>
-                <select class="form-select" id="category" required>
-                    <option value="" disabled selected>Select a category</option>
-                    <option value="Wildlife">Wildlife</option>
-                    <option value="Landscapes">Landscapes</option>
-                    <option value="Plants">Plants</option>
-                </select>
+                <label for="description" class="form-label">Photo Description (Story)</label>
+                <textarea class="form-control" id="description" th:field="${entry.story}" rows="3" required></textarea>
             </div>
+
             <div class="mb-3">
                 <label for="photo" class="form-label">Upload Photo</label>
-                <input type="file" class="form-control" id="photo" accept="image/jpeg" required>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/jpeg" required>
                 <div class="form-text">Maximum file size: 10 MB. JPEG format only.</div>
             </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Photo Description</label>
-                <textarea class="form-control" id="description" rows="3" required></textarea>
-            </div>
+
             <button type="submit" class="btn btn-primary">Submit Entry</button>
         </form>
     </div>
@@ -147,6 +138,7 @@
         <p></p>
     </div>
 </section>
+
 <!-- Footer -->
 <footer class="footer">
     <div th:replace="~{ForumForms.html :: footer}"></div>

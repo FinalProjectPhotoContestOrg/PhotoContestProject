@@ -1,5 +1,6 @@
 package com.example.photocontestproject.mappers;
 
+import com.example.photocontestproject.dtos.EntryDto;
 import com.example.photocontestproject.dtos.in.EntryInDto;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
@@ -35,6 +36,19 @@ public class EntryMapper {
             Contest contest = contestService.getContestById(entryInDto.getContestId());
             entry.setContest(contest);
 //            contest.getParticipants().add(user);
+            return entry;
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(e.getMessage());
+        }
+    }
+    public Entry fromDto(EntryDto entryDto, User user) {
+        try {
+            Entry entry = new Entry();
+            entry.setParticipant(user);
+            entry.setTitle(entryDto.getTitle());
+            entry.setUploadedAt(Timestamp.from(Instant.now()));
+            entry.setStory(entryDto.getStory());
+            entry.setPhotoUrl(entryDto.getPhotoUrl());
             return entry;
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException(e.getMessage());

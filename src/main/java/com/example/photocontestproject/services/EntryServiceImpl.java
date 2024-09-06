@@ -2,7 +2,10 @@ package com.example.photocontestproject.services;
 
 import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.exceptions.AuthorizationException;
+import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
+import com.example.photocontestproject.external.EmailValidator;
+import com.example.photocontestproject.external.service.EmailService;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.EntryRepository;
@@ -21,20 +24,28 @@ public class EntryServiceImpl implements EntryService {
 
     private final EntryRepository entryRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public EntryServiceImpl(EntryRepository entryRepository, UserRepository userRepository) {
+    public EntryServiceImpl(EntryRepository entryRepository, UserRepository userRepository, EmailService emailService) {
         this.entryRepository = entryRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
     @Override
     public Entry createEntry(Entry entry, User user) {
-        //TODO check if user is juror to the contest
+        throwIfUserIsJuror(user, entry);
         throwIfUserIsOrganizer(user);
         throwIfUserIsNotInvitedToContest(user, entry);
-
+        /*if (!EmailValidator.validateEmail(user.getEmail())) {
+            throw new EmailException("Invalid email");
+        }*/
+        emailService.sendEmailForEnteringInContest(user.getEmail(),
+                                                   user.getUsername(),
+                                                   entry.getContest().getTitle(),
+                                                   entry.getTitle());
         if (entry.getContest().getContestType().equals(ContestType.Open)) {
             int points = user.getPoints();
             points += 1;
@@ -74,6 +85,11 @@ public class EntryServiceImpl implements EntryService {
 
     private void throwIfUserIsOrganizer(User user) {
         if (user.getRole().name().equals("Organizer")) {
+            throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
+        }
+    }
+    private void throwIfUserIsJuror(User user, Entry entry) {
+        if (entry.getContest().getJurors().contains(user)) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }
