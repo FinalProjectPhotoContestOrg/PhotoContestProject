@@ -28,6 +28,7 @@ import java.util.Set;
 
 @Service
 public class RatingServiceImpl implements RatingService {
+    public static final String NO_ACCESS_MESSAGE = "You do not have access.";
     private final RatingRepository ratingRepository;
     private final EntryRepository entryRepository;
     private final UserRepository userRepository;
@@ -141,16 +142,16 @@ public class RatingServiceImpl implements RatingService {
                 .stream()
                 .anyMatch(jurorContest -> jurorContest.getId().equals(contest.getId()));
         if (user.getRole() != Role.Organizer && !isJuror) {
-            throw new AuthorizationException("You do not have access.");
+            throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
     private void updateRanking(User participant) {
         int currentPoints = participant.getPoints();
-        if (currentPoints >= 1001) {
+        if (currentPoints >= Ranking.WISE_AND_BENEVOLENT_POINT_THRESHOLD) {
             participant.setRanking(Ranking.WiseAndBenevolentPhotoDictator);
-        } else if (currentPoints >= 151) {
+        } else if (currentPoints >= Ranking.MASTER_POINT_THRESHOLD) {
             participant.setRanking(Ranking.Master);
-        } else if (currentPoints >= 51) {
+        } else if (currentPoints >= Ranking.ENTHUSIAST_POINT_THRESHOLD) {
             participant.setRanking(Ranking.Enthusiast);
         } else {
             participant.setRanking(Ranking.Junkie);
@@ -159,14 +160,14 @@ public class RatingServiceImpl implements RatingService {
     private void throwIfNotAuthor(User user, Rating rating){
         boolean isOwner = user.getId().equals(rating.getJuror().getId());
         if (!isOwner){
-            throw new AuthorizationException("You do not have access.");
+            throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
     private void throwIfNotAuthorOrOrganizer(User user, Rating rating){
         boolean isOwner = user.getId().equals(rating.getJuror().getId());
         boolean isOrganizer = user.getRole().equals(Role.Organizer);
         if (!isOwner && !isOrganizer){
-            throw new AuthorizationException("You do not have access.");
+            throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
 }

@@ -35,17 +35,15 @@ public class ContestController {
     private final RatingService ratingService;
     private final EntryService entryService;
     private final ContestMapper contestMapper;
-    private final EntryMapper entryMapper;
     private final RatingMapper ratingMapper;
     private final AuthenticationHelper authenticationHelper;
 
 
     @Autowired
-    public ContestController(ContestService contestService, EntryService entryService, ContestMapper contestMapper, EntryMapper entryMapper, RatingMapper ratingMapper, RatingService ratingService, AuthenticationHelper authenticationHelper) {
+    public ContestController(ContestService contestService, EntryService entryService, ContestMapper contestMapper, RatingMapper ratingMapper, RatingService ratingService, AuthenticationHelper authenticationHelper) {
         this.contestService = contestService;
         this.entryService = entryService;
         this.contestMapper = contestMapper;
-        this.entryMapper = entryMapper;
         this.ratingMapper = ratingMapper;
         this.ratingService = ratingService;
 
@@ -139,9 +137,8 @@ public class ContestController {
 
     @DeleteMapping("/{id}")
     public void deleteContest(@PathVariable int id, @RequestHeader HttpHeaders headers) {
-        User user;
         try {
-            user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(headers);
             contestService.deleteContest(id, user);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -150,9 +147,8 @@ public class ContestController {
 
     @PostMapping("/{id}/phase")
     public Contest changePhase(@PathVariable int id, @RequestHeader HttpHeaders headers) {
-        User user;
         try {
-            user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(headers);
             return contestService.changePhase(id, user);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -169,8 +165,10 @@ public class ContestController {
     }
 
     @PostMapping("/{contestId}/entries/{entryId}/ratings")
-    public Rating rateEntry(@PathVariable int contestId, @PathVariable int entryId,
-                            @Valid @RequestBody RatingDto ratingDto, @RequestHeader HttpHeaders headers) {
+    public Rating rateEntry(@PathVariable int contestId,
+                            @PathVariable int entryId,
+                            @Valid @RequestBody RatingDto ratingDto,
+                            @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             int jurorId = user.getId();
@@ -192,8 +190,10 @@ public class ContestController {
     }
 
     @PutMapping("/{contestId}/entries/{entryId}/ratings/{ratingId}")
-    public Rating updateRatingToEntry(@PathVariable int contestId, @PathVariable int entryId,
-                                      @PathVariable int ratingId, @Valid @RequestBody RatingDto ratingDto,
+    public Rating updateRatingToEntry(@PathVariable int contestId,
+                                      @PathVariable int entryId,
+                                      @PathVariable int ratingId,
+                                      @Valid @RequestBody RatingDto ratingDto,
                                       @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -220,8 +220,10 @@ public class ContestController {
     }
 
     @DeleteMapping("/{contestId}/entries/{entryId}/ratings/{ratingId}")
-    public void deleteRatingToEntry(@PathVariable int contestId, @PathVariable int entryId,
-                                    @PathVariable int ratingId, @RequestHeader HttpHeaders headers) {
+    public void deleteRatingToEntry(@PathVariable int contestId,
+                                    @PathVariable int entryId,
+                                    @PathVariable int ratingId,
+                                    @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Contest contest = contestService.getContestById(contestId);

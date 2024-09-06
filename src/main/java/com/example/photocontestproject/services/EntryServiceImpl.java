@@ -1,6 +1,7 @@
 package com.example.photocontestproject.services;
 
 import com.example.photocontestproject.enums.ContestType;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
@@ -21,6 +22,7 @@ import java.util.List;
 @Service
 public class EntryServiceImpl implements EntryService {
     public static final String ERROR_NO_PERMISSION_MESSAGE = "You do not have permission to perform this operation";
+    public static final String NOT_INVITED_TO_CONTEST_ERROR_MESSAGE = "You are not invited to this contest and can't enter.";
 
     private final EntryRepository entryRepository;
     private final UserRepository userRepository;
@@ -84,7 +86,7 @@ public class EntryServiceImpl implements EntryService {
     }
 
     private void throwIfUserIsOrganizer(User user) {
-        if (user.getRole().name().equals("Organizer")) {
+        if (user.getRole().equals(Role.Organizer)) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }
@@ -95,14 +97,14 @@ public class EntryServiceImpl implements EntryService {
     }
 
     private void throwIfUserIsNotOrganizer(User user) {
-        if (user.getRole().name().equals("Junkie")) {
+        if (!user.getRole().equals(Role.Organizer)) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }
 
     private void throwIfUserIsNotInvitedToContest(User user, Entry entry) {
         if (entry.getContest().getContestType().equals(ContestType.Invitational) && !entry.getContest().getParticipants().contains(user)) {
-            throw new AuthorizationException("You are not invited to this contest and can't enter.");
+            throw new AuthorizationException(NOT_INVITED_TO_CONTEST_ERROR_MESSAGE);
         }
     }
 }

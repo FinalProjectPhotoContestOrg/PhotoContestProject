@@ -57,11 +57,9 @@ public class EntryRestController {
 
     @PostMapping
     public Entry createEntry(@RequestBody EntryInDto entryInDto, @RequestHeader HttpHeaders headers) {
-        Entry entry;
-        User user;
         try {
-            user = authenticationHelper.tryGetUser(headers);
-            entry = entryMapper.fromDto(entryInDto, user);
+            User user = authenticationHelper.tryGetUser(headers);
+            Entry entry = entryMapper.fromDto(entryInDto, user);
             if (entry.getContest().getContestPhase() != ContestPhase.PhaseI){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Entries can only be created during PhaseI.");
             }

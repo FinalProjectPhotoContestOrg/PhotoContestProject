@@ -8,9 +8,7 @@ import com.example.photocontestproject.services.contracts.EntryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/entries")
@@ -26,6 +24,20 @@ public class EntryMvcController {
 
     @GetMapping("/{id}")
     public String getEntryView(@PathVariable int id, HttpSession session, Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/login";
+        }
+
+        Entry entry = entryService.getEntryById(id);
+        model.addAttribute("entry", entry);
+        return "EntryView";
+    }
+
+    @PostMapping("/{id}")
+    public String rateEntry(@PathVariable int id, HttpSession session, Model model) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);

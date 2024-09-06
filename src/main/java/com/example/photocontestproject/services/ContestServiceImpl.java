@@ -3,6 +3,7 @@ package com.example.photocontestproject.services;
 import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.enums.Ranking;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ContestServiceImpl implements ContestService {
     public static final String ERROR_NO_PERMISSION_MESSAGE = "You do not have permission to perform this operation";
     public static final String ERROR_WRONG_CONTEST_TYPE_MESSAGE = "This Operation is for Invitational contests only.";
+    public static final String NOT_A_MASTER_OR_ABOVE_ERROR_MESSAGE = "Only a user with a rank of Master or above to be a juror.";
 
     private final ContestRepository contestRepository;
     private final EntryRepository entryRepository;
@@ -141,7 +143,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     private void throwIfUserIsNotOrganizer(User user) {
-        if (user.getRole().name().equals("Junkie")) {
+        if (!user.getRole().equals(Role.Organizer)) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }
@@ -149,7 +151,7 @@ public class ContestServiceImpl implements ContestService {
     private void throwIfUserCantBeJuror(User user) {
         Ranking userRanking = user.getRanking();
         if (userRanking.equals(Ranking.Junkie) || userRanking.equals(Ranking.Enthusiast)) {
-            throw new AuthorizationException("Only a user with a rank of Master or above to be a juror.");
+            throw new AuthorizationException(NOT_A_MASTER_OR_ABOVE_ERROR_MESSAGE);
         }
     }
 
