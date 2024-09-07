@@ -4,6 +4,7 @@ import com.example.photocontestproject.dtos.ContestDto;
 import com.example.photocontestproject.dtos.EntryDto;
 import com.example.photocontestproject.dtos.in.ContestInDto;
 import com.example.photocontestproject.enums.ContestPhase;
+import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
@@ -59,6 +60,9 @@ public class ContestMvcController {
             model.addAttribute("entry", new EntryDto());
             model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
             model.addAttribute("isPhaseI", contest.getContestPhase().equals(ContestPhase.PhaseI));
+            model.addAttribute("isJuror", contest.getJurors().contains(user));
+            model.addAttribute("isInvited", contest.getParticipants().stream().anyMatch(participant -> participant.getId().equals(user.getId())));
+            model.addAttribute("isInvitational", contest.getContestType().equals(ContestType.Invitational));
             return "ContestView";
         } catch (EntityNotFoundException e){
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());

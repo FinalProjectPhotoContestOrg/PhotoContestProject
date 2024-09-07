@@ -106,7 +106,7 @@
 
 <!-- Entry Form Section -->
 <section id="enter-contest" class="bg-light py-5"
-         th:if="${!isOrganizer && isPhaseI}">
+         th:if="${!isOrganizer && !isJuror && isPhaseI && (!isInvitational || (isInvitational && isInvited))}">
     <div class="container">
         <h2 class="text-center section-title">Enter the Contest</h2>
         <p class="lead text-center">Submit your entries using the form below.</p>

@@ -12,6 +12,8 @@
     <h2>Create a New Contest</h2>
 
     <!-- Form to create a new contest -->
+    <!--<div style="height: 350px"></div>-->
+
     <form th:action="@{/contests/create}" method="post" th:object="${contest}" enctype="multipart/form-data">
 
         <!-- Contest Title -->
@@ -32,7 +34,7 @@
             <select class="form-control" id="contestType" name="contestType" required>
                 <option th:each="type : ${T(com.example.photocontestproject.enums.ContestType).values()}"
                         th:value="${type.name()}"
-                th:text="${type}"></option>
+                        th:text="${type}"></option>
             </select>
         </div>
 
@@ -55,26 +57,40 @@
         </div>
 
         <!-- Juror Selection -->
-        <div class="mb-3">
+        <!--<div class="mb-3">
             <label for="jurors" class="form-label">Select Jurors</label>
             <select id="jurors" name="jurorIds" class="form-select" multiple>
                 <option th:each="juror : ${masters}" th:value="${juror.id}" th:text="${juror.firstName + ' ' + juror.lastName}"></option>
             </select>
+        </div>-->
+        <!-- Juror Selection -->
+        <div class="mb-3" id="jurors">
+            <label for="jurors" class="form-label">Select Jurors</label>
+            <div th:each="juror : ${masters}">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:id="${'juror-' + juror.id}" th:name="jurorIds" th:value="${juror.id}">
+                    <label class="form-check-label" th:for="${'juror-' + juror.id}" th:text="${juror.firstName + ' ' + juror.lastName}"></label>
+                </div>
+            </div>
         </div>
+
+
 
         <!-- Invitational Participant Selection (hidden initially) -->
         <div id="participantBlock" class="mb-3" style="display: none;">
-            <label for="participants" class="form-label">Select Participants (for invitational contest)</label>
-            <select id="participants" name="participantIds" class="form-select" multiple>
-                <option th:each="junkie : ${junkies}" th:value="${junkie.id}" th:text="${junkie.firstName + ' ' + junkie.lastName}"></option>
-            </select>
+            <label for="participantBlock" class="form-label">Select Participants (for invitational contest)</label>
+            <div th:each="junkie : ${junkies}">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:id="${'participant-' + junkie.id}" th:name="participantIds" th:value="${junkie.id}">
+                    <label class="form-check-label" th:for="${'participant-' + junkie.id}" th:text="${junkie.firstName + ' ' + junkie.lastName}"></label>
+                </div>
+            </div>
         </div>
+
 
         <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Create Contest</button>
     </form>
-
-    <div style="height: 350px"></div>
 </div>
 
 <footer th:replace="~{ForumForms.html :: footer}"></footer>
