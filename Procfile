@@ -1,1 +1,1 @@
-web: java -jar -Dserver.port=$PORT  build/libs/PhotoContestProject-0.0.1-SNAPSHOT.jar
+web: java -jar -Dserver.port=$PORT -Dspring.profiles.active=prod  build/libs/PhotoContestProject-0.0.1-SNAPSHOT.jar

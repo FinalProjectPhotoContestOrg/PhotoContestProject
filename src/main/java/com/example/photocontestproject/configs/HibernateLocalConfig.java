@@ -14,13 +14,13 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-@Profile("prod")
-public class HibernateConfig {
+@Profile("!prod")
+public class HibernateLocalConfig {
 
     private final String dbUrl, dbUsername, dbPassword;
 
     @Autowired
-    public HibernateConfig(Environment env) {
+    public HibernateLocalConfig(Environment env) {
         dbUrl = env.getProperty("database.url");
         dbUsername = env.getProperty("database.username");
         dbPassword = env.getProperty("database.password");
@@ -38,7 +38,7 @@ public class HibernateConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
         dataSource.setUrl(dbUrl);
         dataSource.setUsername(dbUsername);
         dataSource.setPassword(dbPassword);
@@ -48,7 +48,7 @@ public class HibernateConfig {
 
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
 
         // Configure code-first capabilities
         //hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
