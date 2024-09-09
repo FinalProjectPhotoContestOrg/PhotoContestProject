@@ -226,7 +226,6 @@ public class ContestServiceImpl implements ContestService {
                     Entry potentialSharedSpotEntry = entries.get(k);
                     int potentialEntryTotalScore = potentialSharedSpotEntry.getEntryTotalScore();
 
-
                     if (potentialEntryTotalScore != entryTotalScore) {
                         break;
                     } else {
@@ -235,38 +234,15 @@ public class ContestServiceImpl implements ContestService {
 
                     User potentialEntryParticipant = potentialSharedSpotEntry.getParticipant();
                     int potentialUserPoints = potentialEntryParticipant.getPoints();
-                    if (position == 1) {
-                        potentialUserPoints += 40;
-                        i++;
-                    } else if (position == 2) {
-                        potentialUserPoints += 25;
-                        i++;
-                    } else if (position == 3) {
-                        potentialUserPoints += 10;
-                        i++;
-                    }
+                    potentialUserPoints += calculateScore(isSharedSpot, position);
+                    i++;
                     potentialEntryParticipant.setPoints(potentialUserPoints);
                     rankingService.updateRanking(potentialEntryParticipant);
                     userRepository.save(potentialEntryParticipant);
                 }
 
-                if (isSharedSpot) {
-                    if (position == 1) {
-                        userPoints += 40;
-                    } else if (position == 2) {
-                        userPoints += 25;
-                    } else if (position == 3) {
-                        userPoints += 10;
-                    }
-                } else {
-                    if (position == 1) {
-                        userPoints += 50;
-                    } else if (position == 2) {
-                        userPoints += 35;
-                    } else if (position == 3) {
-                        userPoints += 20;
-                    }
-                }
+                userPoints += calculateScore(isSharedSpot, position);
+
                 entry.getParticipant().setPoints(userPoints);
                 rankingService.updateRanking(entry.getParticipant());
                 userRepository.save(entry.getParticipant());
@@ -274,4 +250,26 @@ public class ContestServiceImpl implements ContestService {
             }
         }
     }
+
+    private int calculateScore(boolean isSharedSpot, int position) {
+        if (isSharedSpot) {
+            if (position == 1) {
+                return 40;
+            } else if (position == 2) {
+                return 25;
+            } else if (position == 3) {
+                return 10;
+            }
+        } else {
+            if (position == 1) {
+                return 50;
+            } else if (position == 2) {
+                return 35;
+            } else if (position == 3) {
+                return 20;
+            }
+        }
+        return 0;
+    }
+
 }
