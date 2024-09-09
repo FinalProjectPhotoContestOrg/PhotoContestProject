@@ -96,6 +96,12 @@ public class ContestMvcController {
             Contest contest = contestMapper.fromDto(contestDto);
             contest.setOrganizer(user);
             contestService.createContest(contest, user);
+            if (jurorIds == null) {
+                jurorIds = List.of();
+            }
+            if (participantIds == null) {
+                participantIds = List.of();
+            }
             for (Integer jurorId : jurorIds) {
                 contestService.addJuror(contest.getId(), jurorId, user);
             }
