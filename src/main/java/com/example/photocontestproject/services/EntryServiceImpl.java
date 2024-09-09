@@ -38,8 +38,8 @@ public class EntryServiceImpl implements EntryService {
     @Transactional
     @Override
     public Entry createEntry(Entry entry, User user) {
-        throwIfUserIsJuror(user, entry);
         throwIfUserIsOrganizer(user);
+        throwIfUserIsJuror(user, entry);
         throwIfUserIsNotInvitedToContest(user, entry);
         /*if (!EmailValidator.validateEmail(user.getEmail())) {
             throw new EmailException("Invalid email");

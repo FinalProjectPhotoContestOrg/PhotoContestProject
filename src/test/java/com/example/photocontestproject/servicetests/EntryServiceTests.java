@@ -22,6 +22,7 @@ import org.mockito.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.data.jpa.domain.Specification;
+import com.example.photocontestproject.external.service.EmailService;
 
 import java.util.*;
 
@@ -33,9 +34,10 @@ public class EntryServiceTests {
 
     @Mock
     private EntryRepository entryRepository;
-
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private EmailService emailService;
     @InjectMocks
     private EntryServiceImpl entryService;
 
@@ -63,6 +65,7 @@ public class EntryServiceTests {
         assertNotNull(result);
         verify(entryRepository, times(1)).save(entry);
     }
+
     @Test
     public void create_Entry_ShouldThrow_When_User_Is_Not_Invited() {
         Contest contest = new Contest();
@@ -172,7 +175,6 @@ public class EntryServiceTests {
 
         Assertions.assertEquals(2, result.size());
     }
-
 
 
     @Test

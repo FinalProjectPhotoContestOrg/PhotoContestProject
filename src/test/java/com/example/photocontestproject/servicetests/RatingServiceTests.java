@@ -384,9 +384,11 @@ public class RatingServiceTests {
         entry.setEntryTotalScore(50);
 
         Rating oldRating = new Rating();
+        oldRating.setJuror(organizer);
         oldRating.setScore(5);
 
         Rating newRating = new Rating();
+        newRating.setJuror(organizer);
         newRating.setEntry(entry);
         newRating.setScore(8);
 
