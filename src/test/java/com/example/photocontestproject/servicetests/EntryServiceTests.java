@@ -234,10 +234,21 @@ public class EntryServiceTests {
             }
         });
 
-
         List<Entry> result = entryService.getAllEntries("Title");
 
-
         assertEquals(3, result.size());
+    }
+
+    @Test
+    void throwIfUserIsJuror_Should_Throw() {
+        User user = new User();
+        Entry entry = new Entry();
+        Contest contest = new Contest();
+        contest.setJurors(Set.of(user));
+        entry.setContest(contest);
+
+        assertThrows(AuthorizationException.class, () -> {
+            entryService.throwIfUserIsJuror(user, entry);
+        });
     }
 }

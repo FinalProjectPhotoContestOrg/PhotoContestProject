@@ -146,7 +146,7 @@ public class RatingServiceImpl implements RatingService {
             throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
-    private void updateRanking(User participant) {
+    public void updateRanking(User participant) {
         int currentPoints = participant.getPoints();
         if (currentPoints >= Ranking.WISE_AND_BENEVOLENT_POINT_THRESHOLD) {
             participant.setRanking(Ranking.WiseAndBenevolentPhotoDictator);

@@ -1,10 +1,10 @@
 package com.example.photocontestproject.servicetests;
 
 import com.example.photocontestproject.TestHelper;
-import com.example.photocontestproject.dtos.in.RatingDto;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
+import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
@@ -23,8 +23,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import java.sql.Timestamp;
-import java.time.Instant;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -96,6 +95,7 @@ public class RatingServiceTests {
         verify(entryRepository, times(1)).save(entry);
         verify(ratingRepository, times(1)).save(rating);
     }
+
     @Test
     public void createRating_Should_ThrowException_When_UserIsNotAuthorized() {
         // Arrange
@@ -291,6 +291,7 @@ public class RatingServiceTests {
         verify(entryRepository, times(1)).save(entry);
         verify(ratingRepository, times(1)).save(rating);
     }
+
     @Test
     public void createRating_Should_UpdateEntryTotalScore() {
         // Arrange
@@ -502,6 +503,7 @@ public class RatingServiceTests {
         verify(entryRepository).save(entry);
         verify(userRepository).save(participant);
     }
+
     @Test
     void testDeleteRating_throwsEntityNotFoundException_whenRatingNotFound() {
         User organizer = new User();
@@ -516,7 +518,7 @@ public class RatingServiceTests {
     }
 
     @Test
-    public void testGetRatingsForEntry() {
+    public void getRatingsForEntry_Should_Get_Entries() {
         User user = new User();
         user.setRole(Role.Organizer);
         Set<Rating> ratings = Set.of(new Rating());
@@ -530,7 +532,7 @@ public class RatingServiceTests {
     }
 
     @Test
-    void Test_Throw_If_Not_Author() {
+    void Throw_If_Not_Author_Should_Throw() {
         User organizer = TestHelper.createOrganizerUser();
 
         Rating rating = new Rating();
@@ -538,21 +540,96 @@ public class RatingServiceTests {
         User user = TestHelper.createJunkieUser();
 
 
-
         assertThrows(AuthorizationException.class, () -> ratingService.throwIfNotAuthor(user, rating));
     }
 
     @Test
-    void Test_Throw_If_Not_Author_Or_Organizer() {
+    void Throw_If_Not_Author_Or_Organizer_Should_Throw() {
         User organizer = TestHelper.createJunkieUser();
 
         Rating rating = new Rating();
         rating.setJuror(new User());
         User user = TestHelper.createJunkieUser();
 
-
-
         assertThrows(AuthorizationException.class, () -> ratingService.throwIfNotAuthorOrOrganizer(user, rating));
     }
 
+    @Test
+    void Update_User_Ranking_Should_Update_Ranking_To_Enthusiast() {
+        User user = new User();
+        user.setPoints(Ranking.ENTHUSIAST_POINT_THRESHOLD + 1);
+        user.setRanking(Ranking.Master);
+
+        ratingService.updateRanking(user);
+
+        assertEquals(Ranking.Enthusiast, user.getRanking());
+    }
+
+    @Test
+    void Update_User_Ranking_Should_Update_Ranking_To_Master() {
+        User user = new User();
+        user.setPoints(Ranking.MASTER_POINT_THRESHOLD + 1);
+        user.setRanking(Ranking.Enthusiast);
+
+        ratingService.updateRanking(user);
+
+        assertEquals(Ranking.Master, user.getRanking());
+    }
+
+    @Test
+    void Update_User_Ranking_Should_Update_Ranking_To_WiseAndBenevolentDictator() {
+        User user = new User();
+        user.setPoints(Ranking.WISE_AND_BENEVOLENT_POINT_THRESHOLD + 1);
+        user.setRanking(Ranking.Enthusiast);
+
+        ratingService.updateRanking(user);
+
+        assertEquals(Ranking.WiseAndBenevolentPhotoDictator, user.getRanking());
+    }
+
+    @Test
+    void Update_User_Ranking_Should_Update_Ranking_To_Junkie() {
+        User user = new User();
+        user.setPoints(0);
+        user.setRanking(Ranking.Enthusiast);
+
+        ratingService.updateRanking(user);
+
+        assertEquals(Ranking.Junkie, user.getRanking());
+    }
+
+    @Test
+    void createRating_Should_Throw_If_There_Is_Duplicate() {
+        User juror = new User();
+        juror.setId(1);
+        juror.setRole(Role.Organizer);
+
+        Contest contest = new Contest();
+        contest.setId(1);
+        juror.setJurorContests(Collections.singleton(contest));
+
+        User participant = new User();
+        participant.setId(2);
+        participant.setPoints(50);
+
+        Entry entry = new Entry();
+        entry.setContest(contest);
+        entry.setParticipant(participant);
+        entry.setEntryTotalScore(0);
+
+        Rating rating = new Rating();
+        rating.setJuror(juror);
+        rating.setEntry(entry);
+        rating.setScore(10);
+
+        when(userService.getUserById(juror.getId())).thenReturn(juror);
+        when(userService.getUserById(participant.getId())).thenReturn(participant);
+        when(ratingRepository.save(any(Rating.class))).thenReturn(rating);
+        when(ratingRepository.findByJurorAndEntry(juror, entry)).thenReturn(Optional.of(rating));
+
+
+        assertThrows(DuplicateEntityException.class, () -> {
+            ratingService.createRating(rating);
+        });
+    }
 }

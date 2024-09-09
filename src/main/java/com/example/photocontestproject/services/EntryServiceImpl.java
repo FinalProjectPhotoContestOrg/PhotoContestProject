@@ -90,7 +90,7 @@ public class EntryServiceImpl implements EntryService {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }
-    private void throwIfUserIsJuror(User user, Entry entry) {
+    public void throwIfUserIsJuror(User user, Entry entry) {
         if (entry.getContest().getJurors().contains(user)) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }

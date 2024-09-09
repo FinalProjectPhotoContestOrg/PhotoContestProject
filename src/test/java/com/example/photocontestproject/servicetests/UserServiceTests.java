@@ -3,6 +3,7 @@ package com.example.photocontestproject.servicetests;
 import com.example.photocontestproject.TestHelper;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
+import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
@@ -239,5 +240,16 @@ public class UserServiceTests {
         assertEquals(1, result.size());
         assertEquals("User1", result.get(0).getUsername());
 
+    }
+
+    @Test
+    void throwIfDuplicate_Should_Throw() {
+        User user = TestHelper.createJunkieUser();
+
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+
+        assertThrows(DuplicateEntityException.class, () -> {
+            userService.throwIfUserIsDuplicate("username");
+        });
     }
 }
