@@ -1,6 +1,8 @@
 package com.example.photocontestproject.servicetests;
 
 import com.example.photocontestproject.TestHelper;
+import com.example.photocontestproject.enums.Ranking;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
@@ -20,6 +22,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +54,39 @@ public class UserServiceTests {
 
         assertEquals(user.getId(), foundUser.getId());
         verify(userRepository, times(1)).findById(1);
+    }
+
+    @Test
+    public void testGetUsersByRole() {
+
+        Role role = Role.Junkie;
+        User user1 = TestHelper.createJunkieUser();
+        User user2 = TestHelper.createJunkieUser();
+        List<User> users = Arrays.asList(user1, user2);
+        when(userRepository.findByRole(role)).thenReturn(users);
+
+
+        List<User> result = userService.getUsersByRole(role);
+
+
+        assertEquals(users, result);
+        verify(userRepository).findByRole(role);
+    }
+
+    @Test
+    public void testGetMasters() {
+
+        User user1 = TestHelper.createJunkieUser();
+        User user2 = TestHelper.createJunkieUser();
+        List<User> masters = Arrays.asList(user1, user2);
+        when(userRepository.findByRanking(Ranking.Master)).thenReturn(masters);
+
+
+        List<User> result = userService.getMasters();
+
+
+        assertEquals(masters, result);
+        verify(userRepository).findByRanking(Ranking.Master);
     }
 
     @Test
