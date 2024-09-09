@@ -13,11 +13,15 @@ import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.UserService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -158,6 +162,29 @@ public class ContestServiceImpl implements ContestService {
     private void throwIfContestIsOpen(Contest contest) {
         if (contest.getContestType().equals(ContestType.Open)) {
             throw new AuthorizationException(ERROR_WRONG_CONTEST_TYPE_MESSAGE);
+        }
+    }
+
+    @Scheduled(fixedRate = 1000)
+    public void scheduledTask() {
+        List<Contest> contests = contestRepository.findAll();
+
+        for (Contest contest : contests) {
+            if (contest.getContestPhase().equals(ContestPhase.PhaseI)) {
+                Timestamp currentTime = Timestamp.from(Instant.now());
+                if (currentTime.after(contest.getPhase1End())) {
+                    contest.setContestPhase(ContestPhase.PhaseII);
+                    contestRepository.save(contest);
+                }
+            }
+
+            if (contest.getContestPhase().equals(ContestPhase.PhaseII)) {
+                Timestamp currentTime = Timestamp.from(Instant.now());
+                if (currentTime.after(contest.getPhase2End())) {
+                    contest.setContestPhase(ContestPhase.Finished);
+                    contestRepository.save(contest);
+                }
+            }
         }
     }
 
