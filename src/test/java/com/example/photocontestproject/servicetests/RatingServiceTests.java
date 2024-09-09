@@ -529,6 +529,30 @@ public class RatingServiceTests {
         verify(ratingRepository, times(1)).findByEntryId(1);
     }
 
+    @Test
+    void Test_Throw_If_Not_Author() {
+        User organizer = TestHelper.createOrganizerUser();
 
+        Rating rating = new Rating();
+        rating.setJuror(new User());
+        User user = TestHelper.createJunkieUser();
+
+
+
+        assertThrows(AuthorizationException.class, () -> ratingService.throwIfNotAuthor(user, rating));
+    }
+
+    @Test
+    void Test_Throw_If_Not_Author_Or_Organizer() {
+        User organizer = TestHelper.createJunkieUser();
+
+        Rating rating = new Rating();
+        rating.setJuror(new User());
+        User user = TestHelper.createJunkieUser();
+
+
+
+        assertThrows(AuthorizationException.class, () -> ratingService.throwIfNotAuthorOrOrganizer(user, rating));
+    }
 
 }

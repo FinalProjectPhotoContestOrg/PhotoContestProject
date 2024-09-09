@@ -158,13 +158,13 @@ public class RatingServiceImpl implements RatingService {
             participant.setRanking(Ranking.Junkie);
         }
     }
-    private void throwIfNotAuthor(User user, Rating rating){
+    public void throwIfNotAuthor(User user, Rating rating){
         boolean isOwner = user.getId().equals(rating.getJuror().getId());
         if (!isOwner){
             throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
-    private void throwIfNotAuthorOrOrganizer(User user, Rating rating){
+    public void throwIfNotAuthorOrOrganizer(User user, Rating rating){
         boolean isOwner = user.getId().equals(rating.getJuror().getId());
         boolean isOrganizer = user.getRole().equals(Role.Organizer);
         if (!isOwner && !isOrganizer){
