@@ -156,7 +156,7 @@ public class ContestController {
     }
 
     @GetMapping("/{contestId}/entries")
-    public Set<Entry> getEntriesByContest(@PathVariable int contestId) {
+    public List<Entry> getEntriesByContest(@PathVariable int contestId) {
         Contest contest = contestService.getContestById(contestId);
         if (contest.getEntries().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT);

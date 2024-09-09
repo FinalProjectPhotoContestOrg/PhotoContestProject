@@ -7,13 +7,15 @@ import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
+import com.example.photocontestproject.models.Entry;
+import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.ContestRepository;
 import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.ContestService;
+import com.example.photocontestproject.services.contracts.RatingService;
 import com.example.photocontestproject.services.contracts.UserService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -34,13 +37,19 @@ public class ContestServiceImpl implements ContestService {
     private final EntryRepository entryRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final RatingService rankingService;
 
     @Autowired
-    public ContestServiceImpl(ContestRepository contestRepository, EntryRepository entryRepository, UserRepository userRepository, UserService userService) {
+    public ContestServiceImpl(ContestRepository contestRepository,
+                              EntryRepository entryRepository,
+                              UserRepository userRepository,
+                              UserService userService,
+                              RatingService rankingService) {
         this.contestRepository = contestRepository;
         this.entryRepository = entryRepository;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.rankingService = rankingService;
     }
 
     @Override
@@ -166,6 +175,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Scheduled(fixedRate = 1000)
+    @Transactional
     public void scheduledTask() {
         List<Contest> contests = contestRepository.findAll();
 
@@ -182,10 +192,86 @@ public class ContestServiceImpl implements ContestService {
                 Timestamp currentTime = Timestamp.from(Instant.now());
                 if (currentTime.after(contest.getPhase2End())) {
                     contest.setContestPhase(ContestPhase.Finished);
+                    handleScoringWhenContestEnds(contest);
                     contestRepository.save(contest);
                 }
             }
         }
     }
 
+    @Transactional
+    public void handleScoringWhenContestEnds(Contest contest) {
+        if (contest.getContestPhase().equals(ContestPhase.Finished)) {
+            List<Entry> entries = contest.getEntries();
+            for (Entry entry : entries) {
+                Set<Rating> ratings = entry.getRatings();
+                int totalScore = 0;
+                for (Rating rating : ratings) {
+                    totalScore += rating.getScore();
+                }
+                entry.setEntryTotalScore(totalScore);
+                entryRepository.save(entry);
+            }
+
+            entries.sort((e1, e2) -> e2.getEntryTotalScore() - e1.getEntryTotalScore());
+
+            int position = 1;
+            for (int i = 0; i < entries.size(); i++) {
+                Entry entry = entries.get(i);
+                int entryTotalScore = entry.getEntryTotalScore();
+                int userPoints = entry.getParticipant().getPoints();
+                boolean isSharedSpot = false;
+
+                for (int k = i + 1; k < entries.size(); k++) {
+                    Entry potentialSharedSpotEntry = entries.get(k);
+                    int potentialEntryTotalScore = potentialSharedSpotEntry.getEntryTotalScore();
+
+
+                    if (potentialEntryTotalScore != entryTotalScore) {
+                        break;
+                    } else {
+                        isSharedSpot = true;
+                    }
+
+                    User potentialEntryParticipant = potentialSharedSpotEntry.getParticipant();
+                    int potentialUserPoints = potentialEntryParticipant.getPoints();
+                    if (position == 1) {
+                        potentialUserPoints += 40;
+                        i++;
+                    } else if (position == 2) {
+                        potentialUserPoints += 25;
+                        i++;
+                    } else if (position == 3) {
+                        potentialUserPoints += 10;
+                        i++;
+                    }
+                    potentialEntryParticipant.setPoints(potentialUserPoints);
+                    rankingService.updateRanking(potentialEntryParticipant);
+                    userRepository.save(potentialEntryParticipant);
+                }
+
+                if (isSharedSpot) {
+                    if (position == 1) {
+                        userPoints += 40;
+                    } else if (position == 2) {
+                        userPoints += 25;
+                    } else if (position == 3) {
+                        userPoints += 10;
+                    }
+                } else {
+                    if (position == 1) {
+                        userPoints += 50;
+                    } else if (position == 2) {
+                        userPoints += 35;
+                    } else if (position == 3) {
+                        userPoints += 20;
+                    }
+                }
+                entry.getParticipant().setPoints(userPoints);
+                rankingService.updateRanking(entry.getParticipant());
+                userRepository.save(entry.getParticipant());
+                position++;
+            }
+        }
+    }
 }

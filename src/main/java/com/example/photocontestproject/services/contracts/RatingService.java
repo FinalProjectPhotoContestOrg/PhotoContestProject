@@ -18,6 +18,8 @@ public interface RatingService {
 
     Rating updateRating(int oldScore, Rating ratingDetails, User user);
 
+    void updateRanking(User user);
+
     void deleteRating(int id, User user);
 
     Set<Rating> getRatingsForEntry(int entryId, User user);

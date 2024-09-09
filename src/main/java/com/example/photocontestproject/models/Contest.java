@@ -5,7 +5,9 @@ import com.example.photocontestproject.enums.ContestType;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -47,7 +49,7 @@ public class Contest {
     private Timestamp createdAt;
 
     @OneToMany(mappedBy = "contest")
-    private Set<Entry> entries;
+    private List<Entry> entries;
 
     @ManyToMany
     @JoinTable(
@@ -146,11 +148,11 @@ public class Contest {
         this.createdAt = createdAt;
     }
 
-    public Set<Entry> getEntries() {
+    public List<Entry> getEntries() {
         return entries;
     }
 
-    public void setEntries(Set<Entry> entries) {
+    public void setEntries(List<Entry> entries) {
         this.entries = entries;
     }
 

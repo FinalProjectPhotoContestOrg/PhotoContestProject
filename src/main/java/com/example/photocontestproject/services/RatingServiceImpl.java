@@ -20,9 +20,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 import java.util.Set;
@@ -146,6 +144,8 @@ public class RatingServiceImpl implements RatingService {
             throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
+
+    @Override
     public void updateRanking(User participant) {
         int currentPoints = participant.getPoints();
         if (currentPoints >= Ranking.WISE_AND_BENEVOLENT_POINT_THRESHOLD) {
@@ -158,16 +158,18 @@ public class RatingServiceImpl implements RatingService {
             participant.setRanking(Ranking.Junkie);
         }
     }
-    public void throwIfNotAuthor(User user, Rating rating){
+
+    public void throwIfNotAuthor(User user, Rating rating) {
         boolean isOwner = user.getId().equals(rating.getJuror().getId());
-        if (!isOwner){
+        if (!isOwner) {
             throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
-    public void throwIfNotAuthorOrOrganizer(User user, Rating rating){
+
+    public void throwIfNotAuthorOrOrganizer(User user, Rating rating) {
         boolean isOwner = user.getId().equals(rating.getJuror().getId());
         boolean isOrganizer = user.getRole().equals(Role.Organizer);
-        if (!isOwner && !isOrganizer){
+        if (!isOwner && !isOrganizer) {
             throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
