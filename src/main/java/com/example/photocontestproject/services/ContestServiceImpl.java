@@ -24,7 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -142,6 +144,14 @@ public class ContestServiceImpl implements ContestService {
         return contestRepository.save(contest);
     }
 
+    @Override
+    public Map<Integer, String> getRanks(List<Entry> sortedEntries) {
+        Map<Integer, String> ranks = new HashMap<>();
+        for (int i = 0; i < sortedEntries.size(); i++) {
+            ranks.put(i + 1, getOrdinalSuffix(i + 1));
+        }
+        return ranks;
+    }
     /*@Override
     public Entry createEntryForContest(Entry entry, User user*//*, Contest contest*//*) {
         throwIfUserIsOrganizer(user);
@@ -153,6 +163,17 @@ public class ContestServiceImpl implements ContestService {
     public void deleteContest(int id, User user) {
         throwIfUserIsNotOrganizer(user);
         contestRepository.deleteById(id);
+    }
+    private String getOrdinalSuffix(int number) {
+        if (number % 10 == 1 && number % 100 != 11) {
+            return "st";
+        } else if (number % 10 == 2 && number % 100 != 12) {
+            return "nd";
+        } else if (number % 10 == 3 && number % 100 != 13) {
+            return "rd";
+        } else {
+            return "th";
+        }
     }
 
     private void throwIfUserIsNotOrganizer(User user) {

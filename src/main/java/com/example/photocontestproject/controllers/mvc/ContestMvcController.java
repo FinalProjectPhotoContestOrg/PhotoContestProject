@@ -25,8 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/contests")
@@ -57,15 +56,21 @@ public class ContestMvcController {
         try {
             Contest contest = contestService.getContestById(contestId);
             List<Entry> entries = contest.getEntries();
+            List<Entry> sortedEntries = new ArrayList<>(entries);
+            sortedEntries.sort(Comparator.comparing(Entry::getEntryTotalScore).reversed());
+            Map<Integer, String> ranks = contestService.getRanks(sortedEntries);
             model.addAttribute("contest", contest);
             model.addAttribute("entry", new EntryDto());
             model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
             model.addAttribute("isPhaseI", contest.getContestPhase().equals(ContestPhase.PhaseI));
             model.addAttribute("isPhaseII", contest.getContestPhase().equals(ContestPhase.PhaseII));
+            model.addAttribute("isFinished", contest.getContestPhase().equals(ContestPhase.Finished));
             model.addAttribute("isJuror", contest.getJurors().stream().anyMatch(juror -> juror.getId().equals(user.getId())));
             model.addAttribute("isInvited", contest.getParticipants().stream().anyMatch(participant -> participant.getId().equals(user.getId())));
             model.addAttribute("isInvitational", contest.getContestType().equals(ContestType.Invitational));
             model.addAttribute("entries", entries);
+            model.addAttribute("sortedEntries", sortedEntries);
+            model.addAttribute("ranks", ranks);
             return "ContestView";
         } catch (EntityNotFoundException e){
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());

@@ -205,6 +205,27 @@
         </div>
     </div>
 </section>
+<section id="ranked-entries" class="py-5 bg-light" th:if="${isFinished}">
+    <div class="container">
+        <h2 class="text-center section-title">Ranked Entries by Points</h2>
+        <div class="row">
+            <!-- Sorted by points, with ranks displayed -->
+            <div class="col-md-4" th:each="entryRate, iterStat : ${sortedEntries}">
+                <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link">
+                    <div class="card mb-4">
+                        <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
+                        <div class="card-body">
+                            <!-- Rank (1st, 2nd, etc.) -->
+                            <h5 class="rank-place" th:text="${iterStat.index + 1} + ' ' + ${ranks[iterStat.index + 1]}">1st</h5>
+                            <!-- Entry Title -->
+                            <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Footer -->
 <footer th:replace="~{ForumForms.html :: footer}">
