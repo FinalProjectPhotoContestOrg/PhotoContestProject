@@ -2,11 +2,13 @@ package com.example.photocontestproject.controllers.mvc;
 
 import com.example.photocontestproject.dtos.in.EntryInDto;
 import com.example.photocontestproject.dtos.in.RatingDto;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.mappers.RatingMapper;
+import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
@@ -73,6 +75,10 @@ public class EntryMvcController {
 
         model.addAttribute("entry", entry1);
         model.addAttribute("ratingDto", new RatingDto());
+
+        Contest contest = entry1.getContest();
+        model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
+        model.addAttribute("isJurorToContest", contest.getJurors().stream().anyMatch(juror -> juror.getId().equals(user.getId())));
         return "EntryView";
     }
 

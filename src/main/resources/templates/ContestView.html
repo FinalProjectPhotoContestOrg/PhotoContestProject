@@ -27,6 +27,47 @@
         .section-title {
             margin-bottom: 1.5rem;
         }
+        .card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-img-top {
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .view-button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            display: inline-block;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .view-button:hover {
+            background-color: #0056b3;
+        }
 
         .section-content {
             background-color: #f8f9fa;
@@ -43,6 +84,16 @@
         .entry-form .form-select,
         .entry-form .form-text {
             border-radius: 5px;
+        }
+        a.card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Optional: Add hover effect to make it obvious that the card is clickable */
+        a.card-link:hover .card {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transform: translateY(-5px);
         }
 
         .footer {
@@ -133,6 +184,25 @@
 
             <button type="submit" class="btn btn-primary">Submit Entry</button>
         </form>
+    </div>
+</section>
+<section id="view-entries" class="bg-light py-5" th:if="${isPhaseII}">
+    <div class="container">
+        <h2 class="text-center section-title">Contest Entries</h2>
+        <div class="row">
+            <!-- Display each entry in a card layout -->
+            <div class="col-md-4" th:each="entryRate : ${entries}">
+                <!-- Wrap the card in an anchor tag -->
+                <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link" style="text-decoration: none; color: inherit;">
+                    <div class="card mb-4">
+                        <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 

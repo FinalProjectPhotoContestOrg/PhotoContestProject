@@ -91,7 +91,7 @@
             </div>
 
             <!-- Rating Form Container -->
-            <div class="rating-container" th:if="${isOrganizer} and ${entry.contest.getContestPhase().toString() != 'Finished' }">
+            <div class="rating-container" th:if="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() != 'Finished' }">
                 <h3 class="text-center">Rate This Entry</h3>
 
                 <form action="#" method="POST" th:action="@{'/entries/' + ${entry.id}}" th:object="${ratingDto}">

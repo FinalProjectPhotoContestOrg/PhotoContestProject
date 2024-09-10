@@ -56,13 +56,16 @@ public class ContestMvcController {
         }
         try {
             Contest contest = contestService.getContestById(contestId);
+            List<Entry> entries = contest.getEntries();
             model.addAttribute("contest", contest);
             model.addAttribute("entry", new EntryDto());
             model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
             model.addAttribute("isPhaseI", contest.getContestPhase().equals(ContestPhase.PhaseI));
-            model.addAttribute("isJuror", contest.getJurors().contains(user));
+            model.addAttribute("isPhaseII", contest.getContestPhase().equals(ContestPhase.PhaseII));
+            model.addAttribute("isJuror", contest.getJurors().stream().anyMatch(juror -> juror.getId().equals(user.getId())));
             model.addAttribute("isInvited", contest.getParticipants().stream().anyMatch(participant -> participant.getId().equals(user.getId())));
             model.addAttribute("isInvitational", contest.getContestType().equals(ContestType.Invitational));
+            model.addAttribute("entries", entries);
             return "ContestView";
         } catch (EntityNotFoundException e){
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -130,7 +133,7 @@ public class ContestMvcController {
             Entry entry = entryMapper.fromDto(entryDto, user);
             entry.setContest(contestService.getContestById(contestId));
             entryService.createEntry(entry, user);
-            return "redirect:/contests/" + contestId;
+            return "redirect:/";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("isOrganizer", e.getMessage());
