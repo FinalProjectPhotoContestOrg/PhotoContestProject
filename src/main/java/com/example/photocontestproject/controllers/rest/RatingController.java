@@ -25,6 +25,7 @@ public class RatingController {
     private final RatingService ratingService;
     private final AuthenticationHelper authenticationHelper;
 
+    //TODO look over and refactor urls and code
     @Autowired
     public RatingController(RatingService ratingService, AuthenticationHelper authenticationHelper) {
         this.ratingService = ratingService;

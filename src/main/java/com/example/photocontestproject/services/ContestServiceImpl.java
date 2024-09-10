@@ -203,6 +203,8 @@ public class ContestServiceImpl implements ContestService {
     public void handleScoringWhenContestEnds(Contest contest) {
         if (contest.getContestPhase().equals(ContestPhase.Finished)) {
             List<Entry> entries = contest.getEntries();
+
+            //TODO Maybe we dont need that at all
             for (Entry entry : entries) {
                 Set<Rating> ratings = entry.getRatings();
                 int totalScore = 0;
@@ -215,6 +217,7 @@ public class ContestServiceImpl implements ContestService {
 
             entries.sort((e1, e2) -> e2.getEntryTotalScore() - e1.getEntryTotalScore());
 
+            //TODO position == 4 break after it so we dont iterate over everytihng
             int position = 1;
             for (int i = 0; i < entries.size(); i++) {
                 Entry entry = entries.get(i);

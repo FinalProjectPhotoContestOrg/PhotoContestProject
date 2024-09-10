@@ -38,7 +38,7 @@ public class ContestController {
     private final RatingMapper ratingMapper;
     private final AuthenticationHelper authenticationHelper;
 
-
+    //TODO look over and refactor urls and code
     @Autowired
     public ContestController(ContestService contestService, EntryService entryService, ContestMapper contestMapper, RatingMapper ratingMapper, RatingService ratingService, AuthenticationHelper authenticationHelper) {
         this.contestService = contestService;

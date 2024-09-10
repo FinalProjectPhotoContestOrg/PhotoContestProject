@@ -21,6 +21,7 @@ public class UserRestController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    //TODO look over and refactor urls and code
     @Autowired
     public UserRestController(UserService userService, UserMapper userMapper) {
         this.userService = userService;

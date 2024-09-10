@@ -30,7 +30,7 @@ public class EntryRestController {
     private final AuthenticationHelper authenticationHelper;
     private final RatingService ratingService;
 
-
+    //TODO look over and refactor urls and code
     @Autowired
     public EntryRestController(EntryService entryService, EntryMapper entryMapper, AuthenticationHelper authenticationHelper,
                                RatingService ratingService) {
