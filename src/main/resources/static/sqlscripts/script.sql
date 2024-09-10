@@ -32,6 +32,7 @@ create table contests
         unique (title),
     constraint contests_ibfk_1
         foreign key (organizer_id) references users (id)
+            on delete cascade
 );
 
 create table contest_jurors
@@ -40,9 +41,11 @@ create table contest_jurors
     juror_id   int not null,
     primary key (contest_id, juror_id),
     constraint contest_jurors_ibfk_1
-        foreign key (contest_id) references contests (id),
+        foreign key (contest_id) references contests (id)
+            on delete cascade,
     constraint contest_jurors_ibfk_2
         foreign key (juror_id) references users (id)
+            on delete cascade
 );
 
 create index juror_id
@@ -54,10 +57,10 @@ create table contest_participants
     user_id    int not null,
     constraint contest_participants_contests_id_fk
         foreign key (contest_id) references contests (id)
-            on update cascade on delete cascade,
+            on delete cascade,
     constraint contest_participants_users_id_fk
         foreign key (user_id) references users (id)
-            on update cascade on delete cascade
+            on delete cascade
 );
 
 create index idx_contest_category
@@ -81,9 +84,11 @@ create table entries
     uploaded_at     timestamp default current_timestamp() null,
     entryTotalScore int       default 0                   null,
     constraint entries_ibfk_1
-        foreign key (participant_id) references users (id),
+        foreign key (participant_id) references users (id)
+            on delete cascade,
     constraint entries_ibfk_2
         foreign key (contest_id) references contests (id)
+            on delete cascade
 );
 
 create index contest_id
@@ -107,9 +112,11 @@ create table ratings
     category_mismatch tinyint(1) default 0                   null,
     reviewed_at       timestamp  default current_timestamp() null,
     constraint ratings_ibfk_1
-        foreign key (entry_id) references entries (id),
+        foreign key (entry_id) references entries (id)
+            on delete cascade,
     constraint ratings_ibfk_2
         foreign key (juror_id) references users (id)
+            on delete cascade
 );
 
 create index juror_id
