@@ -136,15 +136,6 @@ public class RatingServiceImpl implements RatingService {
         return ratingRepository.findByEntryId(entryId);
     }
 
-    private void throwIfNotOrganizerOrJuror(User user, Contest contest) {
-        boolean isJuror = user.getJurorContests()
-                .stream()
-                .anyMatch(jurorContest -> jurorContest.getId().equals(contest.getId()));
-        if (user.getRole() != Role.Organizer && !isJuror) {
-            throw new AuthorizationException(NO_ACCESS_MESSAGE);
-        }
-    }
-
     @Override
     public void updateRanking(User participant) {
         int currentPoints = participant.getPoints();
@@ -156,6 +147,16 @@ public class RatingServiceImpl implements RatingService {
             participant.setRanking(Ranking.Enthusiast);
         } else {
             participant.setRanking(Ranking.Junkie);
+        }
+    }
+
+
+    private void throwIfNotOrganizerOrJuror(User user, Contest contest) {
+        boolean isJuror = user.getJurorContests()
+                .stream()
+                .anyMatch(jurorContest -> jurorContest.getId().equals(contest.getId()));
+        if (user.getRole() != Role.Organizer && !isJuror) {
+            throw new AuthorizationException(NO_ACCESS_MESSAGE);
         }
     }
 

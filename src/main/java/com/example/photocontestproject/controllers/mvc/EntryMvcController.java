@@ -1,6 +1,5 @@
 package com.example.photocontestproject.controllers.mvc;
 
-import com.example.photocontestproject.dtos.in.EntryInDto;
 import com.example.photocontestproject.dtos.in.RatingDto;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
@@ -22,7 +21,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
-import java.util.List;
 import java.util.Set;
 
 @Controller
