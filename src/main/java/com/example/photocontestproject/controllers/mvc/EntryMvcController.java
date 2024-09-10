@@ -19,6 +19,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Set;
+
 @Controller
 @RequestMapping("/entries")
 public class EntryMvcController {
@@ -40,6 +44,8 @@ public class EntryMvcController {
         this.modelConverterRegistrar = modelConverterRegistrar;
     }
 
+
+
     @GetMapping("/{id}")
     public String getEntryView(@ModelAttribute("entry") Entry entry, BindingResult bindingResult, @PathVariable int id, HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
@@ -56,6 +62,14 @@ public class EntryMvcController {
         } catch (EntityNotFoundException e) {
             return "redirect:/";
         }
+
+        float entryAvgScore = (float) entry1.getEntryTotalScore() / entry1.getRatings().size();
+        DecimalFormat df = new DecimalFormat("#.#");
+        String formattedScore = df.format(entryAvgScore);
+        model.addAttribute("entryAvgScore", formattedScore);
+
+        Set<Rating> ratings = entry1.getRatings();
+        model.addAttribute("allRatings", ratings);
 
         model.addAttribute("entry", entry1);
         model.addAttribute("ratingDto", new RatingDto());

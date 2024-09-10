@@ -10,19 +10,47 @@
         body {
             background-color: #f8f9fa;
         }
-        .entry-container, .rating-container {
-            max-width: 800px;
+        .entry-container {
+            max-width: 1600px;
             margin: 50px auto;
             padding: 20px;
             background-color: white;
-            border-radius: 8px;
+            border-radius: 10px;
+            box-shadow: 0 0 130px rgba(0, 0, 0, 0.2);
+        }
+        .photo-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .entry-container h2 {
+
+        .details-container, .rating-container, .ratings-list-container {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
             margin-bottom: 20px;
         }
-        .rating-container h3 {
+        .details-container h2 {
             margin-bottom: 20px;
+        }
+        .progress-bar-container {
+            height: 30px;
+            margin: 10px 0;
+        }
+        .rating-box {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+        }
+        .rating-box h4 {
+            margin-top: 0;
+        }
+        .rating-box p {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -32,50 +60,90 @@
 <nav th:replace="~{ForumForms :: navbar}"></nav>
 
 <!-- Entry View Section -->
-<div class="entry-container p-4 shadow-lg rounded bg-light" th:object="${entry}">
-    <h2 class="text-center display-4 font-weight-bold mb-3" th:text="${entry.title}">Entry Title Here</h2>
+<div class="entry-container p-4">
+    <div class="row">
+        <!-- Photo on the left -->
+        <div class="col-md-6 text-center">
+            <div class="photo-container">
+                <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}" alt="Sample Photo" src="https://wallup.net/wp-content/uploads/2019/09/891675-nature-river-landscape.jpg" class="img-fluid rounded shadow-sm">
+            </div>
+        </div>
 
-    <div class="text-center mb-4">
-        <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}" alt="Sample Photo" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
-    </div>
+        <!-- Details and Rating Form on the right -->
+        <div class="col-md-6">
+            <!-- Details Container -->
+            <div class="details-container">
+                <h2 class="display-4 font-weight-bold mb-3 text-center" th:text="${entry.title}">Entry Title Here</h2>
 
-    <div class="entry-details p-3">
-        <p class="lead" th:text="'Story: ' + ${entry.story}">
-            <strong>Story:</strong> This is a description of the entry, highlighting the photographer's intent, techniques used, and other relevant details.
-        </p>
+                <div class="entry-details">
+                    <p class="lead" th:text="'Story: ' + ${entry.story}">
+                        <strong>Story:</strong> This is a description of the entry, highlighting the photographer's intent, techniques used, and other relevant details.
+                    </p>
 
-        <p class="mb-2" th:text="'Category: ' + ${entry.contest.category}">
-            <strong>Category:</strong> Landscapes
-        </p>
+                    <p class="mb-2" th:text="'Category: ' + ${entry.contest.category}">
+                        <strong>Category:</strong> Landscapes
+                    </p>
 
-        <p th:text="'Photographer: ' + ${entry.participant.firstName} + ' ' + ${entry.participant.lastName}">
-            <strong>Submitted by:</strong> Photographer's Name
-        </p>
+                    <p th:text="'Photographer: ' + ${entry.participant.firstName} + ' ' + ${entry.participant.lastName}">
+                        <strong>Submitted by:</strong> Photographer's Name
+                    </p>
+                </div>
+            </div>
+
+            <!-- Rating Form Container -->
+            <div class="rating-container" th:if="${isOrganizer} and ${entry.contest.getContestPhase().toString() != 'Finished' }">
+                <h3 class="text-center">Rate This Entry</h3>
+
+                <form action="#" method="POST" th:action="@{'/entries/' + ${entry.id}}" th:object="${ratingDto}">
+                    <div class="error" style="color: red" th:if="${#fields.hasErrors('score')}" th:errors="*{score}"></div>
+                    <div class="mb-3">
+                        <label for="score" class="form-label">Rating Score (1-10)</label>
+                        <input th:field="*{score}" type="number" class="form-control" id="score" name="score" min="1" max="10" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Comment</label>
+                        <textarea th:field="*{comment}" class="form-control" id="comment" name="comment" rows="4" placeholder="Enter your comment here..." required></textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="categoryMismatch" name="categoryMismatch">
+                        <label th:field="*{categoryMismatch}" class="form-check-label" for="categoryMismatch">Category Mismatch</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Rating</button>
+                </form>
+            </div>
+
+            <!-- Rating Display Container -->
+            <div class="rating-container" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
+                <h3 class="text-center">Entry Rating</h3>
+                <div class="text-center">
+                    <p class="lead mb-2" th:text="'Rating: ' + ${entryAvgScore}">
+                        <strong>Rating:</strong> 8.5
+                    </p>
+                    <div class="progress progress-bar-container">
+                        <div class="progress-bar" role="progressbar" th:style="'width: ' + (${entryAvgScore} * 10) + '%'" aria-valuenow="${entryAvgScore}" aria-valuemin="0" aria-valuemax="10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-<!-- Rating Form Section -->
-<div th:unless="${isOrganizer}" style="height: 150px"></div>
-<div class="rating-container" th:if="${isOrganizer}">
-    <h3 class="text-center">Rate This Entry</h3>
-
-    <form action="#" method="POST" th:action="@{'/entries/' + ${entry.id}}" th:object="${ratingDto}">
-        <div class="error" style="color: red" th:if="${#fields.hasErrors('score')}" th:errors="*{score}"></div>
-        <div class="mb-3">
-            <label for="score" class="form-label">Rating Score (1-10)</label>
-            <input th:field="*{score}" type="number" class="form-control" id="score" name="score" min="1" max="10" required>
+<!-- Ratings List Section -->
+<div class="ratings-list-container p-4">
+    <h3 class="text-center">Ratings</h3>
+    <div class="row">
+        <div th:each="rating : ${entry.ratings}" class="col-md-4 mb-4">
+            <div class="rating-box">
+                <h4 >
+                    <a th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}" th:href="@{/users/{id}(id=${entry.participant.id})}"></a>
+                </h4>
+                <p><strong>Score:</strong> <span th:text="${rating.score}">8</span></p>
+                <p><strong>Comment:</strong> <span th:text="${rating.comment}">Great photo!</span></p>
+                <p><strong>Reviewed At:</strong> <span th:text="${#dates.format(rating.reviewedAt, 'dd MMM yyyy HH:mm')}">10 Sep 2024 14:00</span></p>
+                <p><strong>Category Mismatch:</strong> <span th:text="${rating.categoryMismatch ? 'Yes' : 'No'}">No</span></p>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="comment" class="form-label">Comment</label>
-            <textarea th:field="*{comment}" class="form-control" id="comment" name="comment" rows="4" placeholder="Enter your comment here..." required></textarea>
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="categoryMismatch" name="categoryMismatch">
-            <label th:field="*{categoryMismatch}" class="form-check-label" for="categoryMismatch">Category Mismatch</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit Rating</button>
-    </form>
+    </div>
 </div>
 
 <!-- Footer -->

@@ -1,5 +1,6 @@
 package com.example.photocontestproject.services;
 
+import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
