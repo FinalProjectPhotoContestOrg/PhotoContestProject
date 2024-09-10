@@ -114,7 +114,7 @@
 
             <!-- Rating Display Container -->
             <div class="rating-container" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
-                <h3 class="text-center">Entry Rating</h3>
+                <h3 class="text-center">Entry Overall Rating</h3>
                 <div class="text-center">
                     <p class="lead mb-2" th:text="'Rating: ' + ${entryAvgScore}">
                         <strong>Rating:</strong> 8.5
@@ -129,7 +129,7 @@
 </div>
 
 <!-- Ratings List Section -->
-<div class="ratings-list-container p-4">
+<div class="ratings-list-container p-4" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
     <h3 class="text-center">Ratings</h3>
     <div class="row">
         <div th:each="rating : ${entry.ratings}" class="col-md-4 mb-4">
