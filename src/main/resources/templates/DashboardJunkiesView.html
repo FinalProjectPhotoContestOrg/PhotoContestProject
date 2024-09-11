@@ -1,10 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junkie Dashboard</title>
+    <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
+<div class="container mt-5">
+    <h1 class="text-center">Welcome to Your Dashboard</h1>
 
+    <!-- User Ranking and Points Section -->
+    <section class="my-4">
+        <h2>Current Ranking and Points</h2>
+        <p>
+            Rank: <strong th:text="${currentRank}">Gold</strong><br>
+            Points: <strong th:text="${currentPoints}">1500</strong><br>
+            Points until next rank: <strong th:text="${nextRankPoints}">200</strong>
+        </p>
+    </section>
+
+    <!-- Active Open Contests -->
+    <section class="my-4">
+        <h2>Active Open Contests</h2>
+        <div class="row">
+            <div class="col-md-4" th:each="contest : ${activeContests}">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${contest.title}">Nature Photography Contest</h5>
+                        <p class="card-text">
+                            Category: <span th:text="${contest.category}">Wildlife</span><br>
+                            Ends on: <span th:text="${#dates.format(contest.phase1End, 'MMMM d, yyyy')}">November 30</span>
+                        </p>
+                        <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="btn btn-primary">View Contest</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contests Junkie is Participating In -->
+    <section class="my-4">
+        <h2>Your Participating Contests</h2>
+        <div class="row">
+            <div class="col-md-4" th:each="contest : ${participatingContests}">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${contest.title}">Landscape Photography Contest</h5>
+                        <p class="card-text">
+                            Category: <span th:text="${contest.category}">Landscapes</span><br>
+                            Phase: <span th:text="${contest.contestPhase}">Phase I</span>
+                        </p>
+                        <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="btn btn-secondary">View Contest</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Finished Contests -->
+    <section class="my-4">
+        <h2>Finished Contests</h2>
+        <div class="row">
+            <div class="col-md-4" th:each="contest : ${finishedContests}">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${contest.title}">Portrait Photography Contest</h5>
+                        <p class="card-text">
+                            Category: <span th:text="${contest.category}">Portraits</span><br>
+                            Finished on: <span th:text="${#dates.format(contest.phase2End, 'MMMM d, yyyy')}">August 10</span>
+                        </p>
+                        <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="btn btn-outline-secondary">View Results</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.photocontestproject.services.contracts;
 
+import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import org.springframework.stereotype.Service;
@@ -16,4 +17,5 @@ public interface EntryService {
     List<Entry> getAllEntries(String title);
 
     void deleteEntryById(int id, User user);
+    List<Contest> findContestsByUserId(int userId);
 }

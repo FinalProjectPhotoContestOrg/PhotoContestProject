@@ -7,6 +7,7 @@ import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.external.EmailValidator;
 import com.example.photocontestproject.external.service.EmailService;
+import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.EntryRepository;
@@ -83,6 +84,16 @@ public class EntryServiceImpl implements EntryService {
     public void deleteEntryById(int id, User user) {
         throwIfUserIsNotOrganizer(user);
         entryRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Contest> findContestsByUserId(int userId) {
+        List<Entry> allEntries = entryRepository.findAll();
+        return allEntries.stream()
+                .filter(entry -> entry.getParticipant().getId().equals(userId))
+                .map(Entry::getContest)
+                .distinct()
+                .toList();
     }
 
     private void throwIfUserIsOrganizer(User user) {
