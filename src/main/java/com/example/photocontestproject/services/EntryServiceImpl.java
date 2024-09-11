@@ -91,7 +91,8 @@ public class EntryServiceImpl implements EntryService {
         }
     }
     public void throwIfUserIsJuror(User user, Entry entry) {
-        if (entry.getContest().getJurors().contains(user)) {
+        if (entry.getContest().getJurors().stream()
+                .anyMatch(juror -> juror.getId().equals(user.getId()))) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }
@@ -103,7 +104,8 @@ public class EntryServiceImpl implements EntryService {
     }
 
     private void throwIfUserIsNotInvitedToContest(User user, Entry entry) {
-        if (entry.getContest().getContestType().equals(ContestType.Invitational) && !entry.getContest().getParticipants().contains(user)) {
+        if (entry.getContest().getContestType().equals(ContestType.Invitational) && entry.getContest().getParticipants()
+                .stream().noneMatch(participant -> participant.getId().equals(user.getId()))) {
             throw new AuthorizationException(NOT_INVITED_TO_CONTEST_ERROR_MESSAGE);
         }
     }
