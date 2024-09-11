@@ -62,7 +62,7 @@ public class User {
     private Set<Contest> jurorContests;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "contest_participants",
             joinColumns = @JoinColumn(name = "user_id"),

@@ -86,6 +86,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsersByRole(Role role) {
         return userRepository.findByRole(role);
     }
+    public int getNextRankPoints(int currentPoints) {
+        return Ranking.getPointsToNextRank(currentPoints);
+    }
 
     public List<User> getMasters() {
         return userRepository.findByRanking(Ranking.Master);
