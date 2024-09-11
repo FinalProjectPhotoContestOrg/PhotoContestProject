@@ -58,7 +58,14 @@ public class UserServiceTests {
     }
 
     @Test
-    public void testGetUsersByRole() {
+    void testGetNextRankPoints() {
+        assertEquals(21, userService.getNextRankPoints(30));  // Assuming 100 points needed for next rank from 50
+        assertEquals(51, userService.getNextRankPoints(100));  // Assuming 50 points needed for next rank from 150
+        assertEquals(801, userService.getNextRankPoints(200));   // Assuming 200 is the max rank points
+    }
+
+    @Test
+    public void getUsersByRole_Should_Get_Users_By_Role() {
 
         Role role = Role.Junkie;
         User user1 = TestHelper.createJunkieUser();

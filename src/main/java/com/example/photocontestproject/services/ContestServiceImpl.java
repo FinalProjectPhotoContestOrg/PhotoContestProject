@@ -164,7 +164,7 @@ public class ContestServiceImpl implements ContestService {
         throwIfUserIsNotOrganizer(user);
         contestRepository.deleteById(id);
     }
-    private String getOrdinalSuffix(int number) {
+    public String getOrdinalSuffix(int number) {
         if (number % 10 == 1 && number % 100 != 11) {
             return "st";
         } else if (number % 10 == 2 && number % 100 != 12) {
@@ -255,7 +255,8 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void calculateAndHandleUserPointsAdding(Entry entry, boolean isSharedSpot, int position) {
+    //write a test for this method
+    public void calculateAndHandleUserPointsAdding(Entry entry, boolean isSharedSpot, int position) {
         int userPoints = entry.getParticipant().getPoints();
         userPoints += calculateScore(isSharedSpot, position);
         entry.getParticipant().setPoints(userPoints);
@@ -263,7 +264,7 @@ public class ContestServiceImpl implements ContestService {
         userRepository.save(entry.getParticipant());
     }
 
-    private int calculateScore(boolean isSharedSpot, int position) {
+    public int calculateScore(boolean isSharedSpot, int position) {
         if (isSharedSpot) {
             switch (position) {
                 case 1: return 40;

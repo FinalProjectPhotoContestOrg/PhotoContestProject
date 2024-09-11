@@ -8,16 +8,18 @@ import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
+import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.ContestRepository;
-import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.ContestServiceImpl;
+import com.example.photocontestproject.services.contracts.RatingService;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -28,6 +30,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,14 +42,17 @@ class ContestServiceTests {
 
     @Mock
     private ContestRepository contestRepository;
+    @Mock
+    private UserService userService;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private RatingService ratingService;
 
-    @Mock
-    private UserService userService;;
-    @Mock
-    private UserRepository userRepository;;
 
     @InjectMocks
     private ContestServiceImpl contestService;
+
 
     @BeforeEach
     void setUp() {
@@ -54,7 +61,7 @@ class ContestServiceTests {
 
 
     @Test
-    void testGetContestById() {
+    void getContestById_Should_Get_Contest_By_Id() {
         Contest contest = new Contest();
         when(contestRepository.findById(anyInt())).thenReturn(Optional.of(contest));
 
@@ -65,14 +72,14 @@ class ContestServiceTests {
     }
 
     @Test
-    void testGetContestById_NotFound() {
+    void getContestById_Should_Throw() {
         when(contestRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> contestService.getContestById(1));
     }
 
     @Test
-    void testChangePhase() {
+    void changePhase_Should_Change_Phase() {
         User user = TestHelper.createOrganizerUser();
         Contest contest = new Contest();
         contest.setContestPhase(ContestPhase.PhaseI);
@@ -87,14 +94,14 @@ class ContestServiceTests {
     }
 
     @Test
-    void testChangePhase_Unauthorized() {
+    void changePhase_Should_Throw_If_User_Is_Junkie() {
         User user = TestHelper.createJunkieUser();
 
         assertThrows(AuthorizationException.class, () -> contestService.changePhase(1, user));
     }
 
     @Test
-    void testCreateContest() {
+    void createContest_Should_Create_Contest() {
         User user = TestHelper.createOrganizerUser();
         Contest contest = new Contest();
         when(contestRepository.save(any(Contest.class))).thenReturn(contest);
@@ -106,7 +113,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testCreateContest_Unauthorized() {
+    void createContest_Should_Throw_If_User_Is_Junkie() {
         User user = TestHelper.createJunkieUser();
         Contest contest = new Contest();
 
@@ -114,7 +121,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testDeleteContest() {
+    void deleteContest_Should_Delete() {
         User user = TestHelper.createOrganizerUser();
 
         contestService.deleteContest(1, user);
@@ -123,7 +130,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testDeleteContest_Unauthorized() {
+    void deleteContest_Should_Throw() {
         User user = TestHelper.createJunkieUser();
 
         assertThrows(AuthorizationException.class, () -> contestService.deleteContest(1, user));
@@ -131,7 +138,7 @@ class ContestServiceTests {
 
 
     @Test
-    void testGetAllContests_AllParametersNull() {
+    void getAllContests_Should_Get_All_Contests_With_All_Parameters_Are_Null() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         when(contestRepository.findAll(any(Specification.class))).thenReturn(mockContests);
 
@@ -142,7 +149,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testGetAllContests_TitleNotNull() {
+    void getAllContests_Should_Get_All_Contests_With_Title_Not_Null() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         when(contestRepository.findAll(any(Specification.class))).thenReturn(mockContests);
 
@@ -153,7 +160,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testGetAllContests_CategoryNotNull() {
+    void getAllContests_Should_Get_All_Contests_With_Category_Not_Null() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         when(contestRepository.findAll(any(Specification.class))).thenReturn(mockContests);
 
@@ -164,7 +171,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testGetAllContests_TypeNotNull() {
+    void getAllContests_Should_Get_All_Contests_With_Type_Not_Null() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         when(contestRepository.findAll(any(Specification.class))).thenReturn(mockContests);
 
@@ -175,7 +182,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testGetAllContests_PhaseNotNull() {
+    void getAllContests_Should_Get_All_Contests_With_Phase_Not_Null() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         when(contestRepository.findAll(any(Specification.class))).thenReturn(mockContests);
 
@@ -186,7 +193,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testGetAllContests_AllParametersNotNull() {
+    void getAllContests_Should_Get_All_Contests_With_All_Parameters_Not_Null() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         when(contestRepository.findAll(any(Specification.class))).thenReturn(mockContests);
 
@@ -197,7 +204,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testGetAllContests_TitleIsEmpty() {
+    void getAllContests_Should_Get_All_Contests_With_Title_Empty() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         when(contestRepository.findAll(any(Specification.class))).thenReturn(mockContests);
 
@@ -208,7 +215,7 @@ class ContestServiceTests {
     }
 
     @Test
-    void testGetAllContests_CategoryIsEmpty() {
+    void getAllContests_Should_Get_All_Contests_With_Category_Empty() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         when(contestRepository.findAll(any(Specification.class))).thenReturn(mockContests);
 
@@ -219,7 +226,7 @@ class ContestServiceTests {
     }
 
     @Test
-    public void testGetAllContests_AllParametersProvided() {
+    public void getAllContests_Should_Get_All_Contests_With_All_Parameters_Provided() {
         List<Contest> mockContests = TestHelper.createListOfContests();
         String title = "Title1";
         String category = "Category1";
@@ -238,7 +245,7 @@ class ContestServiceTests {
     
 
     @Test
-    public void testGetAllContests() {
+    public void getAllContest_Should_Get_All_Contests() {
         List<Contest> allContests = TestHelper.createListOfContests();
 
         when(contestRepository.findAll(Mockito.any(Specification.class))).thenAnswer(new Answer<List<Contest>>() {
@@ -276,7 +283,7 @@ class ContestServiceTests {
         assertEquals(2, result.size());
     }
     @Test
-    public void addJuror_ShouldAddJuror_WhenUserIsOrganizerAndUserCanBeJuror() {
+    public void addJuror_Should_Add_Juror_When_User_Is_Organizer_AndUser_Can_Be_Juror() {
 
         User organizer = new User();
         organizer.setId(1);
@@ -304,7 +311,7 @@ class ContestServiceTests {
         verify(userRepository, times(1)).save(userToAdd);
     }
     @Test
-    public void addJuror_ShouldThrowException_WhenUserIsNotOrganizer() {
+    public void addJuror_Should_Throw_Exception_When_User_Is_Not_Organizer() {
         User nonOrganizer = new User();
         nonOrganizer.setId(1);
         nonOrganizer.setRole(Role.Junkie);
@@ -325,7 +332,7 @@ class ContestServiceTests {
         verify(userRepository, never()).save(any(User.class));
     }
     @Test
-    public void addJuror_ShouldThrowException_WhenUserCannotBeJuror() {
+    public void addJuror_Should_Throw_Exception_When_User_Cannot_Be_Juror() {
         // Arrange
         User organizer = new User();
         organizer.setId(1);
@@ -350,7 +357,7 @@ class ContestServiceTests {
         verify(userRepository, never()).save(any(User.class));
     }
     @Test
-    public void getJurors_ShouldReturnListOfJurors_WhenUserIsOrganizerAndContestExists() {
+    public void getJurors_Should_Return_List_Of_Jurors_When_User_Is_Organizer_And_Contest_Exists() {
         User organizer = new User();
         organizer.setId(1);
         organizer.setRole(Role.Organizer);
@@ -374,7 +381,7 @@ class ContestServiceTests {
         verify(contestRepository, times(1)).findById(contest.getId());
     }
     @Test
-    public void addParticipant_ShouldAddUserToContest_WhenUserIsOrganizerAndContestIsValid() {
+    public void addParticipant_Should_AddUser_To_Contest_When_User_Is_Organizer_And_Contest_Is_Valid() {
         User organizer = new User();
         organizer.setId(1);
         organizer.setRole(Role.Organizer);
@@ -423,7 +430,7 @@ class ContestServiceTests {
         verify(userRepository, never()).save(any(User.class));
     }
     @Test
-    public void getParticipants_ShouldReturnParticipants_WhenUserIsOrganizerAndContestIsValid() {
+    public void getParticipants_Should_Return_Participants_When_User_Is_Organizer_And_Contest_Is_Valid() {
         User organizer = new User();
         organizer.setId(1);
         organizer.setRole(Role.Organizer);
@@ -446,5 +453,186 @@ class ContestServiceTests {
         assertTrue(result.contains(participant1));
         assertTrue(result.contains(participant2));
         verify(contestRepository, times(1)).findById(contest.getId());
+    }
+
+
+    @Test
+    void CalculateAndHandleUserPointsAdding_SharedSpot_Position1() {
+        Entry entry = mock(Entry.class);
+        User participant = mock(User.class);
+        when(entry.getParticipant()).thenReturn(participant);
+        when(participant.getPoints()).thenReturn(10);
+
+        contestService.calculateAndHandleUserPointsAdding(entry, true, 1);
+
+        verify(participant).setPoints(50); // 10 + 40
+        verify(ratingService).updateRanking(participant);
+        verify(userRepository).save(participant);
+    }
+
+
+    @Test
+    void calculateScore_Should_Calculate_Score_For_Shared_Spot_For_Position_1() {
+        int result = contestService.calculateScore(true, 1);
+
+        Assertions.assertEquals(40, result);
+    }
+
+    @Test
+    void calculateScore_Should_Calculate_Score_For_Shared_Spot_For_Position_2() {
+        int result = contestService.calculateScore(true, 2);
+
+        Assertions.assertEquals(25, result);
+    }
+
+    @Test
+    void calculateScore_Should_Calculate_Score_For_Shared_Spot_For_Position_3() {
+        int result = contestService.calculateScore(true, 3);
+
+        Assertions.assertEquals(10, result);
+    }
+
+    @Test
+    void calculateScore_Should_Calculate_Score_For_Not_Shared_Spot_For_Position_1() {
+        int result = contestService.calculateScore(false, 1);
+
+        Assertions.assertEquals(50, result);
+    }
+
+    @Test
+    void calculateScore_Should_Calculate_Score_For_Not_Shared_Spot_For_Position_2() {
+        int result = contestService.calculateScore(false, 2);
+
+        Assertions.assertEquals(35, result);
+    }
+
+    @Test
+    void calculateScore_Should_Calculate_Score_For_Not_Shared_Spot_For_Position_3() {
+        int result = contestService.calculateScore(false, 3);
+
+        Assertions.assertEquals(20, result);
+    }
+
+    @Test
+    void calculateScore_Should_Return_Zero_For_Position_Over_3() {
+        int result = contestService.calculateScore(false, 4);
+
+        Assertions.assertEquals(0, result);
+    }
+
+    @Test
+    void handleScoringWhenContestEnds_Should_Handle_Scoring() {
+        Contest contest = mock(Contest.class);
+        Entry entry1 = mock(Entry.class);
+        Entry entry2 = mock(Entry.class);
+        Entry entry3 = mock(Entry.class);
+        User user1 = mock(User.class);
+        User user2 = mock(User.class);
+        User user3 = mock(User.class);
+
+        when(contest.getContestPhase()).thenReturn(ContestPhase.Finished);
+        when(contest.getEntries()).thenReturn(Arrays.asList(entry1, entry2, entry3));
+        when(entry1.getEntryTotalScore()).thenReturn(100);
+        when(entry2.getEntryTotalScore()).thenReturn(100);
+        when(entry3.getEntryTotalScore()).thenReturn(90);
+        when(entry1.getParticipant()).thenReturn(user1);
+        when(entry2.getParticipant()).thenReturn(user2);
+        when(entry3.getParticipant()).thenReturn(user3);
+        when(user1.getPoints()).thenReturn(10);
+        when(user2.getPoints()).thenReturn(20);
+        when(user3.getPoints()).thenReturn(30);
+
+        contestService.handleScoringWhenContestEnds(contest);
+
+        verify(contest, times(1)).getEntries();
+        verify(entry1, times(2)).getEntryTotalScore();
+        verify(entry2, times(3)).getEntryTotalScore();
+        verify(entry3, times(3)).getEntryTotalScore();
+    }
+
+    @Test
+    void scheduledTask_Should_Handle_Phase_Change_1() {
+        Contest contest = mock(Contest.class);
+        when(contest.getContestPhase()).thenReturn(ContestPhase.PhaseI);
+        when(contest.getPhase1End()).thenReturn(Timestamp.from(Instant.now().minusSeconds(10)));
+        when(contestRepository.findAll()).thenReturn(Arrays.asList(contest));
+
+        contestService.scheduledTask();
+
+        verify(contest).setContestPhase(ContestPhase.PhaseII);
+        verify(contestRepository).save(contest);
+    }
+
+    @Test
+    void scheduledTask_Should_Handle_Phase_Change_2() {
+        Contest contest = mock(Contest.class);
+        when(contest.getContestPhase()).thenReturn(ContestPhase.PhaseII);
+        when(contest.getPhase2End()).thenReturn(Timestamp.from(Instant.now().minusSeconds(10)));
+        when(contestRepository.findAll()).thenReturn(Arrays.asList(contest));
+
+        contestService.scheduledTask();
+
+        verify(contest).setContestPhase(ContestPhase.Finished);
+        verify(contestRepository).save(contest);
+    }
+
+    @Test
+    void scheduledTask_Should_Handle_Phase_Change_3() {
+        Contest contest = mock(Contest.class);
+        when(contest.getContestPhase()).thenReturn(ContestPhase.PhaseI);
+        when(contest.getPhase1End()).thenReturn(Timestamp.from(Instant.now().plusSeconds(10)));
+        when(contestRepository.findAll()).thenReturn(Arrays.asList(contest));
+
+        contestService.scheduledTask();
+
+        verify(contest, never()).setContestPhase(any());
+        verify(contestRepository, never()).save(contest);
+    }
+
+    @Test
+    void getOrdinalSuffix_Should_Return_Suffix_st() {
+        assertEquals("st", contestService.getOrdinalSuffix(1));
+        assertEquals("st", contestService.getOrdinalSuffix(21));
+        assertEquals("st", contestService.getOrdinalSuffix(101));
+    }
+
+    @Test
+    void getOrdinalSuffix_Should_Return_Suffix_nd() {
+        assertEquals("nd", contestService.getOrdinalSuffix(2));
+        assertEquals("nd", contestService.getOrdinalSuffix(22));
+        assertEquals("nd", contestService.getOrdinalSuffix(102));
+    }
+
+    @Test
+    void getOrdinalSuffix_Should_Return_Suffix_rd() {
+        assertEquals("rd", contestService.getOrdinalSuffix(3));
+        assertEquals("rd", contestService.getOrdinalSuffix(23));
+        assertEquals("rd", contestService.getOrdinalSuffix(103));
+    }
+
+    @Test
+    void getRanks_Test_With_EmptyList() {
+        List<Entry> entries = Collections.emptyList();
+        Map<Integer, String> ranks = contestService.getRanks(entries);
+        assertEquals(0, ranks.size());
+    }
+
+    @Test
+    void getRanks_Test_With_OneEntry() {
+        List<Entry> entries = Arrays.asList(new Entry());
+        Map<Integer, String> ranks = contestService.getRanks(entries);
+        assertEquals(1, ranks.size());
+        assertEquals("st", ranks.get(1));
+    }
+
+    @Test
+    void getRanks_Test_With_MultipleEntries() {
+        List<Entry> entries = Arrays.asList(new Entry(), new Entry(), new Entry(), new Entry());
+        Map<Integer, String> ranks = contestService.getRanks(entries);
+        assertEquals(4, ranks.size());
+        assertEquals("st", ranks.get(1));
+        assertEquals("nd", ranks.get(2));
+        assertEquals("rd", ranks.get(3));
+        assertEquals("th", ranks.get(4));
     }
 }
