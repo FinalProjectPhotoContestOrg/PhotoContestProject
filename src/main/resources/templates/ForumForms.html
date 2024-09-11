@@ -16,6 +16,12 @@
                     <a class="nav-link" th:href="@{/}">Home</a>
                 </li>
                 <li class="nav-item" th:if="${isOrganizer}">
+                    <a class="nav-link" th:href="@{/dashboard/organizers}">Dashboard</a>
+                </li>
+                <li class="nav-item" th:unless="${isOrganizer}">
+                    <a class="nav-link" th:href="@{/dashboard/junkies}">Dashboard</a>
+                </li>
+                <li class="nav-item" th:if="${isOrganizer}">
                     <a class="nav-link" th:href="@{/contests/create}">Create Contest</a>
                 </li>
                 <li class="nav-item" th:unless="${isAuthenticated}">

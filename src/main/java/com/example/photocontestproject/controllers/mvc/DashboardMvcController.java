@@ -33,7 +33,7 @@ public class DashboardMvcController {
         this.entryService = entryService;
     }
     @GetMapping("/junkies")
-    public String getDashboardView(Model model, HttpSession session) {
+    public String getDashboardJunkieView(Model model, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
@@ -55,4 +55,8 @@ public class DashboardMvcController {
         model.addAttribute("nextRankPoints", nextRankPoints);
         return "DashboardJunkiesView";
     }
-}
+    @GetMapping("/organizers")
+    public String getDashboardOrganizerView(Model model, HttpSession session) {
+        return "DashboardOrganizerView";
+    }
+    }
