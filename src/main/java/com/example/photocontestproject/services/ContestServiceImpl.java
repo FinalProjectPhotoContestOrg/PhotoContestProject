@@ -225,25 +225,16 @@ public class ContestServiceImpl implements ContestService {
         if (contest.getContestPhase().equals(ContestPhase.Finished)) {
             List<Entry> entries = contest.getEntries();
 
-            //TODO Maybe we dont need that at all
-            for (Entry entry : entries) {
-                Set<Rating> ratings = entry.getRatings();
-                int totalScore = 0;
-                for (Rating rating : ratings) {
-                    totalScore += rating.getScore();
-                }
-                entry.setEntryTotalScore(totalScore);
-                entryRepository.save(entry);
-            }
-
             entries.sort((e1, e2) -> e2.getEntryTotalScore() - e1.getEntryTotalScore());
 
-            //TODO position == 4 break after it so we dont iterate over everytihng
             int position = 1;
             for (int i = 0; i < entries.size(); i++) {
+                if (position == 4) {
+                    break;
+                }
                 Entry entry = entries.get(i);
                 int entryTotalScore = entry.getEntryTotalScore();
-                int userPoints = entry.getParticipant().getPoints();
+
                 boolean isSharedSpot = false;
 
                 for (int k = i + 1; k < entries.size(); k++) {
@@ -255,42 +246,35 @@ public class ContestServiceImpl implements ContestService {
                     } else {
                         isSharedSpot = true;
                     }
-
-                    User potentialEntryParticipant = potentialSharedSpotEntry.getParticipant();
-                    int potentialUserPoints = potentialEntryParticipant.getPoints();
-                    potentialUserPoints += calculateScore(isSharedSpot, position);
+                    calculateAndHandleUserPointsAdding(potentialSharedSpotEntry, isSharedSpot, position);
                     i++;
-                    potentialEntryParticipant.setPoints(potentialUserPoints);
-                    rankingService.updateRanking(potentialEntryParticipant);
-                    userRepository.save(potentialEntryParticipant);
                 }
-
-                userPoints += calculateScore(isSharedSpot, position);
-
-                entry.getParticipant().setPoints(userPoints);
-                rankingService.updateRanking(entry.getParticipant());
-                userRepository.save(entry.getParticipant());
+                calculateAndHandleUserPointsAdding(entry, isSharedSpot, position);
                 position++;
             }
         }
     }
 
+    private void calculateAndHandleUserPointsAdding(Entry entry, boolean isSharedSpot, int position) {
+        int userPoints = entry.getParticipant().getPoints();
+        userPoints += calculateScore(isSharedSpot, position);
+        entry.getParticipant().setPoints(userPoints);
+        rankingService.updateRanking(entry.getParticipant());
+        userRepository.save(entry.getParticipant());
+    }
+
     private int calculateScore(boolean isSharedSpot, int position) {
         if (isSharedSpot) {
-            if (position == 1) {
-                return 40;
-            } else if (position == 2) {
-                return 25;
-            } else if (position == 3) {
-                return 10;
+            switch (position) {
+                case 1: return 40;
+                case 2: return 25;
+                case 3: return 10;
             }
         } else {
-            if (position == 1) {
-                return 50;
-            } else if (position == 2) {
-                return 35;
-            } else if (position == 3) {
-                return 20;
+            switch (position) {
+                case 1: return 50;
+                case 2: return 35;
+                case 3: return 20;
             }
         }
         return 0;
