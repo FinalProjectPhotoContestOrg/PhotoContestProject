@@ -14,7 +14,6 @@ import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.EntryService;
 import com.example.photocontestproject.services.contracts.RatingService;
 import jakarta.servlet.http.HttpSession;
-import org.springdoc.core.converters.ModelConverterRegistrar;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,23 +30,25 @@ public class EntryMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final RatingMapper ratingMapper;
     private final RatingService ratingService;
-    private final ModelConverterRegistrar modelConverterRegistrar;
 
     public EntryMvcController(EntryService entryService,
                               AuthenticationHelper authenticationHelper,
                               RatingMapper ratingMapper,
-                              RatingService ratingService, ModelConverterRegistrar modelConverterRegistrar) {
+                              RatingService ratingService) {
         this.entryService = entryService;
         this.authenticationHelper = authenticationHelper;
         this.ratingMapper = ratingMapper;
         this.ratingService = ratingService;
-        this.modelConverterRegistrar = modelConverterRegistrar;
     }
 
 
 
     @GetMapping("/{id}")
-    public String getEntryView(@ModelAttribute("entry") Entry entry, BindingResult bindingResult, @PathVariable int id, HttpSession session, Model model) {
+    public String getEntryView(@ModelAttribute("entry") Entry entry,
+                               BindingResult bindingResult,
+                               @PathVariable int id,
+                               HttpSession session,
+                               Model model) {
         if (bindingResult.hasErrors()) {
             return "EntryView";
         }
@@ -81,7 +82,11 @@ public class EntryMvcController {
     }
 
     @PostMapping("/{id}")
-    public String rateEntry(@ModelAttribute("ratingDto")RatingDto ratingDto, BindingResult bindingResult, @PathVariable int id, HttpSession session, Model model) {
+    public String rateEntry(@ModelAttribute("ratingDto")RatingDto ratingDto,
+                            BindingResult bindingResult,
+                            @PathVariable int id,
+                            HttpSession session,
+                            Model model) {
         User user;
         Entry entry = null;
         try {

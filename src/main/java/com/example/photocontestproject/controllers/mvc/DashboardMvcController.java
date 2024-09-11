@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardMvcController {
@@ -32,6 +33,7 @@ public class DashboardMvcController {
         this.authenticationHelper = authenticationHelper;
         this.entryService = entryService;
     }
+
     @GetMapping("/junkies")
     public String getDashboardJunkieView(Model model, HttpSession session) {
         User user;
@@ -55,8 +57,10 @@ public class DashboardMvcController {
         model.addAttribute("nextRankPoints", nextRankPoints);
         return "DashboardJunkiesView";
     }
-    @GetMapping("/organizers")
-    public String getDashboardOrganizerView(Model model, HttpSession session) {
-        return "DashboardOrganizerView";
+
+
+    @GetMapping("/organizer")
+    public String getDashboardViewOrganizer() {
+        return "DashboardViewOrganizer";
     }
-    }
+}
