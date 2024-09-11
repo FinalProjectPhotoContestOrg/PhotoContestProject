@@ -5,8 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Junkie Dashboard</title>
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
+    <style>
+        /* Make the whole card clickable */
+        .card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        /* Add hover effect */
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Ensure the card-body content doesn't overflow and looks good */
+        .card-body {
+            min-height: 150px; /* Adjust based on content */
+        }
+
+        /* Contest image style */
+        .card-img-top {
+            object-fit: cover;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
+<nav th:replace="~{ForumForms.html :: navbar}"></nav>
 <div class="container mt-5">
     <h1 class="text-center">Welcome to Your Dashboard</h1>
 
@@ -25,16 +50,18 @@
         <h2>Active Open Contests</h2>
         <div class="row">
             <div class="col-md-4" th:each="contest : ${activeContests}">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${contest.title}">Nature Photography Contest</h5>
-                        <p class="card-text">
-                            Category: <span th:text="${contest.category}">Wildlife</span><br>
-                            Ends on: <span th:text="${#dates.format(contest.phase1End, 'MMMM d, yyyy')}">November 30</span>
-                        </p>
-                        <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="btn btn-primary">View Contest</a>
+                <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
+                    <div class="card mb-3">
+                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${contest.title}">Nature Photography Contest</h5>
+                            <p class="card-text">
+                                Category: <span th:text="${contest.category}">Wildlife</span><br>
+                                Ends on: <span th:text="${#dates.format(contest.phase1End, 'MMMM d, yyyy')}">November 30</span>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -44,16 +71,18 @@
         <h2>Your Participating Contests</h2>
         <div class="row">
             <div class="col-md-4" th:each="contest : ${participatingContests}">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${contest.title}">Landscape Photography Contest</h5>
-                        <p class="card-text">
-                            Category: <span th:text="${contest.category}">Landscapes</span><br>
-                            Phase: <span th:text="${contest.contestPhase}">Phase I</span>
-                        </p>
-                        <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="btn btn-secondary">View Contest</a>
+                <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
+                    <div class="card mb-3">
+                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${contest.title}">Landscape Photography Contest</h5>
+                            <p class="card-text">
+                                Category: <span th:text="${contest.category}">Landscapes</span><br>
+                                Phase: <span th:text="${contest.contestPhase}">Phase I</span>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -63,16 +92,18 @@
         <h2>Finished Contests</h2>
         <div class="row">
             <div class="col-md-4" th:each="contest : ${finishedContests}">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${contest.title}">Portrait Photography Contest</h5>
-                        <p class="card-text">
-                            Category: <span th:text="${contest.category}">Portraits</span><br>
-                            Finished on: <span th:text="${#dates.format(contest.phase2End, 'MMMM d, yyyy')}">August 10</span>
-                        </p>
-                        <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="btn btn-outline-secondary">View Results</a>
+                <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
+                    <div class="card mb-3">
+                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${contest.title}">Portrait Photography Contest</h5>
+                            <p class="card-text">
+                                Category: <span th:text="${contest.category}">Portraits</span><br>
+                                Finished on: <span th:text="${#dates.format(contest.phase2End, 'MMMM d, yyyy')}">August 10</span>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
