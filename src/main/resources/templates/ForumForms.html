@@ -16,7 +16,7 @@
                     <a class="nav-link" th:href="@{/}">Home</a>
                 </li>
                 <li class="nav-item" th:if="${isOrganizer}">
-                    <a class="nav-link" th:href="@{/dashboard/organizers}">Dashboard</a>
+                    <a class="nav-link" th:href="@{/dashboard/organizer}">Dashboard</a>
                 </li>
                 <li class="nav-item" th:unless="${isOrganizer}">
                     <a class="nav-link" th:href="@{/dashboard/junkies}">Dashboard</a>
@@ -52,5 +52,26 @@
         <a th:href="'/contests/' + ${contest.id}" class="btn btn-primary">View Contest Details</a>
     </div>
 </div>
+
+
+<a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark"
+   th:fragment="contest-card">
+<div class="">
+    <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+    <div class="card-body">
+        <h5 class="card-title" th:text="${contest.title}">Landscape Photography Contest</h5>
+        <p class="card-text" style="margin-bottom: 0">
+            Category: <span th:text="${contest.category}">Landscapes</span><br>
+            Phase: <span th:text="${contest.contestPhase.toString()}">Phase II</span>
+        </p>
+        <p class="card-text" th:if="${contest.contestPhase.toString() == 'Phase II'}">
+            Phase ends on: <span th:text="${#dates.format(contest.phase2End, 'MMMM d, yyyy')}">November 30</span>
+        </p>
+        <p class="card-text" th:if="${contest.contestPhase.toString() == 'Phase I'}">
+            Phase ends on: <span th:text="${#dates.format(contest.phase1End, 'MMMM d, yyyy')}">November 30</span>
+        </p>
+    </div>
+</div>
+</a>
 </body>
 </html>

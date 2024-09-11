@@ -10,9 +10,11 @@ import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.EntryService;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -60,7 +62,23 @@ public class DashboardMvcController {
 
 
     @GetMapping("/organizer")
-    public String getDashboardViewOrganizer() {
+    public String getDashboardViewOrganizer(Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/login";
+        }
+
+
+        List<Contest> phaseIContests = contestService.getAllContests(null, null, null, ContestPhase.PhaseI);
+        List<Contest> phaseIIContests = contestService.getAllContests(null, null, null, ContestPhase.PhaseII);
+        List<Contest> finishedContests = contestService.getAllContests(null, null, null, ContestPhase.Finished);
+
+        model.addAttribute("phaseIContests", phaseIContests);
+        model.addAttribute("phaseIIContests", phaseIIContests);
+        model.addAttribute("finishedContests", finishedContests);
+
         return "DashboardViewOrganizer";
     }
 }

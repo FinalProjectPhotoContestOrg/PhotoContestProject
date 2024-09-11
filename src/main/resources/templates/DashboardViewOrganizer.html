@@ -1,10 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizer Dashboard</title>
+    <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
+    <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <style>
+        /* Make the whole card clickable */
+        .card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        /* Add hover effect */
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Ensure the card-body content doesn't overflow and looks good */
+        .card-body {
+            min-height: 120px; /* Adjust based on content */
+        }
+
+        /* Contest image style */
+        .card-img-top {
+            object-fit: cover;
+            height: 200px;
+        }
+
+        /* Button styles */
+        .btn-primary {
+            margin-right: 10px;
+        }
+
+        /* Horizontal scrolling container */
+        .scrolling-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 0;
+        }
+
+        .scrolling-container .card {
+            display: inline-block;
+            width: 300px; /* Adjust width as needed */
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
-<h3>HALLOOOOOOOO</h3>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Helper function to format the time remaining
+        function formatTime(ms) {
+            const seconds = Math.floor((ms / 1000) % 60);
+            const minutes = Math.floor((ms / (1000 * 60)) % 60);
+            const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        // Function to update the countdown timer
+        function updateCountdown(id, endTime) {
+            const countdownElement = document.getElementById(`countdown-`+ id);
+            const endDate = new Date(endTime);
+            const interval = setInterval(function() {
+                const now = new Date();
+                const distance = endDate - now;
+
+                if (distance < 0) {
+                    clearInterval(interval);
+                    countdownElement.textContent = 'Expired';
+                } else {
+                    countdownElement.textContent = formatTime(distance);
+                }
+            }, 1000);
+        }
+
+        // Loop through each contest and update the countdown timer
+        document.querySelectorAll('.card').forEach(function(card) {
+            const id = card.getAttribute('data-contest-id');
+            const endTime = card.getAttribute('data-phase-end-time');
+            if (id && endTime) {
+                updateCountdown(id, endTime);
+            }
+        });
+    });
+</script>
+<nav th:replace="~{ForumForms.html :: navbar}"></nav>
+<div class="container mt-5">
+    <h1 class="text-center">Organizer Dashboard</h1>
+
+    <!-- Setup New Contest Button -->
+    <section class="my-4 text-center">
+        <a th:href="@{/contests/create}" class="btn btn-primary">Setup New Contest</a>
+    </section>
+
+    <!-- Phase I Contests -->
+    <section class="my-4">
+        <h2>Contests in Phase I</h2>
+        <div class="scrolling-container">
+            <div th:each="contest : ${phaseIContests}" class="card">
+                <div th:replace="~{ForumForms.html :: contest-card}"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phase II Contests -->
+    <section class="my-4">
+        <h2>Contests in Phase II</h2>
+        <div class="scrolling-container">
+            <div th:each="contest : ${phaseIIContests}" class="card">
+                <div th:replace="~{ForumForms.html :: contest-card}"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Finished Contests -->
+    <section class="my-4">
+        <h2>Finished Contests</h2>
+        <div class="scrolling-container">
+            <div th:each="contest : ${finishedContests}" class="card">
+                <div th:replace="~{ForumForms.html :: contest-card}"></div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
