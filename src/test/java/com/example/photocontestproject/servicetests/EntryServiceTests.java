@@ -241,7 +241,7 @@ public class EntryServiceTests {
 
     @Test
     void throwIfUserIsJuror_Should_Throw() {
-        User user = new User();
+        User user = TestHelper.createJunkieUser();
         Entry entry = new Entry();
         Contest contest = new Contest();
         contest.setJurors(Set.of(user));
@@ -250,5 +250,23 @@ public class EntryServiceTests {
         assertThrows(AuthorizationException.class, () -> {
             entryService.throwIfUserIsJuror(user, entry);
         });
+    }
+
+    @Test
+    void findContestByUserId_Should_Find_Contests() {
+        User user = TestHelper.createJunkieUser();
+        user.setId(1);
+        Entry entry1 = new Entry();
+        entry1.setParticipant(user);
+        entry1.setContest(new Contest());
+        Entry entry2 = new Entry();
+        entry2.setParticipant(user);
+        entry2.setContest(new Contest());
+        List<Entry> entries = List.of(entry1, entry2);
+        when(entryRepository.findAll()).thenReturn(entries);
+
+        List<Contest> result = entryService.findContestsByUserId(1);
+
+        assertEquals(2, result.size());
     }
 }
