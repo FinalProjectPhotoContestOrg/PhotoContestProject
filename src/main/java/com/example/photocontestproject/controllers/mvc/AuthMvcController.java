@@ -2,6 +2,7 @@ package com.example.photocontestproject.controllers.mvc;
 
 import com.example.photocontestproject.dtos.in.LogInDto;
 import com.example.photocontestproject.dtos.in.RegisterDto;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthenticationFailureException;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EmailException;
@@ -41,16 +42,32 @@ public class AuthMvcController {
     }
 
     @PostMapping("/login")
-    public String handleLogin(@Valid @ModelAttribute("login") LogInDto loginDto, BindingResult bindingResult, HttpSession session) {
+    public String handleLogin(@Valid @ModelAttribute("login") LogInDto loginDto,
+                              BindingResult bindingResult,
+                              HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "LoginView";
         }
 
         try {
-            User user = authenticationHelper.throwIfWrongAuthentication(loginDto.getUsername(), loginDto.getPassword());
+            User user = authenticationHelper.throwIfWrongAuthentication(loginDto.getUsername(),
+                    loginDto.getPassword());
             session.setAttribute("currentUser", user);
             session.setAttribute("userId", user.getId());
-            return "redirect:/";
+            String redirectUrl = (String) session.getAttribute("redirectUrl");
+            session.removeAttribute("redirectAfterLogin");
+            if (redirectUrl == null) {
+                redirectUrl = "/";
+            }
+            if (redirectUrl.equalsIgnoreCase("/dashboard")) {
+                if (user.getRole().equals(Role.Organizer)) {
+                   return "redirect:/dashboard/organizer";
+               } else {
+                   return "redirect:/dashboard/junkies";
+               }
+            }
+
+            return "redirect:" + redirectUrl;
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
             return "LoginView";

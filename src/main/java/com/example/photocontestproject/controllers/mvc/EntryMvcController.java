@@ -59,6 +59,7 @@ public class EntryMvcController {
             user = authenticationHelper.tryGetCurrentUser(session);
             entry1 = entryService.getEntryById(id);
         } catch (AuthorizationException e) {
+            session.setAttribute("redirectUrl", "/entries/" + id);
             return "redirect:/login";
         } catch (EntityNotFoundException e) {
             return "redirect:/";

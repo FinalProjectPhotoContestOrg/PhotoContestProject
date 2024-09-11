@@ -51,6 +51,7 @@ public class ContestMvcController {
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
+            session.setAttribute("redirectUrl", "/contests/" + contestId);
             return "redirect:/login";
         }
         try {

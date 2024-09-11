@@ -2,6 +2,7 @@ package com.example.photocontestproject.controllers.mvc;
 
 import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.Ranking;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.models.Contest;
@@ -10,11 +11,9 @@ import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.EntryService;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -36,12 +35,29 @@ public class DashboardMvcController {
         this.entryService = entryService;
     }
 
+    @GetMapping
+    public String handleDashboardRedirect(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            session.setAttribute("redirectUrl", "/dashboard");
+            return "redirect:/login";
+        }
+        if (user.getRole().equals(Role.Junkie)) {
+            return "redirect:/dashboard/junkies";
+        } else {
+            return "redirect:/dashboard/organizer";
+        }
+    }
+
     @GetMapping("/junkies")
     public String getDashboardJunkieView(Model model, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
+            session.setAttribute("redirectUrl", "/dashboard/junkies");
             return "redirect:/login";
         }
         List<Contest> activeContests = contestService.getAllContests(null, null, null, ContestPhase.PhaseI);
@@ -67,6 +83,7 @@ public class DashboardMvcController {
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
+            session.setAttribute("redirectUrl", "/dashboard/organizer");
             return "redirect:/login";
         }
 
