@@ -6,6 +6,42 @@
     <title>Photography Contest</title>
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
+    <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <style>
+        .container-big {
+            max-width: 1600px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 130px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-body {
+            min-height: 120px;
+        }
+
+        .card-img-top {
+            object-fit: cover;
+            height: 200px;
+        }
+
+        .no-underline {
+            text-decoration: none;
+            color: inherit; /* Or specify the color you prefer */
+        }
+    </style>
 </head>
 <body>
 
@@ -17,68 +53,67 @@
     <div class="container">
         <h1>Welcome to the Photography Contest</h1>
         <p class="lead">Showcase your talent and stand a chance to win amazing prizes!</p>
+        <!-- Join Now Button -->
+        <a th:href="@{/register}" class="btn btn-primary btn-lg mt-3 px-5 py-3" style="font-size: 1.5rem;">Join Now</a>
     </div>
 </header>
 
-<!-- Contest List Section -->
-<section id="contests" class="py-5">
+<!-- Featured Contest Section -->
+<section id="featured-contest" class="py-5 bg-primary text-white" style="padding-top: 1.5rem; padding-bottom: 1.5rem">
     <div class="container">
-        <h2 class="text-center">Current Contests</h2>
-        <p class="lead text-center">Browse our ongoing photography contests and participate now!</p>
+        <h1 class="text-center" style="color:black;">Featured Contest</h1>
         <div class="row mt-4">
-
-            <div class="col-md-4" th:each="contest : ${contests}">
-                <div th:replace="~{ForumForms.html :: contest-view}"></div>
+            <a th:href="@{/contests/{contestId}(contestId=${featuredContest.id})}" class="no-underline">
+            <div class="col-md-12">
+                <div th:if="${featuredContest}" class="card mb-4">
+                    <img th:src="@{'data:image/jpeg;base64,' + ${featuredContest.coverPhotoUrl}}" class="card-img-top" alt="Featured Contest Image">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="'Title: ' + ${featuredContest.title}"></h5>
+                        <p class="card-text" th:text="'Category: ' + ${featuredContest.getCategory()}"></p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <span th:text="${featuredContest.entries.size()} + ' Entries'"></span>
+                    </div>
+                </div>
             </div>
-
+            </a>
         </div>
     </div>
 </section>
 
-
-<!-- Gallery Section -->
-<!--<section id="gallery" class="py-5">-->
-<!--    <div class="container">-->
-<!--        <h2 class="text-center">Gallery</h2>-->
-<!--        <p class="lead text-center">Check out some of the amazing submissions from our participants.</p>-->
-<!--        <div class="row mt-4">-->
-<!--            <div class="col-md-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Photo 1">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">Photo Title 1</h5>-->
-<!--                        <p class="card-text">Description of the photo.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-md-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Photo 2">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">Photo Title 2</h5>-->
-<!--                        <p class="card-text">Description of the photo.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-md-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://via.placeholder.com/350x250" class="card-img-top" alt="Photo 3">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">Photo Title 3</h5>-->
-<!--                        <p class="card-text">Description of the photo.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
-
-
+<!-- Recent Winners Section -->
+<div class="container-big">
+    <div class="container">
+        <h2 class="text-center">Recent Winning Entries</h2>
+        <div class="row mt-4">
+            <!-- Loop through recent winners -->
+            <div class="col-md-4" th:each="entry : ${recentWinners}">
+                <a th:href="@{/entries/{entryId}(entryId=${entry.id})}" class="no-underline">
+                    <div class="card h-100">
+                        <!-- Image -->
+                        <img th:src="@{'data:image/jpeg;base64,' + ${entry.photoUrl}}" class="card-img-top"
+                             alt="Photo by [[${entry.participant.username}]]">
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <!-- Title -->
+                            <h5 class="card-title" th:text="${entry.title}"></h5>
+                            <!-- Story -->
+                            <p class="card-text" th:text="${entry.story}"></p>
+                        </div>
+                        <!-- Card Footer -->
+                        <div class="card-footer text-muted">
+                            Uploaded by <span th:text="${entry.participant.username}"></span> on
+                            <span th:text="${#dates.format(entry.uploadedAt, 'yyyy-MM-dd')}"></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Footer -->
 <footer th:replace="~{ForumForms.html :: footer}"></footer>
 
-<!-- Bootstrap JS -->
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>-->
 </body>
 </html>

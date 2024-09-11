@@ -47,7 +47,11 @@ public class HomeMvcController {
             }
         }
 
+        Contest featuredContest = finishedContests.stream()
+                .max((c1, c2) -> Integer.compare(c1.getEntries().size(), c2.getEntries().size()))
+                .orElse(null);
 
+        model.addAttribute("featuredContest", featuredContest);
         model.addAttribute("recentWinners", recentWinners);
 
 
