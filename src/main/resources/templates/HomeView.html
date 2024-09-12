@@ -41,6 +41,9 @@
             text-decoration: none;
             color: inherit; /* Or specify the color you prefer */
         }
+        .no-underline {
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -84,24 +87,20 @@
             <div class="col-md-4" style="max-height: 120px; margin-top: 0">
                 <h1 class="text-center" style="color:black;">User Leaderboard</h1>
                 <div class="card mb-4" style="cursor: auto; transform: none; box-shadow: none">
-
-
-
-
-                        <ul class="list-group">
-                            <!-- Each list item is now wrapped in an anchor tag to make it clickable -->
-                            <li th:each="user, iterStat : ${userLeaderboard}" class="list-group-item d-flex justify-content-between align-items-center">
-                                <a th:href="@{/users/{userId}(userId=${user.id})}" class="no-underline d-flex justify-content-between align-items-center w-100">
+                    <ul class="list-group">
+                        <!-- Each list item is now wrapped in an anchor tag to make it clickable -->
+                        <li th:each="user, iterStat : ${userLeaderboard}" class="list-group-item d-flex align-items-center">
+                            <a th:href="@{/users/{userId}(userId=${user.id})}" class="no-underline d-flex w-100">
+                                <div class="w-100 d-flex justify-content-between">
                         <span>
                             <strong th:text="${iterStat.index + 1} + '. '"></strong>
                             <span th:text="${user.firstName + ' ' + user.lastName}"></span>
-                            <span th:text="${' | ' + user.points + ' pts'}"></span>
                         </span>
-                                    <span class="badge bg-primary rounded-pill" th:text="${user.points} + ' pts'"></span>
-                                </a>
-                            </li>
-                        </ul>
-
+                                    <span class="bg-primary rounded-pill" th:text="${user.points + ' pts'}"></span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 

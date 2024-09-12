@@ -1,6 +1,7 @@
 package com.example.photocontestproject.controllers.mvc;
 
 import com.example.photocontestproject.enums.ContestPhase;
+import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -54,8 +56,10 @@ public class HomeMvcController {
         Contest featuredContest = finishedContests.stream()
                 .max((c1, c2) -> Integer.compare(c1.getEntries().size(), c2.getEntries().size()))
                 .orElse(null);
-
-        List<User> userLeaderboard = userService.getAllUsers(null, null, null);
+        List<User> allUsers = userService.getAllUsers(null, null, null);
+        List<User> userLeaderboard = allUsers.stream()
+                .filter(user -> !user.getRole().equals(Role.Organizer))
+                .collect(Collectors.toList());
         userLeaderboard.sort((u1, u2) -> Integer.compare(u2.getPoints(), u1.getPoints()));
         userLeaderboard = userLeaderboard.stream().limit(8).toList();
 
