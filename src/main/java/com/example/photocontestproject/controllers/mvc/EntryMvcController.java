@@ -13,6 +13,7 @@ import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.EntryService;
 import com.example.photocontestproject.services.contracts.RatingService;
+import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -30,15 +32,17 @@ public class EntryMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final RatingMapper ratingMapper;
     private final RatingService ratingService;
+    private final UserService userService;
 
     public EntryMvcController(EntryService entryService,
                               AuthenticationHelper authenticationHelper,
                               RatingMapper ratingMapper,
-                              RatingService ratingService) {
+                              RatingService ratingService, UserService userService) {
         this.entryService = entryService;
         this.authenticationHelper = authenticationHelper;
         this.ratingMapper = ratingMapper;
         this.ratingService = ratingService;
+        this.userService = userService;
     }
 
 
@@ -78,7 +82,14 @@ public class EntryMvcController {
 
         Contest contest = entry1.getContest();
         model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
-        model.addAttribute("isJurorToContest", contest.getJurors().stream().anyMatch(juror -> juror.getId().equals(user.getId())));
+        model.addAttribute("isJurorToContest", contest.getJurors().stream()
+                .anyMatch(juror -> juror.getId().equals(user.getId())));
+        List<Contest> userContestsParticipate = entryService.findContestsByUserId(user.getId());
+        List<Entry> participantEntries = entryService.getAllEntries(null).stream()
+                .filter(entryUser -> entryUser.getParticipant().getId().equals(user.getId()))
+                .toList();
+        model.addAttribute("contestsParticipate", userContestsParticipate);
+        model.addAttribute("participantEntries", participantEntries);
         return "EntryView";
     }
 
