@@ -3,7 +3,9 @@ package com.example.photocontestproject.controllers.mvc;
 import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
+import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.ContestService;
+import com.example.photocontestproject.services.contracts.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +20,11 @@ import java.util.List;
 @RequestMapping("/")
 public class HomeMvcController {
     private final ContestService contestService;
+    private final UserService userService;
 
-    public HomeMvcController(ContestService contestService) {
+    public HomeMvcController(ContestService contestService, UserService userService) {
         this.contestService = contestService;
+        this.userService = userService;
     }
 
     @ModelAttribute("contests")
@@ -51,6 +55,12 @@ public class HomeMvcController {
                 .max((c1, c2) -> Integer.compare(c1.getEntries().size(), c2.getEntries().size()))
                 .orElse(null);
 
+        List<User> userLeaderboard = userService.getAllUsers(null, null, null);
+        userLeaderboard.sort((u1, u2) -> Integer.compare(u2.getPoints(), u1.getPoints()));
+        userLeaderboard = userLeaderboard.stream().limit(8).toList();
+
+
+        model.addAttribute("userLeaderboard", userLeaderboard);
         model.addAttribute("featuredContest", featuredContest);
         model.addAttribute("recentWinners", recentWinners);
 

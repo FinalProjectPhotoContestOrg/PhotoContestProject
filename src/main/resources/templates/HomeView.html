@@ -29,7 +29,7 @@
         }
 
         .card-body {
-            min-height: 120px;
+            min-height: 88px;
         }
 
         .card-img-top {
@@ -61,22 +61,50 @@
 <!-- Featured Contest Section -->
 <section id="featured-contest" class="py-5 bg-primary text-white" style="padding-top: 1.5rem; padding-bottom: 1.5rem">
     <div class="container">
-        <h1 class="text-center" style="color:black;">Featured Contest</h1>
-        <div class="row mt-4">
-            <a th:href="@{/contests/{contestId}(contestId=${featuredContest.id})}" class="no-underline">
-            <div class="col-md-12">
-                <div th:if="${featuredContest}" class="card mb-4">
-                    <img th:src="@{'data:image/jpeg;base64,' + ${featuredContest.coverPhotoUrl}}" class="card-img-top" alt="Featured Contest Image">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="'Title: ' + ${featuredContest.title}"></h5>
-                        <p class="card-text" th:text="'Category: ' + ${featuredContest.getCategory()}"></p>
+
+        <div class="row mt-4" style="margin-top: 0">
+            <!-- Featured Contest -->
+            <div class="col-md-8">
+                <a th:href="@{/contests/{contestId}(contestId=${featuredContest.id})}" class="no-underline">
+                    <h1 class="text-center" style="color:black;">Featured Contest</h1>
+                    <div th:if="${featuredContest}" class="card mb-4">
+                        <img th:src="@{'data:image/jpeg;base64,' + ${featuredContest.coverPhotoUrl}}" class="card-img-top" alt="Featured Contest Image">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="'Title: ' + ${featuredContest.title}"></h5>
+                            <p class="card-text" th:text="'Category: ' + ${featuredContest.getCategory()}"></p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <span th:text="${featuredContest.entries.size()} + ' Entries'"></span>
+                        </div>
                     </div>
-                    <div class="card-footer text-muted">
-                        <span th:text="${featuredContest.entries.size()} + ' Entries'"></span>
-                    </div>
+                </a>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="col-md-4" style="max-height: 120px; margin-top: 0">
+                <h1 class="text-center" style="color:black;">User Leaderboard</h1>
+                <div class="card mb-4" style="cursor: auto; transform: none; box-shadow: none">
+
+
+
+
+                        <ul class="list-group">
+                            <!-- Each list item is now wrapped in an anchor tag to make it clickable -->
+                            <li th:each="user, iterStat : ${userLeaderboard}" class="list-group-item d-flex justify-content-between align-items-center">
+                                <a th:href="@{/users/{userId}(userId=${user.id})}" class="no-underline d-flex justify-content-between align-items-center w-100">
+                        <span>
+                            <strong th:text="${iterStat.index + 1} + '. '"></strong>
+                            <span th:text="${user.firstName + ' ' + user.lastName}"></span>
+                            <span th:text="${' | ' + user.points + ' pts'}"></span>
+                        </span>
+                                    <span class="badge bg-primary rounded-pill" th:text="${user.points} + ' pts'"></span>
+                                </a>
+                            </li>
+                        </ul>
+
                 </div>
             </div>
-            </a>
+
         </div>
     </div>
 </section>
