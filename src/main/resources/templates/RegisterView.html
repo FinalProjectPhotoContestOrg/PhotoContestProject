@@ -11,6 +11,15 @@
         body {
             background-color: #f8f9fa;
         }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
         .register-container {
             max-width: 500px;
             margin: 100px auto;
@@ -29,7 +38,7 @@
 <nav th:replace="~{ForumForms.html :: navbar}"></nav>
 
 <!-- Registration Form -->
-<div class="register-container">
+<div class="register-container" style="margin-top: 80px">
     <h2 class="text-center">Register</h2>
     <form action="#" th:action="@{/register}" th:object="${register}" th:method="post">
         <div class="mb-3">
@@ -69,7 +78,6 @@
     </form>
 </div>
 
-<div style="height: 100px"></div>
 
 <!-- Footer -->
 <footer th:replace="~{ForumForms.html :: footer}"></footer>

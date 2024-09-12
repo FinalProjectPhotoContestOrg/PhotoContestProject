@@ -5,6 +5,17 @@
     <title>Create Contest</title>
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <style>
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
 <nav th:replace="~{ForumForms.html :: navbar}"></nav>
@@ -93,8 +104,6 @@
         <button type="submit" class="btn btn-primary">Create Contest</button>
     </form>
 </div>
-
-<div style="height: 300px"></div>
 
 <footer th:replace="~{ForumForms.html :: footer}"></footer>
 
