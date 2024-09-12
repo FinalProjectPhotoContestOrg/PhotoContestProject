@@ -61,7 +61,9 @@ public class DashboardMvcController {
             return "redirect:/login";
         }
         List<Contest> activeContests = contestService.getAllContests(null, null, null, ContestPhase.PhaseI);
-        List<Contest> participatingContests = entryService.findContestsByUserId(user.getId());
+        List<Contest> participatingContests = entryService.findContestsByUserId(user.getId()).stream()
+                .filter(contest -> contest.getContestPhase() != ContestPhase.Finished)
+                .toList();
         List<Contest> filteredActiveContests = activeContests.stream()
                 .filter(contest->participatingContests.stream()
                         .noneMatch(participatingContest->participatingContest.getId().equals(contest.getId())))
