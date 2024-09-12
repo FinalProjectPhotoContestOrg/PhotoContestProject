@@ -2,7 +2,6 @@ package com.example.photocontestproject.controllers.mvc;
 
 import com.example.photocontestproject.dtos.ContestDto;
 import com.example.photocontestproject.dtos.EntryDto;
-import com.example.photocontestproject.dtos.in.ContestInDto;
 import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.enums.Role;
@@ -16,6 +15,7 @@ import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.EntryService;
+import com.example.photocontestproject.services.contracts.ImageService;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -36,15 +36,24 @@ public class ContestMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final ContestMapper contestMapper;
     private final UserService userService;
+    private final ImageService imageService;
 
-    public ContestMvcController(ContestService contestService, EntryService entryService, EntryMapper entryMapper, AuthenticationHelper authenticationHelper, ContestMapper contestMapper, UserService userService) {
+    public ContestMvcController(ContestService contestService,
+                                EntryService entryService,
+                                EntryMapper entryMapper,
+                                AuthenticationHelper authenticationHelper,
+                                ContestMapper contestMapper,
+                                UserService userService,
+                                ImageService imageService) {
         this.contestService = contestService;
         this.entryService = entryService;
         this.entryMapper = entryMapper;
         this.authenticationHelper = authenticationHelper;
         this.contestMapper = contestMapper;
         this.userService = userService;
+        this.imageService = imageService;
     }
+
     @GetMapping("/{contestId}")
     public String showSingleContest(@PathVariable Integer contestId, Model model, HttpSession session) {
         User user;
@@ -73,12 +82,13 @@ public class ContestMvcController {
             model.addAttribute("sortedEntries", sortedEntries);
             model.addAttribute("ranks", ranks);
             return "ContestView";
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("notFound", e.getMessage());
             return "ErrorView";
         }
     }
+
     @GetMapping("/create")
     public String getCreateContestView(Model model, HttpSession session) {
         try {
@@ -91,8 +101,9 @@ public class ContestMvcController {
         model.addAttribute("contest", new ContestDto());
         return "CreateContestView";
     }
+
     @PostMapping("/create")
-    public String handleContestCreation(@RequestParam("coverPhoto") MultipartFile file,
+    public String handleContestCreation(@RequestParam("coverPhoto") MultipartFile photoFile,
                                         @ModelAttribute("contest") ContestDto contestDto,
                                         @RequestParam(value = "jurorIds", required = false) List<Integer> jurorIds,
                                         @RequestParam(value = "participantIds", required = false) List<Integer> participantIds,
@@ -100,7 +111,8 @@ public class ContestMvcController {
                                         @SessionAttribute("currentUser") User user,
                                         Model model) {
         try {
-            String base64Image = Base64.getEncoder().encodeToString(file.getBytes());
+            byte[] resizedImage = imageService.resizeImage(photoFile);
+            String base64Image = Base64.getEncoder().encodeToString(resizedImage);
             contestDto.setCoverPhotoUrl(base64Image);
             Contest contest = contestMapper.fromDto(contestDto);
             contest.setOrganizer(user);
@@ -121,12 +133,13 @@ public class ContestMvcController {
         } catch (IOException e) {
             e.printStackTrace();
             return "redirect:/contests/create";
-        } catch (AuthorizationException e){
+        } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("notOrganizer", e.getMessage());
             return "ErrorView";
         }
     }
+
     @PostMapping("/{contestId}/entries")
     public String createEntry(@PathVariable Integer contestId,
                               @RequestParam("photo") MultipartFile photoFile,
@@ -134,7 +147,8 @@ public class ContestMvcController {
                               @SessionAttribute("currentUser") User user,
                               Model model) {
         try {
-            String base64Image = Base64.getEncoder().encodeToString(photoFile.getBytes());
+            byte[] resizedImage = imageService.resizeImage(photoFile);
+            String base64Image = Base64.getEncoder().encodeToString(resizedImage);
             entryDto.setPhotoUrl(base64Image);
             Entry entry = entryMapper.fromDto(entryDto, user);
             entry.setContest(contestService.getContestById(contestId));
