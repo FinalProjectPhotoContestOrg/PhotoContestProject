@@ -67,8 +67,8 @@ public class UserServiceImpl implements UserService {
         throwIfUserIsDuplicate(user.getUsername());
         /*if (!EmailValidator.validateEmail(user.getEmail())) {
             throw new EmailException("Invalid email");
-        }
-        emailService.sendEmailForRegister(user.getEmail(), user.getUsername());*/
+        }*/
+        emailService.sendEmailForRegister(user.getEmail(), user.getUsername());
         return userRepository.save(user);
     }
 

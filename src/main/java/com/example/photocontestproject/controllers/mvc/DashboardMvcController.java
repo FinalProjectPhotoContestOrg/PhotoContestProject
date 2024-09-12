@@ -70,12 +70,18 @@ public class DashboardMvcController {
                 .toList();
         Set<Contest> finishedContests = entryService.findContestsByUserId(user.getId()).stream()
                 .filter(contest -> contest.getContestPhase() == ContestPhase.Finished).collect(Collectors.toSet());
+        List<Contest> jurorContests = contestService.getAllContests(null, null, null, null).stream()
+                .filter(contest -> contest.getJurors().stream()
+                        .anyMatch(juror -> juror.getId().equals(user.getId())))
+                .filter(contest -> contest.getContestPhase() == ContestPhase.PhaseII)
+                .toList();
         int currentPoints = user.getPoints();
         Ranking currentRank = user.getRanking();
         int nextRankPoints = userService.getNextRankPoints(currentPoints);
         model.addAttribute("activeContests", filteredActiveContests);
         model.addAttribute("participatingContests", participatingContests);
         model.addAttribute("finishedContests", finishedContests);
+        model.addAttribute("jurorContests", jurorContests);
         model.addAttribute("currentPoints", currentPoints);
         model.addAttribute("currentRank", currentRank);
         model.addAttribute("nextRankPoints", nextRankPoints);

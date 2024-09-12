@@ -40,6 +40,10 @@
         .card:hover .dark-overlay {
             opacity: 1;
         }
+        .overlay-text {
+            font-size: 1.2rem;
+            text-align: center;
+        }
         .countdown-timer {
             font-size: 1.2rem;
             text-align: center;
@@ -63,16 +67,17 @@
         .participating-card:hover {
             background-color: rgba(0, 0, 0, 0.1);
         }
-        .remaining-time {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            display: none;
+        .scrolling-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 0;
+        }
+
+        .scrolling-container .card {
+            display: inline-block;
+            width: 300px;
+            margin-right: 10px;
+            margin-left: 10px;
         }
         .participating-card:hover .remaining-time {
             display: block;
@@ -98,12 +103,12 @@
     <!-- Active Open Contests -->
     <section class="my-4">
         <h2>Active Open Contests</h2>
-        <div class="row">
-            <div class="col-md-4" th:each="contest : ${activeContests}">
+        <div class="scrolling-container">
+            <div class="card" th:each="contest : ${activeContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}"
                    class="text-decoration-none text-dark contest-link"
                    data-th-id="${contest.id}">
-                    <div class="card mb-3">
+                    <div class=" mb-3">
                         <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${contest.title}">Nature Photography Contest</h5>
@@ -127,9 +132,9 @@
     <!-- Contests Junkie is Participating In -->
     <section class="my-4">
         <h2>Your Participating Contests</h2>
-        <div class="row">
-            <div class="col-md-4" th:each="contest : ${participatingContests}">
-                <div class="card mb-3 participating-card">
+        <div class="scrolling-container">
+            <div class="card" th:each="contest : ${participatingContests}">
+                <div class="mb-3 participating-card">
                     <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${contest.title}">Landscape Photography Contest</h5>
@@ -145,13 +150,40 @@
         </div>
     </section>
 
+    <!-- Contests Junkie is Juror In -->
+    <section class="my-4" th:if="${jurorContests != null && !jurorContests.isEmpty()}">
+        <h2>Contests You're Judging</h2>
+        <div class="scrolling-container">
+            <div class="card" th:each="contest : ${jurorContests}">
+                <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
+                    <div class="mb-3">
+                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${contest.title}">Contest Title</h5>
+                            <p class="card-text">
+                                Category: <span th:text="${contest.category}">Category</span><br>
+                                Phase: <span th:text="${contest.contestPhase}">Phase I</span>
+                            </p>
+                        </div>
+                        <div class="dark-overlay">
+                            <div class="countdown-timer" th:id="'countdown-'+${contest.id}"
+                                 th:data-phase1-end-time="${contest.phase2End.getTime()}">
+                                <span>Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Finished Contests -->
     <section class="my-4">
         <h2>Finished Contests</h2>
-        <div class="row">
-            <div class="col-md-4" th:each="contest : ${finishedContests}">
+        <div class="scrolling-container">
+            <div class="card" th:each="contest : ${finishedContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
-                    <div class="card mb-3">
+                    <div class="mb-3">
                         <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${contest.title}">Portrait Photography Contest</h5>
@@ -161,6 +193,9 @@
                             </p>
                         </div>
                         <div class="dark-overlay">
+                            <div class="overlay-text">
+                                Tap to view results
+                            </div>
                         </div>
                     </div>
                 </a>
@@ -197,7 +232,7 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                timer.innerHTML = '<span>' + days + 'd</span> ' + '<span>' + hours + 'h</span> ' + '<span>' + minutes + 'm</span> ' + '<span>' + seconds + 's</span>';
+                timer.innerHTML =  days + 'd' +' ' + hours + 'h'+' ' + minutes + 'm'+' ' + seconds + 's';
             } else {
                 timer.innerHTML = "Contest ended";
             }
