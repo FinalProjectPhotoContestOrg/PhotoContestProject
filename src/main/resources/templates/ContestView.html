@@ -204,8 +204,8 @@
                     <h5><strong>Category:</strong></h5>
                     <p th:text="${contest.category}">Wildlife, Landscapes, Plants</p>
 
-                    <h5><strong>Submission Guidelines:</strong></h5>
-                    <ul>
+                    <h5 th:if="${isPhaseI}"><strong>Submission Guidelines:</strong></h5>
+                    <ul th:if="${isPhaseI}">
                         <li>File size should not exceed 3 MB per image</li>
                         <li>Entries must be original and not previously published</li>
                     </ul>
