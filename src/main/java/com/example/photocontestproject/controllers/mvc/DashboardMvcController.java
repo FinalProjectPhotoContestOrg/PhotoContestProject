@@ -62,12 +62,16 @@ public class DashboardMvcController {
         }
         List<Contest> activeContests = contestService.getAllContests(null, null, null, ContestPhase.PhaseI);
         List<Contest> participatingContests = entryService.findContestsByUserId(user.getId());
+        List<Contest> filteredActiveContests = activeContests.stream()
+                .filter(contest->participatingContests.stream()
+                        .noneMatch(participatingContest->participatingContest.getId().equals(contest.getId())))
+                .toList();
         Set<Contest> finishedContests = entryService.findContestsByUserId(user.getId()).stream()
                 .filter(contest -> contest.getContestPhase() == ContestPhase.Finished).collect(Collectors.toSet());
         int currentPoints = user.getPoints();
         Ranking currentRank = user.getRanking();
         int nextRankPoints = userService.getNextRankPoints(currentPoints);
-        model.addAttribute("activeContests", activeContests);
+        model.addAttribute("activeContests", filteredActiveContests);
         model.addAttribute("participatingContests", participatingContests);
         model.addAttribute("finishedContests", finishedContests);
         model.addAttribute("currentPoints", currentPoints);
