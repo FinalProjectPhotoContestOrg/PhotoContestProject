@@ -38,12 +38,6 @@
     </div>
 </nav>
 
-<footer th:fragment="footer" class="bg-dark text-white text-center py-3">
-    <div class="container">
-        <p>&copy; 2024 Photography Contest. All Rights Reserved.</p>
-    </div>
-</footer>
-
 <div class="card h-100" th:fragment="contest-view">
     <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" class="card-img-top" alt="Contest 1">
     <div class="card-body">
@@ -73,5 +67,10 @@
     </div>
 </div>
 </a>
+<footer th:fragment="footer" class="bg-dark text-white text-center py-3">
+    <div class="container">
+        <p>&copy; 2024 Photography Contest. All Rights Reserved.</p>
+    </div>
+</footer>
 </body>
 </html>

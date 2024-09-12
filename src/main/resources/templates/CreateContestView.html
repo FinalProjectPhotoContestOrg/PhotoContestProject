@@ -6,19 +6,34 @@
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
         footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 10px;
+            padding: 20px;
         }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .btn {
+            margin: 1rem;
+        }
+
     </style>
 </head>
 <body>
-<nav th:replace="~{ForumForms.html :: navbar}"></nav>
+<div class="wrapper">
+
+    <nav th:replace="~{ForumForms.html :: navbar}"></nav>
 
 <div class="container mt-5">
     <h2>Create a New Contest</h2>
@@ -86,8 +101,6 @@
             </div>
         </div>
 
-
-
         <!-- Invitational Participant Selection (hidden initially) -->
         <div id="participantBlock" class="mb-3" style="display: none;">
             <label for="participantBlock" class="form-label">Select Participants (for invitational contest)</label>
@@ -98,14 +111,13 @@
                 </div>
             </div>
         </div>
-
-
         <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Create Contest</button>
     </form>
+    </div>
+    <footer th:replace="~{ForumForms.html :: footer}"></footer>
 </div>
 
-<footer th:replace="~{ForumForms.html :: footer}"></footer>
 
 <!-- JavaScript to handle contest type change -->
 <script>
@@ -123,5 +135,20 @@
 </script>
 
 <script src="/js/scripts.js"></script>
+<script>
+    const phase1EndInput = document.getElementById('phase1End');
+    const phase2EndInput = document.getElementById('phase2End');
+
+    const today = new Date().toISOString().slice(0, 16);
+    phase1EndInput.min = today;
+    phase2EndInput.min = today;
+
+    phase1EndInput.addEventListener('change', function () {
+        const phase1EndDate = new Date(this.value);
+        const phase1EndMin = phase1EndDate.toISOString().slice(0, 16);
+
+        phase2EndInput.min = phase1EndMin;
+    });
+</script>
 </body>
 </html>

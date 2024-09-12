@@ -136,7 +136,7 @@
         <div th:each="rating : ${entry.ratings}" class="col-md-4 mb-4">
             <div class="rating-box">
                 <h4 >
-                    <a th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}" th:href="@{/users/{id}(id=${entry.participant.id})}"></a>
+                    <p th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}" th:href="@{/users/{id}(id=${entry.participant.id})}"></p>
                 </h4>
                 <p><strong>Score:</strong> <span th:text="${rating.score}">8</span></p>
                 <p><strong>Comment:</strong> <span th:text="${rating.comment}">Great photo!</span></p>

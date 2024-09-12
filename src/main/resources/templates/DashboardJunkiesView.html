@@ -7,6 +7,11 @@
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <style>
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
         .card {
             cursor: pointer;
             transition: transform 0.2s;
@@ -75,6 +80,7 @@
     </style>
 </head>
 <body>
+<div class="wrapper">
 <nav th:replace="~{ForumForms.html :: navbar}"></nav>
 <div class="container mt-5">
     <h1 class="text-center">Welcome to Your Dashboard</h1>
@@ -161,6 +167,9 @@
             </div>
         </div>
     </section>
+
+</div>
+<footer th:replace="~{ForumForms.html :: footer}"></footer>
 </div>
 
 <!-- Bootstrap JS -->
