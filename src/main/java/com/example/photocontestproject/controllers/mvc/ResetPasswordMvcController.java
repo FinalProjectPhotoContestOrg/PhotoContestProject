@@ -49,10 +49,12 @@ public class ResetPasswordMvcController {
             return "ResetPasswordView";
         }
         String encodedPasswordHash = URLEncoder.encode(user.getPasswordHash(), StandardCharsets.UTF_8);
+        System.out.println(encodedPasswordHash);
         String resetLink = String.format("http://localhost:8080/reset-password/form?userId=%d&hash=%s",
                 user.getId(),
                 encodedPasswordHash);
         emailService.sendPasswordResetEmail(user.getEmail(), user.getUsername(), resetLink);
+        System.out.println(resetLink);
         return "redirect:/login";
     }
 
@@ -63,7 +65,10 @@ public class ResetPasswordMvcController {
         User user;
         try {
             user = userService.getUserById(id);
-            String decodedPasswordHash = URLDecoder.decode(encodedPasswordHash, StandardCharsets.UTF_8);
+            String decodedPasswordHash = URLDecoder.decode(encodedPasswordHash, StandardCharsets.UTF_8)
+                    .replace(" ", "+");
+            System.out.println("decode");
+            System.out.println(decodedPasswordHash);
             if (!user.getPasswordHash().equals(decodedPasswordHash)) {
                 return "redirect:/";
             }
@@ -89,7 +94,8 @@ public class ResetPasswordMvcController {
         User user;
         try {
             user = userService.getUserById(id);
-            String decodedPasswordHash = URLDecoder.decode(encodedPasswordHash, StandardCharsets.UTF_8);
+            String decodedPasswordHash = URLDecoder.decode(encodedPasswordHash, StandardCharsets.UTF_8)
+                    .replace(" ", "+");
             if (!user.getPasswordHash().equals(decodedPasswordHash)) {
                 return "redirect:/";
             }

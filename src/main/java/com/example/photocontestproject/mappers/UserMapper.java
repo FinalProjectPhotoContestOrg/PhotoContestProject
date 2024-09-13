@@ -52,7 +52,7 @@ public class UserMapper {
 
     public User updatePassword(User user, PasswordDto passwordDto) {
         String hashedPassword = hashPassword(passwordDto.getPassword());
-        user.setPasswordHash(hashPassword(hashedPassword));
+        user.setPasswordHash(hashedPassword);
         return user;
     }
 }
