@@ -36,9 +36,14 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-bottom: 20px;
+            overflow: hidden; /* Added to prevent overflow */
         }
         .details-container h2 {
             margin-bottom: 20px;
+            overflow: hidden; /* Ensures text does not overflow */
+            white-space: nowrap; /* Prevents text wrapping */
+            text-overflow: ellipsis; /* Adds ellipsis (...) if text overflows */
+            max-width: 100%; /* Ensures it doesn’t exceed container width */
         }
         .progress-bar-container {
             height: 30px;
@@ -57,9 +62,10 @@
         .rating-box p {
             margin-bottom: 0;
         }
-        /*.nav-tabs .nav-item .nav-link::after {
-            display: none; !* Hide extra indicators *!
-        }*/
+        .entry-details p {
+            word-wrap: break-word; /* Added to break long words */
+        }
+
     </style>
 </head>
 <body>
@@ -99,7 +105,7 @@
             </div>
 
             <!-- Rating Form Container -->
-            <div class="rating-container" th:if="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() != 'Finished' }">
+            <div class="rating-container" th:if="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() != 'Finished' } and ${!alreadyRated}">
                 <h3 class="text-center">Rate This Entry</h3>
 
                 <form action="#" method="POST" th:action="@{'/entries/' + ${entry.id}}" th:object="${ratingDto}">
@@ -121,7 +127,7 @@
             </div>
 
             <!-- Rating Display Container -->
-            <div class="rating-container" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
+            <div class="rating-container" th:if="${entry.contest.getContestPhase().toString() == 'Finished'}">
                 <h3 class="text-center">Entry Overall Rating</h3>
                 <div class="text-center">
                     <p class="lead mb-2" th:text="'Rating: ' + ${entryAvgScore}">
@@ -153,7 +159,6 @@
                         <span th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}">John Doe</span>
                     </span>
                 </h4>
-
                 <p><strong>Score:</strong> <span th:text="${rating.score}">8</span></p>
                 <p><strong>Comment:</strong> <span th:text="${rating.comment}">Great photo!</span></p>
                 <p><strong>Reviewed At:</strong> <span th:text="${#dates.format(rating.reviewedAt, 'dd MMM yyyy HH:mm')}">10 Sep 2024 14:00</span></p>
@@ -223,6 +228,8 @@
         </div>
     </div>
 </div>
+
+<div style="height: 280px" th:unless="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() != 'Finished' } and ${!alreadyRated}"></div>
 
 <!-- Footer -->
 <footer th:replace="~{ForumForms.html :: footer}"></footer>
