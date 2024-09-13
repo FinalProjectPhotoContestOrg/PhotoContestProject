@@ -84,12 +84,8 @@ public class EntryMvcController {
         model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
         model.addAttribute("isJurorToContest", contest.getJurors().stream()
                 .anyMatch(juror -> juror.getId().equals(user.getId())));
-        List<Contest> userContestsParticipate = entryService.findContestsByUserId(user.getId());
-        List<Entry> participantEntries = entryService.getAllEntries(null).stream()
-                .filter(entryUser -> entryUser.getParticipant().getId().equals(user.getId()))
-                .toList();
-        model.addAttribute("contestsParticipate", userContestsParticipate);
-        model.addAttribute("participantEntries", participantEntries);
+        model.addAttribute("entryService", entryService);
+        model.addAttribute("organizer", Role.Organizer);
         return "EntryView";
     }
 

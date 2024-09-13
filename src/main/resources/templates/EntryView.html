@@ -8,6 +8,10 @@
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <style>
+        a {
+            color: #000;
+            text-decoration: none;
+        }
         body {
             background-color: #f8f9fa;
         }
@@ -53,6 +57,9 @@
         .rating-box p {
             margin-bottom: 0;
         }
+        /*.nav-tabs .nav-item .nav-link::after {
+            display: none; !* Hide extra indicators *!
+        }*/
     </style>
 </head>
 <body>
@@ -133,15 +140,85 @@
 <div class="ratings-list-container p-4" style="margin-bottom: 0;" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
     <h3 class="text-center">Ratings</h3>
     <div class="row">
-        <div th:each="rating : ${entry.ratings}" class="col-md-4 mb-4">
+        <div th:each="rating, iterStat : ${entry.ratings}" class="col-md-4 mb-4">
             <div class="rating-box">
-                <h4 >
-                    <p th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}" th:href="@{/users/{id}(id=${entry.participant.id})}"></p>
+                <!-- Tooltip for Juror's Name -->
+                <h4>
+                    <span th:if="${!rating.juror.getRole().equals(organizer)}">
+                    <a href="#" data-bs-toggle="modal" th:data-bs-target="'#jurorModal' + ${iterStat.index}">
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" title="View Profile" th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}">John Doe</span>
+                    </a>
+                    </span>
+                    <span th:if="${rating.juror.getRole().equals(organizer)}">
+                        <span th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}">John Doe</span>
+                    </span>
                 </h4>
+
                 <p><strong>Score:</strong> <span th:text="${rating.score}">8</span></p>
                 <p><strong>Comment:</strong> <span th:text="${rating.comment}">Great photo!</span></p>
                 <p><strong>Reviewed At:</strong> <span th:text="${#dates.format(rating.reviewedAt, 'dd MMM yyyy HH:mm')}">10 Sep 2024 14:00</span></p>
                 <p><strong>Category Mismatch:</strong> <span th:text="${rating.categoryMismatch ? 'Yes' : 'No'}">No</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:each="rating, iterStat : ${entry.ratings}">
+    <div class="modal fade" th:id="'jurorModal' + ${iterStat.index}" tabindex="-1" aria-labelledby="jurorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:id="'jurorModalLabel' + ${iterStat.index}">Juror Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tabs Navigation -->
+                    <ul class="nav nav-tabs" id="jurorTabs' + ${iterStat.index}" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" th:id="'info-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#info' + ${iterStat.index}" role="tab" th:aria-controls="'info' + ${iterStat.index}" aria-selected="true">Information</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" th:id="'contests-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#contests' + ${iterStat.index}" role="tab" th:aria-controls="'contests' + ${iterStat.index}" aria-selected="false">Contests</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" th:id="'entries-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#entries' + ${iterStat.index}" role="tab" th:aria-controls="'entries' + ${iterStat.index}" aria-selected="false">Photos</a>
+                        </li>
+                    </ul>
+                    <!-- Tabs Content -->
+                    <div class="tab-content mt-3" th:id="'jurorTabsContent' + ${iterStat.index}">
+                        <!-- Information Tab -->
+                        <div class="tab-pane fade show active" th:id="'info' + ${iterStat.index}" role="tabpanel" th:aria-labelledby="'info-tab' + ${iterStat.index}">
+                            <p><strong>Name:</strong> <span th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}">John Doe</span></p>
+                            <p><strong>Rank:</strong> <span th:text="${rating.juror.getRanking()}">Master</span></p>
+                            <p><strong>Points:</strong> <span th:text="${rating.juror.getPoints()}">123</span></p>
+                            <p><strong>Member since:</strong> <span th:text="${#dates.format(rating.juror.createdAt, 'dd MMM yyyy')}">01 Jan 2020</span></p>
+                        </div>
+                        <!-- Contests Tab -->
+                        <div class="tab-pane fade" th:id="'contests' + ${iterStat.index}" role="tabpanel" th:aria-labelledby="'contests-tab' + ${iterStat.index}">
+                            <h6>Contests:</h6>
+                            <ul>
+                                <li th:each="contest : ${entryService.findContestsByUserId(rating.getJuror().getId())}">
+                                    <span th:text="${contest.title}">Contest Name</span> -
+                                    <span th:text="${contest.category}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Photos Tab -->
+                        <div class="tab-pane fade" th:id="'entries' + ${iterStat.index}" role="tabpanel" th:aria-labelledby="'entries-tab' + ${iterStat.index}">
+                            <h6>Photos:</h6>
+                            <ul th:each="entry : ${entryService.getAllEntries(null)}">
+                                <li th:if="${entry.getParticipant().getId().equals(rating.getJuror().getId())}">
+                                    <span th:text="${entry.title}">Contest Name</span> -
+                                    <span th:text="${entry.story}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -151,6 +228,14 @@
 <footer th:replace="~{ForumForms.html :: footer}"></footer>
 
 <!-- Bootstrap JS -->
-<script src="js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
 </body>
 </html>
