@@ -1,11 +1,14 @@
 package com.example.photocontestproject.services;
 
+import com.example.photocontestproject.dtos.in.RatingDto;
 import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
+import com.example.photocontestproject.mappers.EntryMapper;
+import com.example.photocontestproject.mappers.RatingMapper;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
@@ -14,6 +17,7 @@ import com.example.photocontestproject.repositories.ContestRepository;
 import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.ContestService;
+import com.example.photocontestproject.services.contracts.EntryService;
 import com.example.photocontestproject.services.contracts.RatingService;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.persistence.criteria.Predicate;
@@ -36,22 +40,21 @@ public class ContestServiceImpl implements ContestService {
     public static final String NOT_A_MASTER_OR_ABOVE_ERROR_MESSAGE = "Only a user with a rank of Master or above to be a juror.";
 
     private final ContestRepository contestRepository;
-    private final EntryRepository entryRepository;
     private final UserRepository userRepository;
     private final UserService userService;
-    private final RatingService rankingService;
+    private final RatingService ratingService;
+    private final RatingMapper ratingMapper;
 
     @Autowired
     public ContestServiceImpl(ContestRepository contestRepository,
-                              EntryRepository entryRepository,
                               UserRepository userRepository,
                               UserService userService,
-                              RatingService rankingService) {
+                              RatingService ratingService, RatingMapper ratingMapper) {
         this.contestRepository = contestRepository;
-        this.entryRepository = entryRepository;
         this.userRepository = userRepository;
         this.userService = userService;
-        this.rankingService = rankingService;
+        this.ratingService = ratingService;
+        this.ratingMapper = ratingMapper;
     }
 
     @Override
@@ -81,6 +84,7 @@ public class ContestServiceImpl implements ContestService {
         return contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
     }
 
+    @Transactional
     @Override
     public Contest changePhase(int id, User user) {
         throwIfUserIsNotOrganizer(user);
@@ -88,6 +92,9 @@ public class ContestServiceImpl implements ContestService {
         ContestPhase currentPhase = contest.getContestPhase();
         currentPhase = currentPhase.ordinal() == ContestPhase.values().length - 1 ? ContestPhase.values()[0] : ContestPhase.values()[currentPhase.ordinal() + 1];
         contest.setContestPhase(currentPhase);
+        if (contest.getContestPhase().equals(ContestPhase.Finished)) {
+            handleScoringWhenContestEnds(contest);
+        }
         return contestRepository.save(contest);
     }
 
@@ -166,6 +173,7 @@ public class ContestServiceImpl implements ContestService {
         throwIfUserIsNotOrganizer(user);
         contestRepository.deleteById(id);
     }
+
     public String getOrdinalSuffix(int number) {
         if (number % 10 == 1 && number % 100 != 11) {
             return "st";
@@ -229,6 +237,19 @@ public class ContestServiceImpl implements ContestService {
                 Timestamp currentTime = Timestamp.from(Instant.now());
                 if (currentTime.after(contest.getPhase2End())) {
                     contest.setContestPhase(ContestPhase.Finished);
+
+                    List<Entry> allEntries = contest.getEntries();
+                    List<User> jurors = userService.getUsersByRole(Role.Organizer);
+                    jurors.addAll(contest.getJurors().stream().toList());
+
+                    for (Entry entry : allEntries) {
+                        for (User juror : jurors) {
+                            if (entry.getRatings().stream().noneMatch(r -> r.getJuror().getId().equals(juror.getId()))) {
+                                createDefaultRatingForEntry(entry, juror);
+                            }
+                        }
+                    }
+
                     handleScoringWhenContestEnds(contest);
                     contestRepository.save(contest);
                 }
@@ -275,25 +296,40 @@ public class ContestServiceImpl implements ContestService {
         int userPoints = entry.getParticipant().getPoints();
         userPoints += calculateScore(isSharedSpot, position);
         entry.getParticipant().setPoints(userPoints);
-        rankingService.updateRanking(entry.getParticipant());
+        ratingService.updateRanking(entry.getParticipant());
         userRepository.save(entry.getParticipant());
     }
 
     public int calculateScore(boolean isSharedSpot, int position) {
         if (isSharedSpot) {
             switch (position) {
-                case 1: return 40;
-                case 2: return 25;
-                case 3: return 10;
+                case 1:
+                    return 40;
+                case 2:
+                    return 25;
+                case 3:
+                    return 10;
             }
         } else {
             switch (position) {
-                case 1: return 50;
-                case 2: return 35;
-                case 3: return 20;
+                case 1:
+                    return 50;
+                case 2:
+                    return 35;
+                case 3:
+                    return 20;
             }
         }
         return 0;
     }
 
+    public Entry createDefaultRatingForEntry(Entry entry, User user) {
+        RatingDto ratingDto = new RatingDto();
+        ratingDto.setComment("Default rating");
+        ratingDto.setScore(3);
+        ratingDto.setCategoryMismatch(false);
+        Rating rating = ratingMapper.fromDto(ratingDto, entry, user.getId());
+        ratingService.createRating(rating);
+        return entry;
+    }
 }
