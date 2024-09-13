@@ -6,6 +6,7 @@ import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.ContestService;
+import com.example.photocontestproject.services.contracts.EntryService;
 import com.example.photocontestproject.services.contracts.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +24,12 @@ import java.util.stream.Collectors;
 public class HomeMvcController {
     private final ContestService contestService;
     private final UserService userService;
+    private final EntryService entryService;
 
-    public HomeMvcController(ContestService contestService, UserService userService) {
+    public HomeMvcController(ContestService contestService, UserService userService, EntryService entryService) {
         this.contestService = contestService;
         this.userService = userService;
+        this.entryService = entryService;
     }
 
     @ModelAttribute("contests")
@@ -67,7 +70,7 @@ public class HomeMvcController {
         model.addAttribute("userLeaderboard", userLeaderboard);
         model.addAttribute("featuredContest", featuredContest);
         model.addAttribute("recentWinners", recentWinners);
-
+        model.addAttribute("entryService", entryService);
 
         return "HomeView";
     }
