@@ -82,7 +82,7 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public void deleteEntryById(int id, User user) {
-        throwIfUserIsNotOrganizer(user);
+        throwIfUserIsNotOrganizerOrAuthor(user, getEntryById(id));
         entryRepository.deleteById(id);
     }
 
@@ -110,6 +110,12 @@ public class EntryServiceImpl implements EntryService {
 
     private void throwIfUserIsNotOrganizer(User user) {
         if (!user.getRole().equals(Role.Organizer)) {
+            throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
+        }
+    }
+
+    private void throwIfUserIsNotOrganizerOrAuthor(User user, Entry entry) {
+        if (!user.getRole().equals(Role.Organizer) && !entry.getParticipant().getId().equals(user.getId())) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }

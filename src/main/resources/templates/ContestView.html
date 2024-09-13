@@ -196,7 +196,7 @@
 
                     <h5 th:if="${isPhaseI}"><strong>Submission Guidelines:</strong></h5>
                     <ul th:if="${isPhaseI}">
-                        <li>File size should not exceed 3 MB per image</li>
+                        <li>File size should not exceed 10 MB per image</li>
                         <li>Entries must be original and not previously published</li>
                     </ul>
                 </div>
@@ -272,7 +272,7 @@
             <div class="mb-3">
                 <label for="coverPhoto" class="form-label">Upload Photo</label>
                 <input type="file" class="form-control" id="coverPhoto" name="photo" accept="image/jpeg" required>
-                <div class="form-text">Maximum file size: 3 MB. JPEG format only.</div>
+                <div class="form-text">Maximum file size: 10 MB. JPEG format only.</div>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit Entry</button>
