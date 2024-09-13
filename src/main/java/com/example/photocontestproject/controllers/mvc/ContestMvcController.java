@@ -70,13 +70,14 @@ public class ContestMvcController {
             sortedEntries.sort(Comparator.comparing(Entry::getEntryTotalScore).reversed());
             Map<Integer, String> ranks = contestService.getRanks(sortedEntries);
             boolean alreadyEntered = entries.stream().anyMatch(entry -> entry.getParticipant().getId().equals(user.getId()));
+            boolean isJuror = contest.getJurors().stream().anyMatch(juror -> juror.getId().equals(user.getId()));
             model.addAttribute("contest", contest);
             model.addAttribute("entry", new EntryDto());
             model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
             model.addAttribute("isPhaseI", contest.getContestPhase().equals(ContestPhase.PhaseI));
             model.addAttribute("isPhaseII", contest.getContestPhase().equals(ContestPhase.PhaseII));
             model.addAttribute("isFinished", contest.getContestPhase().equals(ContestPhase.Finished));
-            model.addAttribute("isJuror", contest.getJurors().stream().anyMatch(juror -> juror.getId().equals(user.getId())));
+            model.addAttribute("isJuror", isJuror);
             model.addAttribute("isInvited", contest.getParticipants().stream().anyMatch(participant -> participant.getId().equals(user.getId())));
             model.addAttribute("isInvitational", contest.getContestType().equals(ContestType.Invitational));
             model.addAttribute("entries", entries);
