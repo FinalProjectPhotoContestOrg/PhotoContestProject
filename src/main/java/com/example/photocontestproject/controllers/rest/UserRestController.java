@@ -21,7 +21,7 @@ public class UserRestController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    //TODO look over and refactor urls and code
+
     @Autowired
     public UserRestController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
@@ -51,9 +51,9 @@ public class UserRestController {
         try {
             User user = userMapper.fromDto(userInDto);
             return userService.createUser(user);
-        }catch (EmailException e){
+        } catch (EmailException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (DuplicateEntityException e){
+        } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }

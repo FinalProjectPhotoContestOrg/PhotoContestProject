@@ -25,7 +25,7 @@ public class EntryMapper {
         this.contestService = contestService;
     }
 
-    public Entry fromDto(EntryInDto entryInDto, User user) {
+    public Entry fromDto(EntryInDto entryInDto, User user, int contestId) {
         try {
             Entry entry = new Entry();
             entry.setParticipant(user);
@@ -33,7 +33,7 @@ public class EntryMapper {
             entry.setUploadedAt(Timestamp.from(Instant.now()));
             entry.setStory(entryInDto.getStory());
             entry.setPhotoUrl("http://example.com/photo6.jpg");
-            Contest contest = contestService.getContestById(entryInDto.getContestId());
+            Contest contest = contestService.getContestById(contestId);
             entry.setContest(contest);
 //            contest.getParticipants().add(user);
             return entry;

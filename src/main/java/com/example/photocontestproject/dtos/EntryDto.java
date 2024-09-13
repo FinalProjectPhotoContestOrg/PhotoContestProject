@@ -1,9 +1,7 @@
 package com.example.photocontestproject.dtos;
 
 public class EntryDto {
-
     private String title;
-
     private String story;
     private String photoUrl;
 
