@@ -37,6 +37,15 @@
             margin-right: 10px;
         }
 
+        .card-title, .card-text {
+            white-space: nowrap; /* Prevents the text from breaking into multiple lines */
+            overflow: hidden;    /* Hides the overflowing content */
+            text-overflow: ellipsis; /* Adds '...' at the end if the text overflows */
+        }
+
+        .card-body {
+            max-width: 100%; /* Ensures that the text container doesn't exceed the card's width */
+        }
 
         .scrolling-container {
             overflow-x: auto;

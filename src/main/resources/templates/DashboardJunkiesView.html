@@ -17,7 +17,15 @@
             transition: transform 0.2s;
         }
 
+        .card-title, .card-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
+        .card-body {
+            max-width: 100%;
+        }
         .card:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

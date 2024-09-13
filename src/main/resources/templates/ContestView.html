@@ -18,7 +18,15 @@
             z-index: 900;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
         }
+        .card-title, .card-text {
+            white-space: nowrap; /* Prevents the text from breaking into multiple lines */
+            overflow: hidden;    /* Hides the overflowing content */
+            text-overflow: ellipsis; /* Adds '...' at the end if the text overflows */
+        }
 
+        .card-body {
+            max-width: 100%; /* Ensures that the text container doesn't exceed the card's width */
+        }
         .header-bg h1 {
             font-size: 3.5rem;
             text-align: center;
