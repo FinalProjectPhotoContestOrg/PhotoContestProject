@@ -1,5 +1,6 @@
 package com.example.photocontestproject.mappers;
 
+import com.example.photocontestproject.dtos.in.PasswordDto;
 import com.example.photocontestproject.dtos.in.UserInDto;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
@@ -47,5 +48,11 @@ public class UserMapper {
         } catch (NoSuchAlgorithmException e){
             throw new RuntimeException("Error hashing password", e);
         }
+    }
+
+    public User updatePassword(User user, PasswordDto passwordDto) {
+        String hashedPassword = hashPassword(passwordDto.getPassword());
+        user.setPasswordHash(hashPassword(hashedPassword));
+        return user;
     }
 }
