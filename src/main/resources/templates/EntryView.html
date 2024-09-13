@@ -16,7 +16,7 @@
             background-color: #f8f9fa;
         }
         .entry-container {
-            max-width: 1600px;
+            max-width: 85%;
             margin: 50px auto;
             padding: 20px;
             background-color: white;
@@ -229,7 +229,7 @@
     </div>
 </div>
 
-<div style="height: 280px" th:unless="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() != 'Finished' } and ${!alreadyRated}"></div>
+<!--<div style="height: 280px" th:unless="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() != 'Finished' } and ${!alreadyRated}"></div>-->
 
 <!-- Footer -->
 <footer th:replace="~{ForumForms.html :: footer}"></footer>
