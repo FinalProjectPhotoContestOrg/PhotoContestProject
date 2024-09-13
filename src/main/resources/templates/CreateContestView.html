@@ -38,29 +38,25 @@
 <div class="wrapper">
 
     <nav th:replace="~{ForumForms.html :: navbar}"></nav>
-
     <div class="container mt-5">
         <h2>Create a New Contest</h2>
 
-        <!-- Form to create a new contest -->
-        <!--<div style="height: 350px"></div>-->
-
         <form th:action="@{/contests/create}" method="post" th:object="${contest}" enctype="multipart/form-data">
 
-            <!-- Contest Title -->
+
             <div class="form-group">
                 <label for="title">Title:</label>
-                <input type="text" class="form-control" id="title" name="title" th:value="${contest.title}" required>
+                <input type="text" class="form-control" maxlength="255" id="title" name="title" th:value="${contest.title}" required>
             </div>
 
-            <!-- Contest Category -->
+
             <div class="form-group">
                 <label for="category">Category:</label>
-                <input type="text" class="form-control" id="category" name="category" th:value="${contest.category}"
+                <input type="text" maxlength="100" class="form-control" id="category" name="category" th:value="${contest.category}"
                        required>
             </div>
 
-            <!-- Contest Type (Open or Invitational) -->
+
             <div class="form-group">
                 <label for="contestType">Contest Type:</label>
                 <select class="form-control" id="contestType" name="contestType" required>
@@ -70,36 +66,27 @@
                 </select>
             </div>
 
-            <!-- Phase 1 End Date -->
+
             <div class="form-group">
                 <label for="phase1End">Phase 1 End Date:</label>
                 <input type="datetime-local" class="form-control" id="phase1End" name="phase1End"
                        th:value="${contest.phase1End}" required>
             </div>
 
-            <!-- Phase 2 End Date -->
+
             <div class="form-group">
                 <label for="phase2End">Phase 2 End Date:</label>
                 <input type="datetime-local" class="form-control" id="phase2End" name="phase2End"
                        th:value="${contest.phase2End}" required>
             </div>
 
-            <!-- Cover Photo Upload -->
+
             <div class="form-group" style="margin: 10px">
                 <label for="coverPhoto">Cover Photo (10MB limit):</label>
                 <input type="file" class="form-control-file" id="coverPhoto" name="coverPhoto" accept="image/*"
                        required>
             </div>
 
-            <!-- Juror Selection -->
-            <!--<div class="mb-3">
-                <label for="jurors" class="form-label">Select Jurors</label>
-                <select id="jurors" name="jurorIds" class="form-select" multiple>
-                    <option th:each="juror : ${masters}" th:value="${juror.id}" th:text="${juror.firstName + ' ' + juror.lastName}"></option>
-                </select>
-            </div>-->
-            <!-- Juror Selection -->
-            <!-- Juror Selection -->
             <div class="mb-3" id="jurors">
                 <label for="jurors" class="form-label">Select Jurors</label>
                 <div th:each="juror : ${masters}">
@@ -115,7 +102,7 @@
                 </div>
             </div>
 
-            <!-- Invitational Participant Selection -->
+
             <div id="participantBlock" class="mb-3" style="display: none;">
                 <label for="participantBlock" class="form-label">Select Participants (for invitational contest)</label>
                 <div th:each="junkie : ${junkies}">
@@ -132,16 +119,16 @@
             </div>
 
 
-            <!-- Submit Button -->
+
             <button type="submit" class="btn btn-primary">Create Contest</button>
         </form>
     </div>
     <footer th:replace="~{ForumForms.html :: footer}"></footer>
+
 </div>
 
 
 <script src="/js/createContest.js"></script>
-<!-- JavaScript to handle contest type change -->
 <script>
     document.getElementById('contestType').addEventListener('change', function () {
         const participantBlock = document.getElementById('participantBlock');
@@ -155,7 +142,6 @@
         }
     });
 </script>
-
 <script src="/js/scripts.js"></script>
 <script>
     const phase1EndInput = document.getElementById('phase1End');

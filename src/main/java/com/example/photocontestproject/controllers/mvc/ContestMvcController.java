@@ -94,6 +94,7 @@ public class ContestMvcController {
         try {
             authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
+            session.setAttribute("redirectUrl", "/contests/create");
             return "redirect:/login";
         }
         model.addAttribute("junkies", userService.getUsersByRole(Role.Junkie));

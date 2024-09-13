@@ -88,6 +88,10 @@ public class EntryMvcController {
         List<Entry> participantEntries = entryService.getAllEntries(null).stream()
                 .filter(entryUser -> entryUser.getParticipant().getId().equals(user.getId()))
                 .toList();
+
+        boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
+
+        model.addAttribute("alreadyRated", alreadyRated);
         model.addAttribute("contestsParticipate", userContestsParticipate);
         model.addAttribute("participantEntries", participantEntries);
         return "EntryView";
