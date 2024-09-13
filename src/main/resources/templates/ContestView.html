@@ -153,28 +153,18 @@
             vertical-align: top;
             transform: translateY(-25%);
         }
-
-        /*.countdown-timer-bar .progress {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            background: linear-gradient(90deg, #007bff, #00aaff);
-            transition: width 1s linear;
+        .scrolling-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 0;
         }
 
-        .countdown-timer-bar .time-display {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }*/
+        .scrolling-container .card {
+            display: inline-block;
+            width: 300px;
+            margin-right: 10px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -260,7 +250,7 @@
 
 <!-- Entry Form Section -->
 <section id="enter-contest" class="bg-light py-5"
-         th:if="${!isOrganizer && !isJuror && isPhaseI && (!isInvitational || (isInvitational && isInvited))}">
+         th:if="${!isOrganizer && !isJuror && isPhaseI && (!isInvitational || (isInvitational && isInvited)) && !alreadyEntered}">
     <div class="container">
         <h2 class="text-center section-title">Enter the Contest</h2>
         <p class="lead text-center">Submit your entries using the form below.</p>
@@ -289,21 +279,46 @@
         </form>
     </div>
 </section>
+
+<section class="bg-light py-5"
+         th:if="${!isOrganizer && !isJuror && isPhaseI && (!isInvitational || (isInvitational && isInvited)) && alreadyEntered}">
+    <div class="container">
+        <h2 class="text-center section-title">All Entries in contest:</h2>
+        <div class="row">
+            <div class="scrolling-container">
+                <div class="col-md-4 card" th:each="entryView : ${entries}">
+                    <a th:href="@{/entries/{entryId}(entryId=${entryView.id})}" class="card-link" style="text-decoration: none; color: inherit;">
+                        <div class="mb-4">
+                                <img th:src="'data:image/jpeg;base64,' + ${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
+                                <div class="card-body">
+                                    <!-- Entry Title -->
+                                    <h5 class="card-title" th:text="${entryView.title}">Sample Entry Title</h5>
+                                </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section id="view-entries" class="bg-light py-5" th:if="${isPhaseII && isJuror && isOrganizer}">
     <div class="container">
         <h2 class="text-center section-title">Contest Entries</h2>
         <div class="row">
             <!-- Display each entry in a card layout -->
-            <div class="col-md-4" th:each="entryRate : ${entries}">
-                <!-- Wrap the card in an anchor tag -->
-                <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link" style="text-decoration: none; color: inherit;">
-                    <div class="card mb-4">
-                        <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+            <div class="scrolling-container">
+                <div class="col-md-4 card" th:each="entryRate : ${entries}">
+                    <!-- Wrap the card in an anchor tag -->
+                    <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link" style="text-decoration: none; color: inherit;">
+                        <div class="mb-4">
+                            <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -313,18 +328,20 @@
         <h2 class="text-center section-title">Ranked Entries by Points</h2>
         <div class="row">
             <!-- Sorted by points, with ranks displayed -->
-            <div class="col-md-4" th:each="entryRate, iterStat : ${sortedEntries}">
-                <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link">
-                    <div class="card mb-4">
-                        <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
-                        <div class="card-body">
-                            <!-- Rank (1st, 2nd, etc.) -->
-                            <h5 class="rank-place" th:text="${iterStat.index + 1} + ' ' + ${ranks[iterStat.index + 1]}">1st</h5>
-                            <!-- Entry Title -->
-                            <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+            <div class="scrolling-container">
+                <div class="col-md-4 card" th:each="entryRate, iterStat : ${sortedEntries}">
+                    <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link">
+                        <div class="mb-4">
+                            <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
+                            <div class="card-body">
+                                <!-- Rank (1st, 2nd, etc.) -->
+                                <h5 class="rank-place" th:text="${iterStat.index + 1} + ' ' + ${ranks[iterStat.index + 1]}">1st</h5>
+                                <!-- Entry Title -->
+                                <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

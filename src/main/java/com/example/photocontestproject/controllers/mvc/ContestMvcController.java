@@ -69,6 +69,7 @@ public class ContestMvcController {
             List<Entry> sortedEntries = new ArrayList<>(entries);
             sortedEntries.sort(Comparator.comparing(Entry::getEntryTotalScore).reversed());
             Map<Integer, String> ranks = contestService.getRanks(sortedEntries);
+            boolean alreadyEntered = entries.stream().anyMatch(entry -> entry.getParticipant().getId().equals(user.getId()));
             model.addAttribute("contest", contest);
             model.addAttribute("entry", new EntryDto());
             model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
@@ -81,6 +82,7 @@ public class ContestMvcController {
             model.addAttribute("entries", entries);
             model.addAttribute("sortedEntries", sortedEntries);
             model.addAttribute("ranks", ranks);
+            model.addAttribute("alreadyEntered", alreadyEntered);
             return "ContestView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
