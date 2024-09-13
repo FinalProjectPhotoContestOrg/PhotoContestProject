@@ -65,7 +65,31 @@
         .entry-details p {
             word-wrap: break-word; /* Added to break long words */
         }
+        .modal-body-scrollable {
+            max-height: 400px; /* Set a max height for scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        .list-unstyled li:hover {
+            background-color: #f1f1f1; /* Light gray background on hover */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s ease; /* Smooth background color transition */
+        }
 
+        .list-unstyled li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none; /* Remove underline from links */
+            color: inherit; /* Inherit color from parent */
+        }
+
+        /* Optional: Add a slight shadow to the list items */
+        .list-unstyled li {
+            transition: box-shadow 0.3s ease;
+        }
+
+        .list-unstyled li:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -175,7 +199,7 @@
                     <h5 class="modal-title" th:id="'jurorModalLabel' + ${iterStat.index}">Juror Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-scrollable">
                     <!-- Tabs Navigation -->
                     <ul class="nav nav-tabs" id="jurorTabs' + ${iterStat.index}" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -185,7 +209,7 @@
                             <a class="nav-link" th:id="'contests-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#contests' + ${iterStat.index}" role="tab" th:aria-controls="'contests' + ${iterStat.index}" aria-selected="false">Contests</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" th:id="'entries-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#entries' + ${iterStat.index}" role="tab" th:aria-controls="'entries' + ${iterStat.index}" aria-selected="false">Photos</a>
+                            <a class="nav-link" th:id="'entries-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#entries' + ${iterStat.index}" role="tab" th:aria-controls="'entries' + ${iterStat.index}" aria-selected="false">Entries</a>
                         </li>
                     </ul>
                     <!-- Tabs Content -->
@@ -199,21 +223,29 @@
                         </div>
                         <!-- Contests Tab -->
                         <div class="tab-pane fade" th:id="'contests' + ${iterStat.index}" role="tabpanel" th:aria-labelledby="'contests-tab' + ${iterStat.index}">
-                            <h6>Contests:</h6>
-                            <ul>
-                                <li th:each="contest : ${entryService.findContestsByUserId(rating.getJuror().getId())}">
-                                    <span th:text="${contest.title}">Contest Name</span> -
-                                    <span th:text="${contest.category}"></span>
+                            <ul class="list-unstyled">
+                                <li th:each="contest : ${entryService.findContestsByUserId(rating.getJuror().getId())}" class="d-flex align-items-center border-bottom mb-2 pb-2">
+                                    <a th:href="@{'/contests/' + ${contest.id}}" class="text-decoration-none d-flex align-items-center w-100"  data-bs-toggle="tooltip" data-bs-placement="top" title="View Contest">
+                                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Photo" class="img-thumbnail me-3" style="max-width: 100px; max-height: 75px;">
+                                        <div class="d-flex flex-column">
+                                            <span th:text="${contest.title}"  class="fw-bold d-block">Contest Name</span>
+                                            <span th:text="${contest.category}" class="text-muted d-block">Category</span>
+                                        </div>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                         <!-- Photos Tab -->
                         <div class="tab-pane fade" th:id="'entries' + ${iterStat.index}" role="tabpanel" th:aria-labelledby="'entries-tab' + ${iterStat.index}">
-                            <h6>Photos:</h6>
-                            <ul th:each="entry : ${entryService.getAllEntries(null)}">
-                                <li th:if="${entry.getParticipant().getId().equals(rating.getJuror().getId())}">
-                                    <span th:text="${entry.title}">Contest Name</span> -
-                                    <span th:text="${entry.story}"></span>
+                            <ul th:each="entry : ${entryService.getAllEntries(null)}" class="list-unstyled">
+                                <li th:if="${entry.getParticipant().getId().equals(rating.getJuror().getId())}" class="d-flex align-items-center border-bottom mb-2 pb-2">
+                                    <a th:href="@{'/entries/' + ${entry.id}}" class="text-decoration-none d-flex align-items-center w-100"  data-bs-toggle="tooltip" data-bs-placement="top" title="View Entry">
+                                        <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}" alt="Photo" class="img-thumbnail me-3" style="max-width: 100px; max-height: 75px;">
+                                        <div class="d-flex flex-column">
+                                            <span th:text="${entry.title}" class="fw-bold d-block">Photo Title</span>
+                                            <span th:text="${entry.story}" class="text-muted d-block"></span>
+                                        </div>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
