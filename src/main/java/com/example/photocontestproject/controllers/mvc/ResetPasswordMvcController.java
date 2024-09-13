@@ -54,7 +54,6 @@ public class ResetPasswordMvcController {
                 user.getId(),
                 encodedPasswordHash);
         emailService.sendPasswordResetEmail(user.getEmail(), user.getUsername(), resetLink);
-        System.out.println(resetLink);
         return "redirect:/login";
     }
 
@@ -67,8 +66,6 @@ public class ResetPasswordMvcController {
             user = userService.getUserById(id);
             String decodedPasswordHash = URLDecoder.decode(encodedPasswordHash, StandardCharsets.UTF_8)
                     .replace(" ", "+");
-            System.out.println("decode");
-            System.out.println(decodedPasswordHash);
             if (!user.getPasswordHash().equals(decodedPasswordHash)) {
                 return "redirect:/";
             }

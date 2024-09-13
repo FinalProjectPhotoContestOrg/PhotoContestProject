@@ -99,6 +99,7 @@ public class ContestServiceImpl implements ContestService {
         throwIfUserCantBeJuror(userToAdd);
         Contest contestToUpdate = contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
         contestToUpdate.getJurors().add(userToAdd);
+        throwIfUserIsParticipantInContest(userToAdd, contestToUpdate);
 
         contestRepository.save(contestToUpdate);
         userRepository.save(userToAdd);
@@ -118,6 +119,7 @@ public class ContestServiceImpl implements ContestService {
         User userToAdd = userService.getUserById(userId);
         Contest contestToUpdate = contestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contest"));
         throwIfContestIsOpen(contestToUpdate);
+        throwIfUserIsJurorInContest(userToAdd, contestToUpdate);
 
         contestToUpdate.getParticipants().add(userToAdd);
         int points = userToAdd.getPoints();
@@ -195,6 +197,20 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
+    private void throwIfUserIsParticipantInContest(User user, Contest contest) {
+        Set<User> participants = contest.getParticipants();
+        if (participants.stream().anyMatch(p -> p.getId().equals(user.getId()))) {
+            throw new AuthorizationException("You are already a participant in this contest");
+        }
+    }
+
+    private void throwIfUserIsJurorInContest(User user, Contest contest) {
+        Set<User> jurors = contest.getJurors();
+        if (jurors.stream().anyMatch(j -> j.getId().equals(user.getId()))) {
+            throw new AuthorizationException("You are already a juror in this contest");
+        }
+    }
+
     @Scheduled(fixedRate = 1000)
     @Transactional
     public void scheduledTask() {
@@ -255,7 +271,6 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    //write a test for this method
     public void calculateAndHandleUserPointsAdding(Entry entry, boolean isSharedSpot, int position) {
         int userPoints = entry.getParticipant().getPoints();
         userPoints += calculateScore(isSharedSpot, position);
