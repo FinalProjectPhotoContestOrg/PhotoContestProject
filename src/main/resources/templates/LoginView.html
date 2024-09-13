@@ -41,7 +41,7 @@
 <div class="login-container">
   <h2 class="text-center">Login</h2>
   <form action="#" th:action="@{/login}" th:method="post" th:object="${login}">
-    <div class="mb-3">
+    <div class="mb-3" >
       <label for="username" class="form-label">Username</label>
       <input th:field="*{username}" type="text" class="form-control" id="username" placeholder="Enter your username" required>
     </div>
@@ -54,7 +54,8 @@
       <button type="submit" class="btn btn-primary">Login</button>
     </div>
     <div class="text-center mt-3">
-      <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
+      <p>Don't have an account? <a th:href="@{/register}">Register Here</a></p>
+      <p>Forgot password? <a th:href="@{/reset-password}">Click Here</a></p>
     </div>
   </form>
 </div>

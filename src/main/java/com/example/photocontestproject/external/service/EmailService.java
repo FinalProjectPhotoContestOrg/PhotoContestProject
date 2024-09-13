@@ -71,4 +71,31 @@ public class EmailService {
             throw new RuntimeException(e);
         }
     }
+
+    public void sendPasswordResetEmail(String to, String username, String resetLink) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            String subject = "Password Reset Request for PhotoPulse";
+
+            String htmlText = "<div style=\"color: black; font-family: Arial, sans-serif;\">" +
+                    "<p style=\"color: black\">Hello " + username + ",</p>" +
+                    "<p style=\"color: black\">We received a request to reset your password for your PhotoPulse account. If you made this request, please click on the link below to reset your password:</p>" +
+                    "<p style=\"color: black\"><a href=\"" + resetLink + "\" style=\"color: black; text-decoration: none; font-weight: bold;\">Reset Password</a></p>" +
+                    "<p style=\"color: black\">If you did not request a password reset, you can safely ignore this email. Your password will not be changed.</p>" +
+                    "<p style=\"color: black\">Best regards,</p>" +
+                    "<p style=\"color: black\">Todor and Stefan<br/>PhotoPulse Team</p>" +
+                    "</div>";
+
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlText, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Failed to send password reset email", e);
+        }
+    }
+
 }

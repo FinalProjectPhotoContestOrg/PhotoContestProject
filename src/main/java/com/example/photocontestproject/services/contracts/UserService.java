@@ -1,6 +1,5 @@
 package com.example.photocontestproject.services.contracts;
 
-import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.models.User;
 
@@ -15,10 +14,15 @@ public interface UserService {
 
     User getUserById(int id);
 
+    User getUserByEmail(String email);
+
     User createUser(User user);
 
     public void deleteUserById(int id);
+
     List<User> getMasters();
+
     List<User> getUsersByRole(Role role);
+
     int getNextRankPoints(int currentPoints);
 }

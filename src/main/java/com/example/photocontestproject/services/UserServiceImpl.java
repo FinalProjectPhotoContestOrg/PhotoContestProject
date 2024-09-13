@@ -1,12 +1,9 @@
 package com.example.photocontestproject.services;
 
-import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
-import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
-import com.example.photocontestproject.external.EmailValidator;
 import com.example.photocontestproject.external.service.EmailService;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
@@ -31,15 +28,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers(String username, String firstName, String lastName) {
-        return userRepository.findAll((root, query, cb)->{
+        return userRepository.findAll((root, query, cb) -> {
             Predicate predicate = cb.conjunction();
-            if (username != null && !username.isEmpty()){
+            if (username != null && !username.isEmpty()) {
                 predicate = cb.and(predicate, cb.like(root.get("title"), "%" + username + "%"));
             }
-            if (firstName != null && !firstName.isEmpty()){
+            if (firstName != null && !firstName.isEmpty()) {
                 predicate = cb.and(predicate, cb.like(root.get("title"), "%" + firstName + "%"));
             }
-            if (lastName != null && !lastName.isEmpty()){
+            if (lastName != null && !lastName.isEmpty()) {
                 predicate = cb.and(predicate, cb.like(root.get("title"), "%" + lastName + "%"));
             }
             return predicate;
@@ -83,9 +80,17 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("User", "username", userOptional.get().getUsername());
         }
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User"));
+    }
+
+
     public List<User> getUsersByRole(Role role) {
         return userRepository.findByRole(role);
     }
+
     public int getNextRankPoints(int currentPoints) {
         return Ranking.getPointsToNextRank(currentPoints);
     }
