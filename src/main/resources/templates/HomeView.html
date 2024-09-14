@@ -120,7 +120,7 @@
             <!-- Leaderboard -->
             <div class="col-md-4" style="max-height: 120px; margin-top: 0">
                 <h1 class="text-center" style="color:black;">User Leaderboard</h1>
-                <div class="card mb-4" style="cursor: auto; transform: none; box-shadow: none">
+                <div class="card mb-4" style="cursor: auto; transform: none; box-shadow: none; max-height: 300px; overflow-y: auto;">
                     <ul class="list-group">
                         <!-- Each list item is now wrapped in an anchor tag to make it clickable -->
                         <li th:each="user, iterStat : ${userLeaderboard}" class="list-group-item d-flex align-items-center">
@@ -152,13 +152,13 @@
                                 <!-- Tabs Navigation -->
                                 <ul class="nav nav-tabs" id="userTabs' + ${iterStat.index}" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link active" th:id="'info-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#info' + ${iterStat.index}" role="tab" th:aria-controls="'info' + ${iterStat.index}" aria-selected="true">Information</a>
+                                        <a class="nav-link active"  th:id="'info-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#info' + ${iterStat.index}" role="tab" th:aria-controls="'info' + ${iterStat.index}" aria-selected="true" style="color:black;">Information</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link" th:id="'contests-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#contests' + ${iterStat.index}" role="tab" th:aria-controls="'contests' + ${iterStat.index}" aria-selected="false">Contests</a>
+                                        <a class="nav-link" th:id="'contests-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#contests' + ${iterStat.index}" role="tab" th:aria-controls="'contests' + ${iterStat.index}" aria-selected="false" style="color:black;">Contests</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link" th:id="'entries-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#entries' + ${iterStat.index}" role="tab" th:aria-controls="'entries' + ${iterStat.index}" aria-selected="false">Entries</a>
+                                        <a class="nav-link" th:id="'entries-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#entries' + ${iterStat.index}" role="tab" th:aria-controls="'entries' + ${iterStat.index}" aria-selected="false" style="color:black;">Entries</a>
                                     </li>
                                 </ul>
                                 <!-- Tabs Content -->

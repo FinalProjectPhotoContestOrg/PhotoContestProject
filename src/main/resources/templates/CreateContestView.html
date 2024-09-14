@@ -46,13 +46,13 @@
 
             <div class="form-group">
                 <label for="title">Title:</label>
-                <input type="text" class="form-control" maxlength="255" id="title" name="title" th:value="${contest.title}" required>
+                <input type="text" class="form-control" maxlength="40" id="title" name="title" th:value="${contest.title}" required>
             </div>
 
 
             <div class="form-group">
                 <label for="category">Category:</label>
-                <input type="text" maxlength="100" class="form-control" id="category" name="category" th:value="${contest.category}"
+                <input type="text" maxlength="20" class="form-control" id="category" name="category" th:value="${contest.category}"
                        required>
             </div>
 
