@@ -36,7 +36,7 @@ public class HomeMvcController {
     public String getHomeView(Model model) {
         List<Entry> recentWinners = contestService.get3RecentWinners();
         Contest featuredContest = contestService.getFeaturedContest();
-        List<User> userLeaderboard = userService.getLeaderboardList();
+        List<User> userLeaderboard = userService.getUsersSortedByPoints();
 
         model.addAttribute("userLeaderboard", userLeaderboard);
         model.addAttribute("featuredContest", featuredContest);

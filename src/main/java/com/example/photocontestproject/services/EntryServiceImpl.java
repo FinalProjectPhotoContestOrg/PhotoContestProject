@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -97,6 +98,14 @@ public class EntryServiceImpl implements EntryService {
         float entryAvgScore = (float) entry.getEntryTotalScore() / entry.getRatings().size();
         DecimalFormat df = new DecimalFormat("#.#");
         return df.format(entryAvgScore);
+    }
+
+    @Override
+    public int getEntryRankInContest(Entry entry) {
+        List<Entry> sortedEntries =  entry.getContest().getEntries().stream()
+                .sorted(Comparator.comparing(Entry::getEntryTotalScore).reversed())
+                .toList();
+        return sortedEntries.indexOf(entry) + 1;
     }
 
     @Override

@@ -7,7 +7,6 @@ import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.mappers.RatingMapper;
-import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
@@ -20,9 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DecimalFormat;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -45,7 +41,6 @@ public class EntryMvcController {
         this.ratingService = ratingService;
         this.userService = userService;
     }
-
 
 
     @GetMapping("/{id}")
@@ -74,6 +69,7 @@ public class EntryMvcController {
         Set<Rating> ratings = entry1.getRatings();
         boolean isJurorToContest = userService.isUserJurorToContest(user, entry1);
         boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
+        int rank = entryService.getEntryRankInContest(entry1);
 
         model.addAttribute("entryAvgScore", entryAvgScore);
         model.addAttribute("allRatings", ratings);
@@ -85,11 +81,6 @@ public class EntryMvcController {
         model.addAttribute("organizer", Role.Organizer);
         model.addAttribute("alreadyRated", alreadyRated);
         model.addAttribute("user", user);
-
-        List<Entry> sortedEntries = entry1.getContest().getEntries().stream()
-                .sorted(Comparator.comparing(Entry::getEntryTotalScore).reversed())
-                .toList();
-        int rank = sortedEntries.indexOf(entry1) + 1;
         model.addAttribute("rank", rank);
 
         return "EntryView";

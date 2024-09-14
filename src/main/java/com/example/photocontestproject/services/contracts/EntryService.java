@@ -22,4 +22,6 @@ public interface EntryService {
     List<Contest> findContestsByUserId(int userId);
 
     String getAverageRating(Entry entry);
+
+    int getEntryRankInContest(Entry entry);
 }

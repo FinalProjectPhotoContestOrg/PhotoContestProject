@@ -27,7 +27,7 @@ public interface UserService {
 
     int getNextRankPoints(int currentPoints);
 
-    List<User> getLeaderboardList();
+    List<User> getUsersSortedByPoints();
 
     boolean isUserJurorToContest(User user, Entry entry);
 }

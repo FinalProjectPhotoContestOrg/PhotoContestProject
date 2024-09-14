@@ -61,10 +61,10 @@ public class AuthMvcController {
             }
             if (redirectUrl.equalsIgnoreCase("/dashboard")) {
                 if (user.getRole().equals(Role.Organizer)) {
-                   return "redirect:/dashboard/organizer";
-               } else {
-                   return "redirect:/dashboard/junkies";
-               }
+                    return "redirect:/dashboard/organizer";
+                } else {
+                    return "redirect:/dashboard/junkies";
+                }
             }
 
             return "redirect:" + redirectUrl;

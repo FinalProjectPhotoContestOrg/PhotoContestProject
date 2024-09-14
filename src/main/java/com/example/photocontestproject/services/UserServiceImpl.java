@@ -103,12 +103,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getLeaderboardList() {
+    public List<User> getUsersSortedByPoints() {
         List<User> allUsers = this.getAllUsers(null, null, null);
         return allUsers.stream()
                 .filter(user -> !user.getRole().equals(Role.Organizer))
                 .sorted((u1, u2) -> Integer.compare(u2.getPoints(), u1.getPoints()))
-                .limit(8)
                 .collect(Collectors.toList());
     }
 
