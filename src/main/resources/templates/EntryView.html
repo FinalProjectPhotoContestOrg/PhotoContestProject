@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" th:content="${entry.title}" />
+    <meta property="og:description" th:content="${entry.story}" />
+    <meta property="og:image" th:content="'data:image/jpeg;base64,' + ${entry.photoUrl}" />
+    <meta property="og:url" th:content="'https://a444-2a01-5a8-302-a84f-a908-df5a-57d4-384.ngrok-free.app/entries/' + ${entry.id}" />
+    <meta property="og:type" content="website" />
     <title>Entry View - Photography Contest</title>
     <!-- Bootstrap CSS from local file -->
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
@@ -29,7 +34,6 @@
             border-radius: 4px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
         .details-container, .rating-container, .ratings-list-container {
             background-color: white;
             border-radius: 4px;
@@ -74,19 +78,16 @@
             cursor: pointer; /* Pointer cursor on hover */
             transition: background-color 0.3s ease; /* Smooth background color transition */
         }
-
         .list-unstyled li a {
             display: flex;
             align-items: center;
             text-decoration: none; /* Remove underline from links */
             color: inherit; /* Inherit color from parent */
         }
-
         /* Optional: Add a slight shadow to the list items */
         .list-unstyled li {
             transition: box-shadow 0.3s ease;
         }
-
         .list-unstyled li:hover {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -169,6 +170,12 @@
 <!-- Ratings List Section -->
 <div class="ratings-list-container p-4" style="margin-bottom: 0;" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
     <h3 class="text-center">Ratings</h3>
+    <div class="text-center mb-4">
+        <div class="fb-share-button"
+             th:data-href="'https://a444-2a01-5a8-302-a84f-a908-df5a-57d4-384.ngrok-free.app/entries/' + ${entry.id}"
+             data-layout="button_count">
+        </div>
+    </div>
     <div class="row">
         <div th:each="rating, iterStat : ${entry.ratings}" class="col-md-4 mb-4">
             <div class="rating-box">
@@ -251,7 +258,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Modal Footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -266,6 +272,9 @@
 <!-- Footer -->
 <footer th:replace="~{ForumForms.html :: footer}"></footer>
 
+<!-- Facebook SDK -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v15.0" nonce="your_nonce_value"></script>
 <!-- Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
