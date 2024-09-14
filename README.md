@@ -1,8 +1,11 @@
-# Photo Contest Application
+# Photo Contest Application - PhotoPulse
 
+## Link to the project
+[PhotoPulse](
+https://photo-contest1-135837c18081.herokuapp.com/)
 ## Project Description
 
-The Photo Contest Application allows aspiring photographers to manage and participate in online photo contests. The application features two main components:
+This Photo Contest Application allows aspiring photographers to manage and participate in online photo contests. The application features two main components:
 
 - **Organizational**: For application owners to organize and manage photo contests.
 - **For Photo Junkies**: Users can register, participate in contests, and be invited as jurors based on their ranking.
