@@ -183,6 +183,7 @@ public class EntryServiceTests {
         user.setRole(Role.Organizer);
 
         doNothing().when(entryRepository).deleteById(anyInt());
+        when(entryRepository.findById(anyInt())).thenReturn(Optional.of(new Entry()));
 
         entryService.deleteEntryById(1, user);
 
@@ -192,7 +193,10 @@ public class EntryServiceTests {
     @Test
     public void deleteEntryById_Should_Throw_If_Not_Organizer() {
         User user = TestHelper.createJunkieUser();
-
+        user.setId(2);
+        Entry entry = new Entry();
+        entry.setParticipant(TestHelper.createJunkieUser());
+        when(entryRepository.findById(anyInt())).thenReturn(Optional.of(entry));
         AuthorizationException exception = assertThrows(AuthorizationException.class, () -> {
             entryService.deleteEntryById(1, user);
         });

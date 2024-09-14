@@ -5,6 +5,7 @@ import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
+import com.example.photocontestproject.external.service.EmailService;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.UserServiceImpl;
@@ -36,6 +37,8 @@ public class UserServiceTests {
 
     @Mock
     private UserRepository userRepository;
+    @Mock
+    EmailService emailService;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -111,7 +114,7 @@ public class UserServiceTests {
         User user = TestHelper.createJunkieUser();
 
         when(userRepository.save(any(User.class))).thenReturn(user);
-
+        doNothing().when(emailService).sendEmailForRegister(user.getEmail(), user.getUsername());
         User savedUser = userService.createUser(user);
 
         assertEquals(user.getId(), savedUser.getId());
