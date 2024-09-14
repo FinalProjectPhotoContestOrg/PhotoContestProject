@@ -28,10 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -77,6 +74,15 @@ public class ContestServiceImpl implements ContestService {
 
             return predicate;
         });
+    }
+
+    @Override
+    public Contest getFeaturedContest() {
+        List<Contest> finishedContests = this.getAllContests(null, null, null, ContestPhase.Finished);
+
+        return finishedContests.stream()
+                .max(Comparator.comparingInt(c -> c.getEntries().size()))
+                .orElse(null);
     }
 
     @Override
@@ -205,14 +211,14 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void throwIfUserIsParticipantInContest(User user, Contest contest) {
+    public void throwIfUserIsParticipantInContest(User user, Contest contest) {
         Set<User> participants = contest.getParticipants();
         if (participants.stream().anyMatch(p -> p.getId().equals(user.getId()))) {
             throw new AuthorizationException("You are already a participant in this contest");
         }
     }
 
-    private void throwIfUserIsJurorInContest(User user, Contest contest) {
+    public void throwIfUserIsJurorInContest(User user, Contest contest) {
         Set<User> jurors = contest.getJurors();
         if (jurors.stream().anyMatch(j -> j.getId().equals(user.getId()))) {
             throw new AuthorizationException("You are already a juror in this contest");

@@ -7,8 +7,10 @@ import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
+import com.example.photocontestproject.mappers.RatingMapper;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
+import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.ContestRepository;
 import com.example.photocontestproject.repositories.UserRepository;
@@ -48,7 +50,8 @@ class ContestServiceTests {
     private UserRepository userRepository;
     @Mock
     private RatingService ratingService;
-
+    @Mock
+    private RatingMapper ratingMapper;
 
     @InjectMocks
     private ContestServiceImpl contestService;
@@ -89,6 +92,22 @@ class ContestServiceTests {
         Contest result = contestService.changePhase(1, user);
 
         assertEquals(ContestPhase.PhaseII, result.getContestPhase());
+        verify(contestRepository, times(1)).findById(1);
+        verify(contestRepository, times(1)).save(contest);
+    }
+
+    @Test
+    void changePhase_Should_Change_Phase_And_Calculate_Score() {
+        User user = TestHelper.createOrganizerUser();
+        Contest contest = new Contest();
+        contest.setEntries(new ArrayList<>());
+        contest.setContestPhase(ContestPhase.PhaseII);
+        when(contestRepository.findById(anyInt())).thenReturn(Optional.of(contest));
+        when(contestRepository.save(any(Contest.class))).thenReturn(contest);
+
+        Contest result = contestService.changePhase(1, user);
+
+        assertEquals(ContestPhase.Finished, result.getContestPhase());
         verify(contestRepository, times(1)).findById(1);
         verify(contestRepository, times(1)).save(contest);
     }
@@ -242,7 +261,7 @@ class ContestServiceTests {
         assertEquals(mockContests, result);
         verify(contestRepository, times(1)).findAll(any(Specification.class));
     }
-    
+
 
     @Test
     public void getAllContest_Should_Get_All_Contests() {
@@ -282,6 +301,7 @@ class ContestServiceTests {
 
         assertEquals(2, result.size());
     }
+
     @Test
     public void addJuror_Should_Add_Juror_When_User_Is_Organizer_AndUser_Can_Be_Juror() {
 
@@ -310,6 +330,7 @@ class ContestServiceTests {
         verify(contestRepository, times(1)).save(result);
         verify(userRepository, times(1)).save(userToAdd);
     }
+
     @Test
     public void addJuror_Should_Throw_Exception_When_User_Is_Not_Organizer() {
         User nonOrganizer = new User();
@@ -331,6 +352,7 @@ class ContestServiceTests {
         verify(contestRepository, never()).save(any(Contest.class));
         verify(userRepository, never()).save(any(User.class));
     }
+
     @Test
     public void addJuror_Should_Throw_Exception_When_User_Cannot_Be_Juror() {
         // Arrange
@@ -356,6 +378,7 @@ class ContestServiceTests {
         verify(contestRepository, never()).save(any(Contest.class));
         verify(userRepository, never()).save(any(User.class));
     }
+
     @Test
     public void getJurors_Should_Return_List_Of_Jurors_When_User_Is_Organizer_And_Contest_Exists() {
         User organizer = new User();
@@ -380,6 +403,7 @@ class ContestServiceTests {
         assertTrue(result.contains(juror2));
         verify(contestRepository, times(1)).findById(contest.getId());
     }
+
     @Test
     public void addParticipant_Should_AddUser_To_Contest_When_User_Is_Organizer_And_Contest_Is_Valid() {
         User organizer = new User();
@@ -406,6 +430,7 @@ class ContestServiceTests {
         verify(contestRepository, times(1)).save(contest);
         verify(userRepository, times(1)).save(participant);
     }
+
     @Test
     public void addParticipant_ShouldThrowException_WhenContestIsOpen() {
         User organizer = new User();
@@ -429,6 +454,7 @@ class ContestServiceTests {
         verify(contestRepository, never()).save(any(Contest.class));
         verify(userRepository, never()).save(any(User.class));
     }
+
     @Test
     public void getParticipants_Should_Return_Participants_When_User_Is_Organizer_And_Contest_Is_Valid() {
         User organizer = new User();
@@ -634,5 +660,94 @@ class ContestServiceTests {
         assertEquals("nd", ranks.get(2));
         assertEquals("rd", ranks.get(3));
         assertEquals("th", ranks.get(4));
+    }
+
+    @Test
+    void scheduledTask_Should_Handle_Phase_Changes() {
+        Contest contest1 = mock(Contest.class);
+        Contest contest2 = new Contest();
+        List<Entry> entries = new ArrayList<>();
+        Entry entry = new Entry();
+        User user = TestHelper.createJunkieUser();
+        user.setPoints(10);
+        entry.setParticipant(user);
+        entry.setRatings(new HashSet<>());
+
+        User juror = TestHelper.createOrganizerUser();
+        Set<User> jurors = new HashSet<>();
+        jurors.add(juror);
+        entry.setParticipant(user);
+
+        contest2.setJurors(jurors);
+
+        entry.setContest(contest2);
+        entries.add(entry);
+        contest2.setEntries(entries);
+        contest2.setPhase2End(Timestamp.from(Instant.now().minusSeconds(10)));
+        contest2.setContestPhase(ContestPhase.PhaseII);
+        Contest contest3 = mock(Contest.class);
+
+        when(contest1.getContestPhase()).thenReturn(ContestPhase.PhaseI);
+        when(contest1.getPhase1End()).thenReturn(Timestamp.from(Instant.now().minusSeconds(10)));
+
+
+        when(contest3.getContestPhase()).thenReturn(ContestPhase.Finished);
+
+        List<Contest> contests = Arrays.asList(contest1, contest2, contest3);
+        when(contestRepository.findAll()).thenReturn(contests);
+        when(ratingMapper.fromDto(any(), any())).thenReturn(new Rating());
+
+        contestService.scheduledTask();
+
+        verify(contest1).setContestPhase(ContestPhase.PhaseII);
+        verify(contestRepository, times(2)).save(any(Contest.class));
+    }
+
+    @Test
+    void throwIfUserIsParticipantInContest_Should_Throw() {
+        User user = TestHelper.createJunkieUser();
+        Entry entry = new Entry();
+        Contest contest = new Contest();
+        contest.setParticipants(Set.of(user));
+        entry.setContest(contest);
+
+        assertThrows(AuthorizationException.class, () -> {
+            contestService.throwIfUserIsParticipantInContest(user, contest);
+        });
+    }
+
+    @Test
+    void throwIfUserIsParticipantInContest_Should_Not_Throw() {
+        User user = TestHelper.createJunkieUser();
+        Entry entry = new Entry();
+        Contest contest = new Contest();
+        contest.setParticipants(new HashSet<>());
+        entry.setContest(contest);
+
+        contestService.throwIfUserIsParticipantInContest(user, contest);
+    }
+
+    @Test
+    void throwIfUserIsJurorInContest() {
+        User user = TestHelper.createJunkieUser();
+        Entry entry = new Entry();
+        Contest contest = new Contest();
+        contest.setJurors(Set.of(user));
+        entry.setContest(contest);
+
+        assertThrows(AuthorizationException.class, () -> {
+            contestService.throwIfUserIsJurorInContest(user, contest);
+        });
+    }
+
+    @Test
+    void throwIfUserIsJurorInContest_Should_Not_Throw() {
+        User user = TestHelper.createJunkieUser();
+        Entry entry = new Entry();
+        Contest contest = new Contest();
+        contest.setJurors(new HashSet<>());
+        entry.setContest(contest);
+
+        contestService.throwIfUserIsJurorInContest(user, contest);
     }
 }

@@ -39,6 +39,7 @@ public class UserMvcController {
             return "redirect:/login";
         }
         List<User> users = userService.getAllUsers(null, null, null);
+        users.sort((u1, u2) -> u2.getPoints() - u1.getPoints());
         model.addAttribute("users", users);
         return "UsersView";
     }

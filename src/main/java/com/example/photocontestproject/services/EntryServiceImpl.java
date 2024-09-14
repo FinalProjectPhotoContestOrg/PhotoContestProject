@@ -1,5 +1,6 @@
 package com.example.photocontestproject.services;
 
+import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
@@ -12,12 +13,15 @@ import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
+import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.EntryService;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,12 +32,17 @@ public class EntryServiceImpl implements EntryService {
     private final EntryRepository entryRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final ContestService contestService;
 
     @Autowired
-    public EntryServiceImpl(EntryRepository entryRepository, UserRepository userRepository, EmailService emailService) {
+    public EntryServiceImpl(EntryRepository entryRepository,
+                            UserRepository userRepository,
+                            EmailService emailService,
+                            ContestService contestService) {
         this.entryRepository = entryRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.contestService = contestService;
     }
 
     @Transactional
@@ -87,6 +96,42 @@ public class EntryServiceImpl implements EntryService {
     }
 
     @Override
+    public String getAverageRating(Entry entry) {
+        float entryAvgScore = (float) entry.getEntryTotalScore() / entry.getRatings().size();
+        DecimalFormat df = new DecimalFormat("#.#");
+        return df.format(entryAvgScore);
+    }
+
+
+
+    @Override
+    public List<Entry> get3RecentWinners() {
+        List<Contest> finishedContests = contestService.getAllContests(null, null, null, ContestPhase.Finished);
+        List<Entry> recentWinners = new ArrayList<>();
+        for (Contest contest : finishedContests) {
+            recentWinners.add(contest.getEntries().getFirst());
+            if (recentWinners.size() == 3) {
+                break;
+            }
+        }
+
+
+
+        if (recentWinners.size() < 3) {
+            for (Contest contest : finishedContests) {
+                if (contest.getEntries().size() < 2) {
+                    continue;
+                }
+                recentWinners.add(contest.getEntries().get(1));
+                if (recentWinners.size() == 3) {
+                    break;
+                }
+            }
+        }
+        return recentWinners;
+    }
+
+    @Override
     public List<Contest> findContestsByUserId(int userId) {
         List<Entry> allEntries = entryRepository.findAll();
         return allEntries.stream()
@@ -108,11 +153,11 @@ public class EntryServiceImpl implements EntryService {
         }
     }
 
-    private void throwIfUserIsNotOrganizer(User user) {
-        if (!user.getRole().equals(Role.Organizer)) {
-            throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
-        }
-    }
+//    private void throwIfUserIsNotOrganizer(User user) {
+//        if (!user.getRole().equals(Role.Organizer)) {
+//            throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
+//        }
+//    }
 
     private void throwIfUserIsNotOrganizerOrAuthor(User user, Entry entry) {
         if (!user.getRole().equals(Role.Organizer) && !entry.getParticipant().getId().equals(user.getId())) {

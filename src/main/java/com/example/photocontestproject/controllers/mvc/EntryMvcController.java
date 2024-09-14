@@ -70,32 +70,23 @@ public class EntryMvcController {
             return "redirect:/";
         }
 
-        float entryAvgScore = (float) entry1.getEntryTotalScore() / entry1.getRatings().size();
-        DecimalFormat df = new DecimalFormat("#.#");
-        String formattedScore = df.format(entryAvgScore);
-
-        model.addAttribute("entryAvgScore", formattedScore);
-
+        String entryAvgScore = entryService.getAverageRating(entry1);
         Set<Rating> ratings = entry1.getRatings();
+        boolean isJurorToContest = userService.isUserJurorToContest(user, entry1);
+        boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
 
+        model.addAttribute("entryAvgScore", entryAvgScore);
         model.addAttribute("allRatings", ratings);
-
         model.addAttribute("entry", entry1);
         model.addAttribute("ratingDto", new RatingDto());
-
-        Contest contest = entry1.getContest();
-
         model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
-        model.addAttribute("isJurorToContest", contest.getJurors().stream()
-                .anyMatch(juror -> juror.getId().equals(user.getId())));
+        model.addAttribute("isJurorToContest", isJurorToContest);
         model.addAttribute("entryService", entryService);
         model.addAttribute("organizer", Role.Organizer);
-
-        boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
         model.addAttribute("alreadyRated", alreadyRated);
         model.addAttribute("user", user);
 
-        List<Entry> sortedEntries = contest.getEntries().stream()
+        List<Entry> sortedEntries = entry1.getContest().getEntries().stream()
                 .sorted(Comparator.comparing(Entry::getEntryTotalScore).reversed())
                 .toList();
         int rank = sortedEntries.indexOf(entry1) + 1;
@@ -105,7 +96,7 @@ public class EntryMvcController {
     }
 
     @PostMapping("/{id}")
-    public String rateEntry(@ModelAttribute("ratingDto")RatingDto ratingDto,
+    public String rateEntry(@ModelAttribute("ratingDto") RatingDto ratingDto,
                             BindingResult bindingResult,
                             @PathVariable int id,
                             HttpSession session,
@@ -114,7 +105,7 @@ public class EntryMvcController {
         Entry entry = null;
         try {
             entry = entryService.getEntryById(id);
-        }  catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return "redirect:/";
         }
         try {

@@ -262,4 +262,16 @@ public class UserServiceTests {
             userService.throwIfUserIsDuplicate("username");
         });
     }
+
+    @Test
+    void getUserByEmail_Should_Find_By_Email() {
+        User user = TestHelper.createJunkieUser();
+
+        when(userRepository.findByEmail("email")).thenReturn(Optional.of(user));
+
+        User foundUser = userService.getUserByEmail("email");
+
+        assertEquals(user.getId(), foundUser.getId());
+        verify(userRepository, times(1)).findByEmail("email");
+    }
 }

@@ -1,17 +1,22 @@
 package com.example.photocontestproject.enums;
 
 public enum ContestPhase {
-    PhaseI,
-    PhaseII,
-    Finished;
+    PhaseI("Phase I"),
+    PhaseII("Phase II"),
+    Finished("Finished");
 
+    private final String name;
+
+    ContestPhase(String name) {
+        this.name = name;
+    }
+
+    public boolean equalsName(String otherName) {
+        return name.equals(otherName);
+    }
 
     @Override
     public String toString() {
-        return switch (this) {
-            case PhaseI -> "Phase I";
-            case PhaseII -> "Phase II";
-            case Finished -> "Finished";
-        };
+        return this.name;
     }
 }
