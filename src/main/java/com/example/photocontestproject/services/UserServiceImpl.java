@@ -5,6 +5,8 @@ import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.external.service.EmailService;
+import com.example.photocontestproject.models.Contest;
+import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.UserService;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -97,5 +100,22 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getMasters() {
         return userRepository.findByRanking(Ranking.Master);
+    }
+
+    @Override
+    public List<User> getLeaderboardList() {
+        List<User> allUsers = this.getAllUsers(null, null, null);
+        return allUsers.stream()
+                .filter(user -> !user.getRole().equals(Role.Organizer))
+                .sorted((u1, u2) -> Integer.compare(u2.getPoints(), u1.getPoints()))
+                .limit(8)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isUserJurorToContest(User user, Entry entry) {
+        Contest contest = entry.getContest();
+        return contest.getJurors().stream()
+                .anyMatch(juror -> juror.getId().equals(user.getId()));
     }
 }

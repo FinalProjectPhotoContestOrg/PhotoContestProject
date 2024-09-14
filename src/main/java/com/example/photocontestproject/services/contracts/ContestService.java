@@ -26,8 +26,9 @@ public interface ContestService {
 
     List<User> getParticipants(int id, int userId, User loggedInUser);
 
-    //Entry createEntryForContest(Entry entry, User user/*, Contest contest*/);
     Map<Integer, String> getRanks(List<Entry> sortedEntries);
 
     void deleteContest(int id, User user);
+
+    Contest getFeaturedContest();
 }

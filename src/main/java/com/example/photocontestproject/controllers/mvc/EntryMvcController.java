@@ -7,7 +7,6 @@ import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.helpers.AuthenticationHelper;
 import com.example.photocontestproject.mappers.RatingMapper;
-import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
@@ -20,8 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DecimalFormat;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -46,7 +43,6 @@ public class EntryMvcController {
     }
 
 
-
     @GetMapping("/{id}")
     public String getEntryView(@ModelAttribute("entry") Entry entry,
                                BindingResult bindingResult,
@@ -69,24 +65,19 @@ public class EntryMvcController {
             return "redirect:/";
         }
 
-        float entryAvgScore = (float) entry1.getEntryTotalScore() / entry1.getRatings().size();
-        DecimalFormat df = new DecimalFormat("#.#");
-        String formattedScore = df.format(entryAvgScore);
-        model.addAttribute("entryAvgScore", formattedScore);
-
+        String entryAvgScore = entryService.getAverageRating(entry1);
         Set<Rating> ratings = entry1.getRatings();
-        model.addAttribute("allRatings", ratings);
+        boolean isJurorToContest = userService.isUserJurorToContest(user, entry1);
+        boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
 
+        model.addAttribute("entryAvgScore", entryAvgScore);
+        model.addAttribute("allRatings", ratings);
         model.addAttribute("entry", entry1);
         model.addAttribute("ratingDto", new RatingDto());
-
-        Contest contest = entry1.getContest();
         model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
-        model.addAttribute("isJurorToContest", contest.getJurors().stream()
-                .anyMatch(juror -> juror.getId().equals(user.getId())));
+        model.addAttribute("isJurorToContest", isJurorToContest);
         model.addAttribute("entryService", entryService);
         model.addAttribute("organizer", Role.Organizer);
-        boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
         model.addAttribute("alreadyRated", alreadyRated);
         model.addAttribute("user", user);
 
@@ -94,7 +85,7 @@ public class EntryMvcController {
     }
 
     @PostMapping("/{id}")
-    public String rateEntry(@ModelAttribute("ratingDto")RatingDto ratingDto,
+    public String rateEntry(@ModelAttribute("ratingDto") RatingDto ratingDto,
                             BindingResult bindingResult,
                             @PathVariable int id,
                             HttpSession session,
@@ -103,7 +94,7 @@ public class EntryMvcController {
         Entry entry = null;
         try {
             entry = entryService.getEntryById(id);
-        }  catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return "redirect:/";
         }
         try {

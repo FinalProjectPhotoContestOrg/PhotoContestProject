@@ -1,6 +1,7 @@
 package com.example.photocontestproject.services.contracts;
 
 import com.example.photocontestproject.enums.Role;
+import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 
 import java.util.List;
@@ -25,4 +26,8 @@ public interface UserService {
     List<User> getUsersByRole(Role role);
 
     int getNextRankPoints(int currentPoints);
+
+    List<User> getLeaderboardList();
+
+    boolean isUserJurorToContest(User user, Entry entry);
 }

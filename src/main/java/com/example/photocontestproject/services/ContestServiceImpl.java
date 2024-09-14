@@ -28,10 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -77,6 +74,15 @@ public class ContestServiceImpl implements ContestService {
 
             return predicate;
         });
+    }
+
+    @Override
+    public Contest getFeaturedContest() {
+        List<Contest> finishedContests = this.getAllContests(null, null, null, ContestPhase.Finished);
+
+        return finishedContests.stream()
+                .max(Comparator.comparingInt(c -> c.getEntries().size()))
+                .orElse(null);
     }
 
     @Override
