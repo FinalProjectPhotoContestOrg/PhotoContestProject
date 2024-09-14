@@ -267,14 +267,16 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" th:field="${entry.title}" required>
+                        <input type="text" maxlength="60" class="form-control" id="title" name="title" th:field="${entry.title}" required>
+                        <small id="title-count" class="form-text text-muted">0/60</small>
                     </div>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="description" class="form-label">Photo Description (Story)</label>
-                <textarea class="form-control" id="description" th:field="${entry.story}" rows="3" required></textarea>
+                <textarea class="form-control" maxlength="200" id="description" name="description" th:field="${entry.story}" rows="3" required></textarea>
+                <small id="description-count" class="form-text text-muted">0/200</small>
             </div>
 
             <div class="mb-3">
@@ -439,6 +441,25 @@
 
     // Update countdowns every second
     setInterval(updateCountdowns, 1000);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const titleInput = document.getElementById('title');
+        const titleCount = document.getElementById('title-count');
+        const titleMaxLength = titleInput.getAttribute('maxlength');
+
+        const storyInput = document.getElementById('description');
+        const storyCount = document.getElementById('description-count');
+        const storyMaxLength = storyInput.getAttribute('maxlength');
+
+        titleInput.addEventListener('input', function () {
+            titleCount.textContent = titleInput.value.length + '/' + titleMaxLength;
+        });
+
+        storyInput.addEventListener('input', function () {
+            storyCount.textContent = storyInput.value.length + '/' + storyMaxLength;
+        });
+    });
 </script>
 </body>
 </html>
