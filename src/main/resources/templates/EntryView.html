@@ -161,6 +161,12 @@
                     <div class="progress progress-bar-container">
                         <div class="progress-bar" role="progressbar" th:style="'width: ' + (${entryAvgScore} * 10) + '%'" aria-valuenow="${entryAvgScore}" aria-valuemin="0" aria-valuemax="10"></div>
                     </div>
+                    <div th:if="${entry.getParticipant().id.equals(user.id)}" class="text-center mb-4">
+                        <div class="fb-share-button"
+                             th:data-href="'https://a444-2a01-5a8-302-a84f-a908-df5a-57d4-384.ngrok-free.app/entries/' + ${entry.id}"
+                             data-layout="button_count">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,12 +176,6 @@
 <!-- Ratings List Section -->
 <div class="ratings-list-container p-4" style="margin-bottom: 0;" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
     <h3 class="text-center">Ratings</h3>
-    <div th:if="${entry.getParticipant().id.equals(user.id)}" class="text-center mb-4">
-        <div class="fb-share-button"
-             th:data-href="'https://a444-2a01-5a8-302-a84f-a908-df5a-57d4-384.ngrok-free.app/entries/' + ${entry.id}"
-             data-layout="button_count">
-        </div>
-    </div>
     <div class="row">
         <div th:each="rating, iterStat : ${entry.ratings}" class="col-md-4 mb-4">
             <div class="rating-box">
