@@ -205,14 +205,14 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    private void throwIfUserIsParticipantInContest(User user, Contest contest) {
+    public void throwIfUserIsParticipantInContest(User user, Contest contest) {
         Set<User> participants = contest.getParticipants();
         if (participants.stream().anyMatch(p -> p.getId().equals(user.getId()))) {
             throw new AuthorizationException("You are already a participant in this contest");
         }
     }
 
-    private void throwIfUserIsJurorInContest(User user, Contest contest) {
+    public void throwIfUserIsJurorInContest(User user, Contest contest) {
         Set<User> jurors = contest.getJurors();
         if (jurors.stream().anyMatch(j -> j.getId().equals(user.getId()))) {
             throw new AuthorizationException("You are already a juror in this contest");

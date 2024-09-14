@@ -22,6 +22,13 @@ public class TestHelper {
         return user;
     }
 
+    public static Entry createEntry() {
+        Entry entry = new Entry();
+        entry.setId(1);
+        entry.setTitle("Title");
+        return entry;
+    }
+
     public static User createOrganizerUser() {
         User user = new User();
         user.setId(1);
