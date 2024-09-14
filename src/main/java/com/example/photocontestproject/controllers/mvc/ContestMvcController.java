@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/contests")
@@ -66,8 +67,10 @@ public class ContestMvcController {
         try {
             Contest contest = contestService.getContestById(contestId);
             List<Entry> entries = contest.getEntries();
-            List<Entry> sortedEntries = new ArrayList<>(entries);
-            sortedEntries.sort(Comparator.comparing(Entry::getEntryTotalScore).reversed());
+            List<Entry> sortedEntries = entries.stream()
+                    .sorted(Comparator.comparing(Entry::getEntryTotalScore).reversed())
+                    .limit(8)
+                    .collect(Collectors.toList());
             Map<Integer, String> ranks = contestService.getRanks(sortedEntries);
             boolean alreadyEntered = entries.stream().anyMatch(entry -> entry.getParticipant().getId().equals(user.getId()));
             boolean isJuror = contest.getJurors().stream().anyMatch(juror -> juror.getId().equals(user.getId()));

@@ -309,6 +309,31 @@
         </div>
     </div>
 </section>
+<section class="py-5" th:if="${isJuror && isPhaseI}">
+    <div class="container text-center">
+        <h2 class="section-title">You Have Been Selected as a Juror</h2>
+        <p class="lead">
+            You have been selected to judge this contest. Please wait until the contest enters Phase II
+            to begin the judging process.
+        </p>
+    </div>
+    <div class="container">
+        <h2 class="text-center section-title">All Entries in contest:</h2>
+        <div class="row">
+            <div class="scrolling-container">
+                <div class="col-md-4 card" th:each="entryView : ${entries}">
+                        <div class="mb-4">
+                            <img th:src="'data:image/jpeg;base64,' + ${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
+                            <div class="card-body">
+                                <!-- Entry Title -->
+                                <h5 class="card-title" th:text="${entryView.title}">Sample Entry Title</h5>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section id="view-entries" class="bg-light py-5" th:if="${isPhaseII && (isJuror || isOrganizer)}">
     <div class="container">

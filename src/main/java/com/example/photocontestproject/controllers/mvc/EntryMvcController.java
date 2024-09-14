@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -72,23 +73,33 @@ public class EntryMvcController {
         float entryAvgScore = (float) entry1.getEntryTotalScore() / entry1.getRatings().size();
         DecimalFormat df = new DecimalFormat("#.#");
         String formattedScore = df.format(entryAvgScore);
+
         model.addAttribute("entryAvgScore", formattedScore);
 
         Set<Rating> ratings = entry1.getRatings();
+
         model.addAttribute("allRatings", ratings);
 
         model.addAttribute("entry", entry1);
         model.addAttribute("ratingDto", new RatingDto());
 
         Contest contest = entry1.getContest();
+
         model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
         model.addAttribute("isJurorToContest", contest.getJurors().stream()
                 .anyMatch(juror -> juror.getId().equals(user.getId())));
         model.addAttribute("entryService", entryService);
         model.addAttribute("organizer", Role.Organizer);
+
         boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
         model.addAttribute("alreadyRated", alreadyRated);
         model.addAttribute("user", user);
+
+        List<Entry> sortedEntries = contest.getEntries().stream()
+                .sorted(Comparator.comparing(Entry::getEntryTotalScore).reversed())
+                .toList();
+        int rank = sortedEntries.indexOf(entry1) + 1;
+        model.addAttribute("rank", rank);
 
         return "EntryView";
     }
