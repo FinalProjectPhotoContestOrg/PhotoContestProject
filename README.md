@@ -130,7 +130,7 @@ server.max-http-request-header-size= 1MB
 ```
 ## Database Relations
 Database relations are shown in the following diagram:
-![Database Relations](/ReadMe/DBdiagram.png)
+![Database Relations](/src/main/resources/ReadMe/DBdiagram.png)
 
 ## Contributors
 https://github.com/TodorKst [Todor Kostadinov]
