@@ -98,19 +98,21 @@
         <div class="row mt-4" style="margin-top: 0">
             <!-- Featured Contest -->
             <div class="col-md-8">
-                <a th:href="@{/contests/{contestId}(contestId=${featuredContest.id})}" class="no-underline">
-                    <h1 class="text-center" style="color:black;">Featured Contest</h1>
-                    <div th:if="${featuredContest}" class="card mb-4">
-                        <img th:src="@{'data:image/jpeg;base64,' + ${featuredContest.coverPhotoUrl}}" class="card-img-top" alt="Featured Contest Image">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="'Title: ' + ${featuredContest.title}"></h5>
-                            <p class="card-text" th:text="'Category: ' + ${featuredContest.getCategory()}"></p>
+                <div th:if="${featuredContest}">
+                    <a th:href="@{/contests/{contestId}(contestId=${featuredContest.id})}" class="no-underline">
+                        <h1 class="text-center" style="color:black;">Featured Contest</h1>
+                        <div th:if="${featuredContest}" class="card mb-4">
+                            <img th:src="@{'data:image/jpeg;base64,' + ${featuredContest.coverPhotoUrl}}" class="card-img-top" alt="Featured Contest Image">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="'Title: ' + ${featuredContest.title}"></h5>
+                                <p class="card-text" th:text="'Category: ' + ${featuredContest.getCategory()}"></p>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <span th:text="${featuredContest.entries.size()} + ' Entries'"></span>
+                            </div>
                         </div>
-                        <div class="card-footer text-muted">
-                            <span th:text="${featuredContest.entries.size()} + ' Entries'"></span>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
 
             <!-- Leaderboard -->
