@@ -34,7 +34,7 @@ public class HomeMvcController {
 
     @GetMapping
     public String getHomeView(Model model) {
-        List<Entry> recentWinners = entryService.get3RecentWinners();
+        List<Entry> recentWinners = contestService.get3RecentWinners();
         Contest featuredContest = contestService.getFeaturedContest();
         List<User> userLeaderboard = userService.getLeaderboardList();
 

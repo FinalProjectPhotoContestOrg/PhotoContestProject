@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ContestServiceImpl implements ContestService {
@@ -41,17 +42,21 @@ public class ContestServiceImpl implements ContestService {
     private final UserService userService;
     private final RatingService ratingService;
     private final RatingMapper ratingMapper;
+    private final EntryService entryService;
 
     @Autowired
     public ContestServiceImpl(ContestRepository contestRepository,
                               UserRepository userRepository,
                               UserService userService,
-                              RatingService ratingService, RatingMapper ratingMapper) {
+                              RatingService ratingService,
+                              RatingMapper ratingMapper,
+                              EntryService entryService) {
         this.contestRepository = contestRepository;
         this.userRepository = userRepository;
         this.userService = userService;
         this.ratingService = ratingService;
         this.ratingMapper = ratingMapper;
+        this.entryService = entryService;
     }
 
     @Override
@@ -83,6 +88,66 @@ public class ContestServiceImpl implements ContestService {
         return finishedContests.stream()
                 .max(Comparator.comparingInt(c -> c.getEntries().size()))
                 .orElse(null);
+    }
+
+    @Override
+    public List<Contest> getContestsWithJuror(User user) {
+        return this.getAllContests(null, null, null, null).stream()
+                .filter(contest -> contest.getJurors().stream()
+                        .anyMatch(juror -> juror.getId().equals(user.getId())))
+                .filter(contest -> contest.getContestPhase() == ContestPhase.PhaseII)
+                .toList();
+    }
+
+    @Override
+    public Set<Contest> getFinishedContestsForUser(User user) {
+        return entryService.findContestsByUserId(user.getId()).stream()
+                .filter(contest -> contest.getContestPhase() == ContestPhase.Finished).collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<Contest> getUnFinishedContestsForUser(User user) {
+        return entryService.findContestsByUserId(user.getId()).stream()
+                .filter(contest -> contest.getContestPhase() != ContestPhase.Finished)
+                .toList();
+    }
+
+    @Override
+    public List<Contest> getContestsUserIsNotParticipatingIn(User user) {
+        List<Contest> activeContests = this.getAllContests(null, null, null, ContestPhase.PhaseI);
+        List<Contest> participatingContests = this.getUnFinishedContestsForUser(user);
+
+        return activeContests.stream()
+                .filter(contest->participatingContests.stream()
+                        .noneMatch(participatingContest->participatingContest.getId().equals(contest.getId())))
+                .toList();
+    }
+
+    @Override
+    public List<Entry> get3RecentWinners() {
+        List<Contest> finishedContests = this.getAllContests(null, null, null, ContestPhase.Finished);
+        List<Entry> recentWinners = new ArrayList<>();
+        for (Contest contest : finishedContests) {
+            recentWinners.add(contest.getEntries().getFirst());
+            if (recentWinners.size() == 3) {
+                break;
+            }
+        }
+
+
+
+        if (recentWinners.size() < 3) {
+            for (Contest contest : finishedContests) {
+                if (contest.getEntries().size() < 2) {
+                    continue;
+                }
+                recentWinners.add(contest.getEntries().get(1));
+                if (recentWinners.size() == 3) {
+                    break;
+                }
+            }
+        }
+        return recentWinners;
     }
 
     @Override

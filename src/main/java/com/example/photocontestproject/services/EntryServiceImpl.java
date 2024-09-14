@@ -32,17 +32,14 @@ public class EntryServiceImpl implements EntryService {
     private final EntryRepository entryRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
-    private final ContestService contestService;
 
     @Autowired
     public EntryServiceImpl(EntryRepository entryRepository,
                             UserRepository userRepository,
-                            EmailService emailService,
-                            ContestService contestService) {
+                            EmailService emailService) {
         this.entryRepository = entryRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
-        this.contestService = contestService;
     }
 
     @Transactional
@@ -100,35 +97,6 @@ public class EntryServiceImpl implements EntryService {
         float entryAvgScore = (float) entry.getEntryTotalScore() / entry.getRatings().size();
         DecimalFormat df = new DecimalFormat("#.#");
         return df.format(entryAvgScore);
-    }
-
-
-
-    @Override
-    public List<Entry> get3RecentWinners() {
-        List<Contest> finishedContests = contestService.getAllContests(null, null, null, ContestPhase.Finished);
-        List<Entry> recentWinners = new ArrayList<>();
-        for (Contest contest : finishedContests) {
-            recentWinners.add(contest.getEntries().getFirst());
-            if (recentWinners.size() == 3) {
-                break;
-            }
-        }
-
-
-
-        if (recentWinners.size() < 3) {
-            for (Contest contest : finishedContests) {
-                if (contest.getEntries().size() < 2) {
-                    continue;
-                }
-                recentWinners.add(contest.getEntries().get(1));
-                if (recentWinners.size() == 3) {
-                    break;
-                }
-            }
-        }
-        return recentWinners;
     }
 
     @Override

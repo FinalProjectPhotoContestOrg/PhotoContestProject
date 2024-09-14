@@ -60,27 +60,19 @@ public class DashboardMvcController {
             session.setAttribute("redirectUrl", "/dashboard/junkies");
             return "redirect:/login";
         }
-        List<Contest> activeContests = contestService.getAllContests(null, null, null, ContestPhase.PhaseI);
-        List<Contest> participatingContests = entryService.findContestsByUserId(user.getId()).stream()
-                .filter(contest -> contest.getContestPhase() != ContestPhase.Finished)
-                .toList();
-        List<Contest> filteredActiveContests = activeContests.stream()
-                .filter(contest->participatingContests.stream()
-                        .noneMatch(participatingContest->participatingContest.getId().equals(contest.getId())))
-                .toList();
-        Set<Contest> finishedContests = entryService.findContestsByUserId(user.getId()).stream()
-                .filter(contest -> contest.getContestPhase() == ContestPhase.Finished).collect(Collectors.toSet());
-        List<Contest> jurorContests = contestService.getAllContests(null, null, null, null).stream()
-                .filter(contest -> contest.getJurors().stream()
-                        .anyMatch(juror -> juror.getId().equals(user.getId())))
-                .filter(contest -> contest.getContestPhase() == ContestPhase.PhaseII)
-                .toList();
+
+
+        List<Contest> participatingContests = contestService.getUnFinishedContestsForUser(user);
+        List<Contest> contestUserIsNorParticipatingIn = contestService.getContestsUserIsNotParticipatingIn(user);
+        Set<Contest> finishedContestsForUser = contestService.getFinishedContestsForUser(user);
+        List<Contest> jurorContests = contestService.getContestsWithJuror(user);
         int currentPoints = user.getPoints();
         Ranking currentRank = user.getRanking();
         int nextRankPoints = userService.getNextRankPoints(currentPoints);
-        model.addAttribute("activeContests", filteredActiveContests);
+
+        model.addAttribute("activeContests", contestUserIsNorParticipatingIn);
         model.addAttribute("participatingContests", participatingContests);
-        model.addAttribute("finishedContests", finishedContests);
+        model.addAttribute("finishedContests", finishedContestsForUser);
         model.addAttribute("jurorContests", jurorContests);
         model.addAttribute("currentPoints", currentPoints);
         model.addAttribute("currentRank", currentRank);
