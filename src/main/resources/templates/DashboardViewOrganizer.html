@@ -7,6 +7,25 @@
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <style>
+        .card .dark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .card:hover .dark-overlay {
+            opacity: 1;
+        }
         html, body {
             height: 100%;
             margin: 0;
@@ -87,6 +106,12 @@
                 <div th:each="contest : ${phaseIContests}" class="card" data-contest-id="${contest.id}"
                      data-phase-end-time="${contest.phase1end}">
                     <div th:replace="~{ForumForms.html :: contest-card}"></div>
+                    <div class="dark-overlay">
+                        <div class="countdown-timer" th:id="'countdown-'+${contest.id}"
+                             th:data-phase1-end-time="${contest.phase1End.getTime()}">
+                            <span>Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -98,6 +123,12 @@
                 <div th:each="contest : ${phaseIIContests}" class="card" data-contest-id="${contest.id}"
                      data-phase-end-time="${contest.phase2end}">
                     <div th:replace="~{ForumForms.html :: contest-card}"></div>
+                    <div class="dark-overlay">
+                        <div class="countdown-timer" th:id="'countdown-'+${contest.id}"
+                             th:data-phase1-end-time="${contest.phase2End.getTime()}">
+                            <span>Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -108,6 +139,11 @@
             <div class="scrolling-container">
                 <div th:each="contest : ${finishedContests}" class="card">
                     <div th:replace="~{ForumForms.html :: contest-card}"></div>
+                    <div class="dark-overlay">
+                        <div class="overlay-text">
+                            Tap to view results
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -118,5 +154,59 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const countdowns = {};
+    document.querySelectorAll('.countdown-timer').forEach(timer => {
+        const contestId = timer.id.split('-')[1];
+        const endTime = parseInt(timer.getAttribute('data-phase1-end-time'), 10);
+
+        countdowns[contestId] = endTime;
+    });
+
+    function updateCountdowns() {
+        const now = new Date().getTime();
+        document.querySelectorAll('.countdown-timer').forEach(timer => {
+            const contestId = timer.id.split('-')[1];
+            const endTime = countdowns[contestId];
+            const distance = endTime - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                timer.innerHTML =  days + 'd' +' ' + hours + 'h'+' ' + minutes + 'm'+' ' + seconds + 's';
+            } else {
+                timer.innerHTML = "Contest ended";
+            }
+        });
+    }
+    setInterval(updateCountdowns, 1000);
+
+    document.querySelectorAll('.contest-link').forEach(function (contestLink) {
+        contestLink.addEventListener('click', function (event) {
+            const contestId = this.getAttribute('data-th-id');
+            const contestCard = this.closest('.col-md-4');
+
+            fetch(`/participate/${contestId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').getAttribute('content') // CSRF token for Spring Security
+                },
+                body: JSON.stringify({ contestId: contestId })
+            }).then(response => {
+                if (response.ok) {
+                    contestCard.remove();
+                } else {
+                    console.error('Failed to participate in the contest');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
 </body>
 </html>
