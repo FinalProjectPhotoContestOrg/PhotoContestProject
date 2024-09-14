@@ -170,7 +170,7 @@
 <!-- Ratings List Section -->
 <div class="ratings-list-container p-4" style="margin-bottom: 0;" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
     <h3 class="text-center">Ratings</h3>
-    <div class="text-center mb-4">
+    <div th:if="${entry.getParticipant().id.equals(user.id)}" class="text-center mb-4">
         <div class="fb-share-button"
              th:data-href="'https://a444-2a01-5a8-302-a84f-a908-df5a-57d4-384.ngrok-free.app/entries/' + ${entry.id}"
              data-layout="button_count">

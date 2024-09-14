@@ -88,6 +88,7 @@ public class EntryMvcController {
         model.addAttribute("organizer", Role.Organizer);
         boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
         model.addAttribute("alreadyRated", alreadyRated);
+        model.addAttribute("user", user);
 
         return "EntryView";
     }
