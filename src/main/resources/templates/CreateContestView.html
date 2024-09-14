@@ -6,6 +6,11 @@
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <style>
+
+        /* Optional: Adjust tooltip appearance delay and smooth hover effect */
+        .user-rank-tooltip[data-bs-toggle="tooltip"] {
+            cursor: pointer; /* Show pointer cursor for hover effect */
+        }
         html, body {
             height: 100%;
             margin: 0;
@@ -46,14 +51,16 @@
 
             <div class="form-group">
                 <label for="title">Title:</label>
-                <input type="text" class="form-control" maxlength="40" id="title" name="title" th:value="${contest.title}" required>
+                <input type="text" class="form-control" maxlength="60" id="title" name="title" th:value="${contest.title}" required>
+                <small id="title-count" class="form-text text-muted">0/60</small>
             </div>
 
 
             <div class="form-group">
                 <label for="category">Category:</label>
-                <input type="text" maxlength="20" class="form-control" id="category" name="category" th:value="${contest.category}"
-                       required>
+                <input type="text" maxlength="30" class="form-control" id="category" name="category" th:value="${contest.category}" required>
+                <small id="category-count" class="form-text text-muted">0/30</small>
+
             </div>
 
 
@@ -112,8 +119,12 @@
                                th:name="participantIds"
                                th:value="${junkie.id}"
                                th:data-juror-id="${'juror-' + junkie.id}">
-                        <label class="form-check-label" th:for="${'participant-' + junkie.id}"
-                               th:text="${junkie.firstName + ' ' + junkie.lastName}"></label>
+                        <label class="form-check-label user-rank-tooltip"
+                               th:for="${'participant-' + junkie.id}"
+                               th:text="${junkie.firstName + ' ' + junkie.lastName}"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               th:title="'Rank: ' + ${junkie.ranking}"></label>
                     </div>
                 </div>
             </div>
@@ -158,5 +169,25 @@
         phase2EndInput.min = phase1EndMin;
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const titleInput = document.getElementById('title');
+        const titleCount = document.getElementById('title-count');
+        const titleMaxLength = titleInput.getAttribute('maxlength');
+
+        const categoryInput = document.getElementById('category');
+        const categoryCount = document.getElementById('category-count');
+        const categoryMaxLength = categoryInput.getAttribute('maxlength');
+
+        titleInput.addEventListener('input', function () {
+            titleCount.textContent = titleInput.value.length + '/' + titleMaxLength;
+        });
+
+        categoryInput.addEventListener('input', function () {
+            categoryCount.textContent = categoryInput.value.length + '/' +categoryMaxLength;
+        });
+    });
+</script>
+
 </body>
 </html>
