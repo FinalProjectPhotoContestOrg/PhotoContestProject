@@ -29,6 +29,29 @@ public class TestHelper {
         return entry;
     }
 
+    public static Entry createEntryWithId(int id) {
+        Entry entry = new Entry();
+        entry.setId(id);
+        entry.setTitle("Title" + id);
+        return entry;
+    }
+
+    public static Contest createFinishedContest(int id) {
+        Contest contest = new Contest();
+        contest.setId(id);
+        contest.setTitle("Title" + id);
+        contest.setCategory("Category" + id);
+        List<Entry> entries = new ArrayList<>();
+        Entry entry = createEntryWithId(id + 3 * id);
+        Entry entry2 = createEntryWithId(id + 3 * id + 1);
+        entries.add(entry);
+        entries.add(entry2);
+        contest.setEntries(entries);
+        contest.setContestType(ContestType.Open);
+        contest.setContestPhase(ContestPhase.Finished);
+        return contest;
+    }
+
     public static User createOrganizerUser() {
         User user = new User();
         user.setId(1);

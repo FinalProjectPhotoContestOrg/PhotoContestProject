@@ -15,6 +15,7 @@ import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.ContestRepository;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.ContestServiceImpl;
+import com.example.photocontestproject.services.contracts.EntryService;
 import com.example.photocontestproject.services.contracts.RatingService;
 import com.example.photocontestproject.services.contracts.UserService;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -52,6 +53,8 @@ class ContestServiceTests {
     private RatingService ratingService;
     @Mock
     private RatingMapper ratingMapper;
+    @Mock
+    private EntryService entryService;
 
     @InjectMocks
     private ContestServiceImpl contestService;
@@ -749,5 +752,191 @@ class ContestServiceTests {
         entry.setContest(contest);
 
         contestService.throwIfUserIsJurorInContest(user, contest);
+    }
+
+    @Test
+    void getFeaturedContest_Should_Return_Contest_With_Max_Entries() {
+        List<Contest> finishedContests = new ArrayList<>();
+        finishedContests.add(TestHelper.createFinishedContest(1));
+        finishedContests.add(TestHelper.createFinishedContest(2));
+        Contest contest = TestHelper.createFinishedContest(3);
+        contest.getEntries().add(TestHelper.createEntryWithId(1));
+        finishedContests.add(contest);
+
+        when(contestService.getAllContests(null, null, null, ContestPhase.Finished)).thenReturn(finishedContests);
+        when(contestRepository.findAll(any(Specification.class))).thenReturn(finishedContests);
+
+        Contest result = contestService.getFeaturedContest();
+
+        assertNotNull(result);
+        assertEquals(3, result.getEntries().size());
+    }
+
+    @Test
+    void getContestsWithJuror_Should_Return_Contests_With_Juror_In_PhaseII() {
+        User juror = new User();
+        juror.setId(1);
+
+        Contest contest1 = TestHelper.createFinishedContest(1);
+        Contest contest2 = TestHelper.createFinishedContest(2);
+        contest2.setContestPhase(ContestPhase.PhaseII);
+        contest2.setJurors(Set.of(juror));
+        List<Contest> allContests = Arrays.asList(
+                contest1,
+                contest2
+        );
+
+        when(contestService.getAllContests(null, null, null, null)).thenReturn(allContests);
+        when(contestRepository.findAll(any(Specification.class))).thenReturn(allContests);
+
+        List<Contest> result = contestService.getContestsWithJuror(juror);
+
+        assertEquals(1, result.size());
+        assertEquals(ContestPhase.PhaseII, result.get(0).getContestPhase());
+    }
+
+    @Test
+    void getFinishedContestsForUser_Should_Return_Finished_Contests() {
+        User user = new User();
+        user.setId(1);
+        Contest contest1 = TestHelper.createFinishedContest(1);
+        Contest contest2 = TestHelper.createFinishedContest(2);
+        contest2.setContestPhase(ContestPhase.PhaseI);
+        List<Contest> userContests = Arrays.asList(
+                contest1,
+                contest2
+        );
+
+        when(entryService.findContestsByUserId(user.getId())).thenReturn(userContests);
+
+        Set<Contest> result = contestService.getFinishedContestsForUser(user);
+
+        assertEquals(1, result.size());
+        assertEquals(ContestPhase.Finished, result.iterator().next().getContestPhase());
+    }
+
+    @Test
+    void getUnFinishedContestsForUser_Should_Return_Unfinished_Contests() {
+        User user = new User();
+        user.setId(1);
+
+        Contest contest1 = TestHelper.createFinishedContest(1);
+        Contest contest2 = TestHelper.createFinishedContest(2);
+        contest2.setContestPhase(ContestPhase.PhaseI);
+        List<Contest> userContests = Arrays.asList(
+                contest1,
+                contest2
+        );
+
+        when(entryService.findContestsByUserId(user.getId())).thenReturn(userContests);
+
+        List<Contest> result = contestService.getUnFinishedContestsForUser(user);
+
+        assertEquals(1, result.size());
+        assertNotEquals(ContestPhase.Finished, result.get(0).getContestPhase());
+    }
+
+    @Test
+    void getContestsUserIsNotParticipatingIn_Should_Return_Contests_User_Is_Not_Participating_In() {
+        User user = new User();
+        user.setId(1);
+
+        Contest contest1 = TestHelper.createFinishedContest(1);
+        Contest contest2 = TestHelper.createFinishedContest(2);
+        contest2.setContestPhase(ContestPhase.PhaseI);
+        contest1.setContestPhase(ContestPhase.PhaseII);
+        List<Contest> activeContests = Arrays.asList(
+                contest1,
+                contest2
+        );
+
+        List<Contest> participatingContests = Collections.singletonList(contest1);
+
+        when(contestService.getAllContests(null, null, null, ContestPhase.PhaseI)).thenReturn(activeContests);
+        when(contestRepository.findAll(any(Specification.class))).thenReturn(activeContests);
+        when(contestService.getUnFinishedContestsForUser(user)).thenReturn(participatingContests);
+
+        List<Contest> result = contestService.getContestsUserIsNotParticipatingIn(user);
+
+        assertEquals(1, result.size());
+        assertEquals(2, result.get(0).getId());
+    }
+
+    @Test
+    void get3RecentWinners_Should_Return_Three_Recent_Winners() {
+        List<Contest> finishedContests = new ArrayList<>();
+        Contest contest1 = TestHelper.createFinishedContest(1);
+        Contest contest2 = TestHelper.createFinishedContest(2);
+        Contest contest3 = TestHelper.createFinishedContest(3);
+        Contest contest4 = TestHelper.createFinishedContest(4);
+
+        finishedContests.add(contest1);
+        finishedContests.add(contest2);
+        finishedContests.add(contest3);
+        finishedContests.add(contest4);
+
+        when(contestService.getAllContests(null, null, null, ContestPhase.Finished)).thenReturn(finishedContests);
+        when(contestRepository.findAll(any(Specification.class))).thenReturn(finishedContests);
+
+        List<Entry> result = contestService.get3RecentWinners();
+
+        assertEquals(3, result.size());
+    }
+
+    @Test
+    void get3RecentWinners_Should_Return_Three_Recent_Winners_And_Add_Second_Place_If_Not_Enough_People() {
+        List<Contest> finishedContests = new ArrayList<>();
+        Contest contest1 = TestHelper.createFinishedContest(1);
+        Contest contest2 = TestHelper.createFinishedContest(2);
+
+
+        finishedContests.add(contest1);
+        finishedContests.add(contest2);
+
+        when(contestService.getAllContests(null, null, null, ContestPhase.Finished)).thenReturn(finishedContests);
+        when(contestRepository.findAll(any(Specification.class))).thenReturn(finishedContests);
+
+        List<Entry> result = contestService.get3RecentWinners();
+
+        assertEquals(3, result.size());
+    }
+
+    @Test
+    void get3RecentWinners_Should_Return_Three_Recent_Winners_And_Add_Second_Place_If_Not_Enough_People_With_Only_3_Entries() {
+        List<Contest> finishedContests = new ArrayList<>();
+        Contest contest1 = TestHelper.createFinishedContest(1);
+        Contest contest2 = TestHelper.createFinishedContest(2);
+        contest1.getEntries().remove(0);
+
+        finishedContests.add(contest1);
+        finishedContests.add(contest2);
+
+        when(contestService.getAllContests(null, null, null, ContestPhase.Finished)).thenReturn(finishedContests);
+        when(contestRepository.findAll(any(Specification.class))).thenReturn(finishedContests);
+
+        List<Entry> result = contestService.get3RecentWinners();
+
+        assertEquals(3, result.size());
+    }
+
+    @Test
+    void get3RecentWinners_Should_Return_Three_Recent_Winners_And_Add_Second_Place_If_Not_Enough_People_With_ManyEntries() {
+        List<Contest> finishedContests = new ArrayList<>();
+        Contest contest1 = TestHelper.createFinishedContest(1);
+        contest1.getEntries().add(TestHelper.createEntryWithId(1));
+        contest1.getEntries().add(TestHelper.createEntryWithId(2));
+        contest1.getEntries().add(TestHelper.createEntryWithId(3));
+        Contest contest2 = TestHelper.createFinishedContest(2);
+
+        finishedContests.add(contest1);
+        finishedContests.add(contest2);
+
+
+        when(contestService.getAllContests(null, null, null, ContestPhase.Finished)).thenReturn(finishedContests);
+        when(contestRepository.findAll(any(Specification.class))).thenReturn(finishedContests);
+
+        List<Entry> result = contestService.get3RecentWinners();
+
+        assertEquals(3, result.size());
     }
 }
