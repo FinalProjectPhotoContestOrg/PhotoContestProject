@@ -1,19 +1,15 @@
 package com.example.photocontestproject.services;
 
-import com.example.photocontestproject.enums.ContestPhase;
 import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
-import com.example.photocontestproject.exceptions.EmailException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
-import com.example.photocontestproject.external.EmailValidator;
 import com.example.photocontestproject.external.service.EmailService;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
-import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.EntryService;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
@@ -21,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -53,9 +48,9 @@ public class EntryServiceImpl implements EntryService {
             throw new EmailException("Invalid email");
         }*/
         emailService.sendEmailForEnteringInContest(user.getEmail(),
-                                                   user.getUsername(),
-                                                   entry.getContest().getTitle(),
-                                                   entry.getTitle());
+                user.getUsername(),
+                entry.getContest().getTitle(),
+                entry.getTitle());
         if (entry.getContest().getContestType().equals(ContestType.Open)) {
             int points = user.getPoints();
             points += 1;
@@ -102,7 +97,7 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public int getEntryRankInContest(Entry entry) {
-        List<Entry> sortedEntries =  entry.getContest().getEntries().stream()
+        List<Entry> sortedEntries = entry.getContest().getEntries().stream()
                 .sorted(Comparator.comparing(Entry::getEntryTotalScore).reversed())
                 .toList();
         return sortedEntries.indexOf(entry) + 1;
@@ -123,6 +118,7 @@ public class EntryServiceImpl implements EntryService {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
         }
     }
+
     public void throwIfUserIsJuror(User user, Entry entry) {
         if (entry.getContest().getJurors().stream()
                 .anyMatch(juror -> juror.getId().equals(user.getId()))) {

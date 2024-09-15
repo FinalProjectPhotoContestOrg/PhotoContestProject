@@ -7,6 +7,7 @@ import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
+import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
@@ -272,5 +273,38 @@ public class EntryServiceTests {
         List<Contest> result = entryService.findContestsByUserId(1);
 
         assertEquals(2, result.size());
+    }
+
+    @Test
+    void getAverageRating_Should_Return_Average_Rating() {
+        Entry entry = new Entry();
+        entry.setEntryTotalScore(10);
+        Rating rating1 = TestHelper.createRatingWithId(1);
+        Rating rating2 = TestHelper.createRatingWithId(2);
+        Rating rating3 = TestHelper.createRatingWithId(3);
+        Rating rating4 = TestHelper.createRatingWithId(4);
+        Set<Rating> ratings = new HashSet<>();
+        ratings.add(rating1);
+        ratings.add(rating2);
+        ratings.add(rating3);
+        ratings.add(rating4);
+        entry.setRatings(ratings);
+        String result = entryService.getAverageRating(entry);
+        assertEquals("2.5", result);
+    }
+
+    @Test
+    void getEntryRankInContest_Should_Return_Entry_Rank() {
+        Entry entry1 = new Entry();
+        entry1.setEntryTotalScore(10);
+        Entry entry2 = new Entry();
+        entry2.setEntryTotalScore(20);
+        Entry entry3 = new Entry();
+        entry3.setEntryTotalScore(30);
+        Contest contest = new Contest();
+        contest.setEntries(List.of(entry1, entry2, entry3));
+        entry1.setContest(contest);
+        int result = entryService.getEntryRankInContest(entry1);
+        assertEquals(3, result);
     }
 }

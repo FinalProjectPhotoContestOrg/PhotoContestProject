@@ -6,6 +6,8 @@ import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.DuplicateEntityException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.external.service.EmailService;
+import com.example.photocontestproject.models.Contest;
+import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.UserServiceImpl;
@@ -273,5 +275,36 @@ public class UserServiceTests {
 
         assertEquals(user.getId(), foundUser.getId());
         verify(userRepository, times(1)).findByEmail("email");
+    }
+
+    @Test
+    void getUsersSortedByPoints_Should_Get_Users_By_Points() {
+        User user1 = TestHelper.createJunkieUser();
+        user1.setPoints(10);
+        User user2 = TestHelper.createJunkieUser();
+        user2.setPoints(20);
+        user2.setId(2);
+        List<User> users = Arrays.asList(user1, user2);
+        when(userRepository.findAll(any(Specification.class))).thenReturn(users);
+
+        List<User> result = userService.getUsersSortedByPoints();
+
+        assertEquals(user1.getId(), result.get(1).getId());
+        assertEquals(user2.getId(), result.get(0).getId());
+    }
+
+    @Test
+    void isUserJurorToContest_Should_Return_True() {
+        User user = TestHelper.createJunkieUser();
+        Contest contest = TestHelper.createFinishedContest(1);
+        contest.getJurors().add(user);
+        Entry entry = TestHelper.createEntryWithId(1);
+        entry.setContest(contest);
+        contest.getEntries().add(entry);
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+
+        boolean result = userService.isUserJurorToContest(user, entry);
+
+        assertEquals(true, result);
     }
 }

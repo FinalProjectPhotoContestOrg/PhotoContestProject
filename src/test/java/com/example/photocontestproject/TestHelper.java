@@ -5,6 +5,7 @@ import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
+import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 
 import java.util.ArrayList;
@@ -79,6 +80,14 @@ public class TestHelper {
         mockContests.add(contest2);
 
         return mockContests;
+    }
+
+    // create rating
+    public static Rating createRatingWithId(int id) {
+        Rating rating = new Rating();
+        rating.setId(id);
+        rating.setScore(id % 10);
+        return rating;
     }
 
     public static List<Entry> createListOfEntries() {

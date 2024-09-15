@@ -7,14 +7,12 @@ import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
-import com.example.photocontestproject.mappers.EntryMapper;
 import com.example.photocontestproject.mappers.RatingMapper;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.Rating;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.ContestRepository;
-import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.EntryService;
@@ -118,8 +116,8 @@ public class ContestServiceImpl implements ContestService {
         List<Contest> participatingContests = this.getUnFinishedContestsForUser(user);
 
         return activeContests.stream()
-                .filter(contest->participatingContests.stream()
-                        .noneMatch(participatingContest->participatingContest.getId().equals(contest.getId())))
+                .filter(contest -> participatingContests.stream()
+                        .noneMatch(participatingContest -> participatingContest.getId().equals(contest.getId())))
                 .toList();
     }
 
@@ -133,9 +131,7 @@ public class ContestServiceImpl implements ContestService {
                 break;
             }
         }
-
-
-
+        
         if (recentWinners.size() < 3) {
             for (Contest contest : finishedContests) {
                 if (contest.getEntries().size() < 2) {
