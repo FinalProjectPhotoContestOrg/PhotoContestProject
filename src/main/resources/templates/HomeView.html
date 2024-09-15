@@ -12,6 +12,7 @@
             color: rgba(0, 0, 0);
             text-decoration: none;
         }
+
         .container-big {
             max-width: 1600px;
             margin: 0 auto;
@@ -45,13 +46,16 @@
             text-decoration: none;
             color: inherit; /* Or specify the color you prefer */
         }
+
         .no-underline {
             text-decoration: none;
         }
+
         .modal-body-scrollable {
             max-height: 400px; /* Set a max height for scrolling */
             overflow-y: auto; /* Enable vertical scrolling */
         }
+
         .list-unstyled li:hover {
             background-color: #f1f1f1; /* Light gray background on hover */
             cursor: pointer; /* Pointer cursor on hover */
@@ -73,9 +77,11 @@
         .list-unstyled li:hover {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         body {
             background-color: rgb(244, 233, 205); /* Set the background color */
         }
+
         .navbar {
             background-color: rgb(119, 172, 162); /* Navbar background color */
         }
@@ -86,11 +92,13 @@
             padding: 1rem 0;
             text-align: center;
         }
+
         .bg-light {
             --bs-bg-opacity: 1;
             margin: 50px;
             background-color: rgb(244, 233, 205);
         }
+
         .btn-primary {
             --bs-btn-color: #fff;
             --bs-btn-bg: rgb(3, 25, 38);
@@ -107,6 +115,7 @@
             --bs-btn-disabled-bg: rgb(3, 25, 38);
             --bs-btn-disabled-border-color: rgb(3, 25, 38);
         }
+
         .nav-link {
             color: white;
             transition: all 0.3s ease;
@@ -119,6 +128,7 @@
             padding: 8px 16px;
             text-align: center;
         }
+
         .scrolling-container {
             overflow: auto; /* Allows scrolling */
             white-space: nowrap; /* Keeps the content in one line */
@@ -129,13 +139,15 @@
         }
 
         .scrolling-container {
-            -ms-overflow-style: none;  /* Hides the scrollbar for Internet Explorer and Edge */
-            scrollbar-width: none;  /* Hides the scrollbar for Firefox */
+            -ms-overflow-style: none; /* Hides the scrollbar for Internet Explorer and Edge */
+            scrollbar-width: none; /* Hides the scrollbar for Firefox */
         }
+
         .bg-dark {
             --bs-bg-opacity: 1;
             background-color: rgb(119, 172, 162);
         }
+
         .container-big {
             max-width: 1600px;
             margin: 0 auto;
@@ -145,6 +157,7 @@
             border-radius: 10px;
             box-shadow: 0 0 130px rgba(0, 0, 0, 0.2);
         }
+
         .list-group {
             --bs-list-group-color: var(--bs-body-color);
             --bs-list-group-bg: rgb(244, 233, 205);
@@ -183,7 +196,8 @@
         <p class="lead">Showcase your talent and stand a chance to win amazing prizes!</p>
         <!-- Join Now Button -->
         <div th:if="${!isAuthenticated}">
-            <a th:href="@{/register}" class="btn btn-primary btn-lg mt-3 px-5 py-3" style="font-size: 1.5rem;">Join Now</a>
+            <a th:href="@{/register}" class="btn btn-primary btn-lg mt-3 px-5 py-3" style="font-size: 1.5rem;">Join
+                Now</a>
         </div>
     </div>
 </header>
@@ -198,8 +212,9 @@
                 <div th:if="${featuredContest}">
                     <a th:href="@{/contests/{contestId}(contestId=${featuredContest.id})}" class="no-underline">
                         <h1 class="text-center" style="color:black;">Featured Contest</h1>
-                        <div th:if="${featuredContest}" class="card mb-4">
-                            <img th:src="@{'data:image/jpeg;base64,' + ${featuredContest.coverPhotoUrl}}" class="card-img-top" alt="Featured Contest Image">
+                        <div th:if="${featuredContest}" class="card mb-4" style="min-height: 370px;  max-height: 370px;">
+                            <img th:src="@{'data:image/jpeg;base64,' + ${featuredContest.coverPhotoUrl}}"
+                                 class="card-img-top" alt="Featured Contest Image">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="'Title: ' + ${featuredContest.title}"></h5>
                                 <p class="card-text" th:text="'Category: ' + ${featuredContest.getCategory()}"></p>
@@ -215,16 +230,19 @@
             <!-- Leaderboard -->
             <div class="col-md-4" style="max-height: 120px; margin-top: 0">
                 <h1 class="text-center" style="color:black;">User Leaderboard</h1>
-                <div class="card mb-4" style="cursor: auto; background: rgb(244, 233, 205); transform: none; box-shadow: none; max-height: 300px; overflow-y: auto;">
+                <div class="card mb-4"
+                     style="cursor: auto; background: rgb(244, 233, 205); transform: none; box-shadow: none; max-height: 370px; min-height: 370px; overflow-y: auto;">
                     <ul class="list-group">
                         <!-- Each list item is now wrapped in an anchor tag to make it clickable -->
-                        <li th:each="user, iterStat : ${userLeaderboard}" class="list-group-item d-flex align-items-center">
+                        <li th:each="user, iterStat : ${userLeaderboard}"
+                            class="list-group-item d-flex align-items-center">
                             <a th:href="@{/users/{userId}(userId=${user.id})}" class="no-underline d-flex">
                                 <div class="w-100 d-flex justify-content-between">
                         <span>
                             <strong th:text="${iterStat.index + 1} + '. '"></strong>
                             <a href="#" data-bs-toggle="modal" th:data-bs-target="'#userModal' + ${iterStat.index}">
-                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="View Profile" th:text="${user.firstName + ' ' + user.lastName}"></span>
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="View Profile"
+                                      th:text="${user.firstName + ' ' + user.lastName}"></span>
                             </a>
                         </span>
                                     <span class="bg-primary rounded-pill" th:text="${user.points + ' pts'}"></span>
@@ -236,43 +254,66 @@
             </div>
 
             <div th:each="user, iterStat : ${userLeaderboard}">
-                <div class="modal fade" th:id="'userModal' + ${iterStat.index}" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+                <div class="modal fade" th:id="'userModal' + ${iterStat.index}" tabindex="-1"
+                     aria-labelledby="userModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content text-black">
                             <div class="modal-header">
                                 <h5 class="modal-title" th:id="'userModalLabel' + ${iterStat.index}">User Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                             </div>
                             <div class="modal-body modal-body-scrollable">
                                 <!-- Tabs Navigation -->
                                 <ul class="nav nav-tabs" id="userTabs' + ${iterStat.index}" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link active"  th:id="'info-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#info' + ${iterStat.index}" role="tab" th:aria-controls="'info' + ${iterStat.index}" aria-selected="true" style="color:black;">Information</a>
+                                        <a class="nav-link active" th:id="'info-tab' + ${iterStat.index}"
+                                           th:data-bs-toggle="tab" th:href="'#info' + ${iterStat.index}" role="tab"
+                                           th:aria-controls="'info' + ${iterStat.index}" aria-selected="true"
+                                           style="color:black;">Information</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link" th:id="'contests-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#contests' + ${iterStat.index}" role="tab" th:aria-controls="'contests' + ${iterStat.index}" aria-selected="false" style="color:black;">Contests</a>
+                                        <a class="nav-link" th:id="'contests-tab' + ${iterStat.index}"
+                                           th:data-bs-toggle="tab" th:href="'#contests' + ${iterStat.index}" role="tab"
+                                           th:aria-controls="'contests' + ${iterStat.index}" aria-selected="false"
+                                           style="color:black;">Contests</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link" th:id="'entries-tab' + ${iterStat.index}" th:data-bs-toggle="tab" th:href="'#entries' + ${iterStat.index}" role="tab" th:aria-controls="'entries' + ${iterStat.index}" aria-selected="false" style="color:black;">Entries</a>
+                                        <a class="nav-link" th:id="'entries-tab' + ${iterStat.index}"
+                                           th:data-bs-toggle="tab" th:href="'#entries' + ${iterStat.index}" role="tab"
+                                           th:aria-controls="'entries' + ${iterStat.index}" aria-selected="false"
+                                           style="color:black;">Entries</a>
                                     </li>
                                 </ul>
                                 <!-- Tabs Content -->
                                 <div class="tab-content mt-3" th:id="'userTabsContent' + ${iterStat.index}">
                                     <!-- Information Tab -->
-                                        <div class="tab-pane fade show active" th:id="'info' + ${iterStat.index}" role="tabpanel" th:aria-labelledby="'info-tab' + ${iterStat.index}">
-                                            <p><strong>Name:</strong> <span th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}">John Doe</span></p>
-                                            <p><strong>Rank:</strong> <span th:text="${user.getRanking()}">Master</span></p>
-                                            <p><strong>Points:</strong> <span th:text="${user.getPoints()}">123</span></p>
-                                            <p><strong>Member since:</strong> <span th:text="${#dates.format(user.createdAt, 'dd MMM yyyy')}">01 Jan 2020</span></p>
-                                        </div>
+                                    <div class="tab-pane fade show active" th:id="'info' + ${iterStat.index}"
+                                         role="tabpanel" th:aria-labelledby="'info-tab' + ${iterStat.index}">
+                                        <p><strong>Name:</strong> <span
+                                                th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}">John Doe</span>
+                                        </p>
+                                        <p><strong>Rank:</strong> <span th:text="${user.getRanking()}">Master</span></p>
+                                        <p><strong>Points:</strong> <span th:text="${user.getPoints()}">123</span></p>
+                                        <p><strong>Member since:</strong> <span
+                                                th:text="${#dates.format(user.createdAt, 'dd MMM yyyy')}">01 Jan 2020</span>
+                                        </p>
+                                    </div>
                                     <!-- Contests Tab -->
-                                    <div class="tab-pane fade" th:id="'contests' + ${iterStat.index}" role="tabpanel" th:aria-labelledby="'contests-tab' + ${iterStat.index}">
+                                    <div class="tab-pane fade" th:id="'contests' + ${iterStat.index}" role="tabpanel"
+                                         th:aria-labelledby="'contests-tab' + ${iterStat.index}">
                                         <ul class="list-unstyled">
-                                            <li th:each="contest : ${entryService.findContestsByUserId(user.getId())}" class="d-flex align-items-center border-bottom mb-2 pb-2">
-                                                <a th:href="@{'/contests/' + ${contest.id}}" class="text-decoration-none d-flex align-items-center w-100"  data-bs-toggle="tooltip" data-bs-placement="top" title="View Contest">
-                                                    <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Photo" class="img-thumbnail me-3" style="max-width: 100px; max-height: 75px;">
+                                            <li th:each="contest : ${entryService.findContestsByUserId(user.getId())}"
+                                                class="d-flex align-items-center border-bottom mb-2 pb-2">
+                                                <a th:href="@{'/contests/' + ${contest.id}}"
+                                                   class="text-decoration-none d-flex align-items-center w-100"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top"
+                                                   title="View Contest">
+                                                    <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}"
+                                                         alt="Photo" class="img-thumbnail me-3"
+                                                         style="max-width: 100px; max-height: 75px;">
                                                     <div class="d-flex flex-column">
-                                                        <span th:text="${contest.title}"  class="fw-bold d-block">Contest Name</span>
+                                                        <span th:text="${contest.title}" class="fw-bold d-block">Contest Name</span>
                                                         <span th:text="${contest.category}" class="text-muted d-block">Category</span>
                                                     </div>
                                                 </a>
@@ -280,14 +321,21 @@
                                         </ul>
                                     </div>
                                     <!-- Photos Tab -->
-                                    <div class="tab-pane fade" th:id="'entries' + ${iterStat.index}" role="tabpanel" th:aria-labelledby="'entries-tab' + ${iterStat.index}">
+                                    <div class="tab-pane fade" th:id="'entries' + ${iterStat.index}" role="tabpanel"
+                                         th:aria-labelledby="'entries-tab' + ${iterStat.index}">
                                         <ul th:each="entry : ${entryService.getAllEntries(null)}" class="list-unstyled">
-                                            <li th:if="${entry.getParticipant().getId().equals(user.getId())}" class="d-flex align-items-center border-bottom mb-2 pb-2">
-                                                <a th:href="@{'/entries/' + ${entry.id}}" class="text-decoration-none d-flex align-items-center w-100"  data-bs-toggle="tooltip" data-bs-placement="top" title="View Entry">
-                                                    <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}" alt="Photo" class="img-thumbnail me-3" style="max-width: 100px; max-height: 75px;">
+                                            <li th:if="${entry.getParticipant().getId().equals(user.getId())}"
+                                                class="d-flex align-items-center border-bottom mb-2 pb-2">
+                                                <a th:href="@{'/entries/' + ${entry.id}}"
+                                                   class="text-decoration-none d-flex align-items-center w-100"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top" title="View Entry">
+                                                    <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}"
+                                                         alt="Photo" class="img-thumbnail me-3"
+                                                         style="max-width: 100px; max-height: 75px;">
                                                     <div class="d-flex flex-column">
                                                         <span th:text="${entry.title}" class="fw-bold d-block">Photo Title</span>
-                                                        <span th:text="${entry.story}" class="text-muted d-block"></span>
+                                                        <span th:text="${entry.story}"
+                                                              class="text-muted d-block"></span>
                                                     </div>
                                                 </a>
                                             </li>
