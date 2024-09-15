@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body th:classappend="${theme}">
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
@@ -14,6 +14,9 @@
         <a class="navbar-brand" th:href="@{/}">PhotoPulse</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                <li id="theme-toggle" style="margin-right: 8px; color: white; margin-top: 7px">
+                    <i id="theme-icon" class="fa fa-moon" th:classappend="${theme == 'dark-theme' ? 'fa-sun' : 'fa-moon'}"></i>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/}">Home</a>
                 </li>

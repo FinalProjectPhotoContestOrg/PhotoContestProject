@@ -39,9 +39,9 @@ public class AuthMvcController {
         if (resetRedirectUrl) {
             session.removeAttribute("redirectUrl");
         }
-        String theme = "light-theme";
+        /*String theme = "light-theme";
 
-        model.addAttribute("theme", theme);
+        model.addAttribute("theme", theme);*/
         model.addAttribute("login", new LogInDto());
         return "LoginView";
     }

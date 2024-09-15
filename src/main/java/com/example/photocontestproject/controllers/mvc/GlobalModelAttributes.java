@@ -19,4 +19,8 @@ public class GlobalModelAttributes {
         User user = (User) session.getAttribute("currentUser");
         return user != null && user.getRole().equals(Role.Organizer);
     }
+    @ModelAttribute("theme")
+    public String populateTheme() {
+        return "light-theme";
+    }
 }

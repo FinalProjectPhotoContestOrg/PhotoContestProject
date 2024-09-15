@@ -6,8 +6,9 @@
     <title>Photography Contest</title>
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
-    <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="/static/css/bgNavAndFootStyle.css">
+    <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="../static/css/bgNavAndFootStyle.css">
     <style>
         /*a {
             color: rgba(0, 0, 0);
@@ -399,7 +400,6 @@
         });
     });
 </script>
-<script src="../static/js/darkLigthTheme.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<script th:src="@{/js/darkLigthTheme.js}" src="../static/js/darkLigthTheme.js"></script>
 </body>
 </html>

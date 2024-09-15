@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>Create Contest</title>
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
-    <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="/static/css/bgNavAndFootStyle.css">
+    <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="../static/css/bgNavAndFootStyle.css">
     <style>
 
         /* Optional: Adjust tooltip appearance delay and smooth hover effect */
@@ -234,6 +235,6 @@
         });
     });
 </script>
-<script src="../static/js/darkLigthTheme.js"></script>
+<script th:src="@{/js/darkLigthTheme.js}" src="../static/js/darkLigthTheme.js"></script>
 </body>
 </html>

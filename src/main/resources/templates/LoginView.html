@@ -6,15 +6,14 @@
   <title>Login - Photography Contest</title>
   <!-- Bootstrap CSS from local file -->
   <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="icon" type="image/png" th:href="@{/favicon.png}">
   <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="../static/css/bgNavAndFootStyle.css">
 </head>
 <body th:classappend="${theme}">
 
 <nav th:replace="~{ForumForms.html :: navbar}"></nav>
-<button id="theme-toggle">
-  <i id="theme-icon" class="fa fa-moon" th:classappend="${theme == 'dark-theme' ? 'fa-sun' : 'fa-moon'}"></i>
-</button>
+
 <div class="login-container">
   <h2 class="text-center">Login</h2>
   <form action="#" th:action="@{/login}" th:method="post" th:object="${login}">
@@ -43,6 +42,5 @@
 <!-- Bootstrap JS -->
 <script src="js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/darkLigthTheme.js}" src="../static/js/darkLigthTheme.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </body>
 </html>
