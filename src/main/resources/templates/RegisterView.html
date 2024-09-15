@@ -7,16 +7,17 @@
     <!-- Bootstrap CSS from local file -->
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="/static/css/bgNavAndFootStyle.css">
     <style>
-        body {
+        /*body {
             background-color: rgb(244, 233, 205);;
         }
         footer {
             background-color: rgb(119, 172, 162);;
             text-align: center;
             padding: 10px;
-        }
-        .register-container {
+        }*/
+        /*.register-container {
             max-width: 500px;
             margin: 100px auto;
             padding: 20px;
@@ -26,8 +27,8 @@
         }
         .register-container h2 {
             margin-bottom: 20px;
-        }
-        .nav-link {
+        }*/
+        /*.nav-link {
             transition: all 0.3s ease;
             color: white;
         }
@@ -58,7 +59,7 @@
             --bs-btn-disabled-color: #fff;
             --bs-btn-disabled-bg: rgb(3, 25, 38);
             --bs-btn-disabled-border-color: rgb(3, 25, 38);
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -101,7 +102,7 @@
             <button type="submit" class="btn btn-primary">Register</button>
         </div>
         <div class="text-center mt-3">
-            <p>Already have an account? <a th:href="@{/login}">Login here</a></p>
+            <p>Already have an account? <a class="login-text" th:href="@{/login}">Login here</a></p>
         </div>
     </form>
 </div>

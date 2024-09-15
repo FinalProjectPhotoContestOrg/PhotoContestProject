@@ -6,24 +6,21 @@
     <title th:text="${contest.title} + ' - Photography Contest'">Contest Details - Photography Contest</title>
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="/static/css/bgNavAndFootStyle.css">
     <style>
-        .scrolling-container {
-            overflow: auto; /* Allows scrolling */
-            white-space: nowrap; /* Keeps the content in one line */
+        /*.scrolling-container {
+            overflow: auto; !* Allows scrolling *!
+            white-space: nowrap; !* Keeps the content in one line *!
         }
 
         .scrolling-container::-webkit-scrollbar {
-            display: none; /* Hides the scrollbar for WebKit browsers (Chrome, Safari) */
+            display: none; !* Hides the scrollbar for WebKit browsers (Chrome, Safari) *!
         }
 
         .scrolling-container {
-            -ms-overflow-style: none;  /* Hides the scrollbar for Internet Explorer and Edge */
-            scrollbar-width: none;  /* Hides the scrollbar for Firefox */
+            -ms-overflow-style: none;  !* Hides the scrollbar for Internet Explorer and Edge *!
+            scrollbar-width: none;  !* Hides the scrollbar for Firefox *!
         }
-        body {
-            background-color: rgb(244, 233, 205); /* Set the background color */
-        }
-
         .header-bg {
             background-size: cover;
             background-position: center;
@@ -36,13 +33,13 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
         }
         .card-title, .card-text {
-            white-space: nowrap; /* Prevents the text from breaking into multiple lines */
-            overflow: hidden;    /* Hides the overflowing content */
-            text-overflow: ellipsis; /* Adds '...' at the end if the text overflows */
+            white-space: nowrap; !* Prevents the text from breaking into multiple lines *!
+            overflow: hidden;    !* Hides the overflowing content *!
+            text-overflow: ellipsis; !* Adds '...' at the end if the text overflows *!
         }
 
         .card-body {
-            max-width: 100%; /* Ensures that the text container doesn't exceed the card's width */
+            max-width: 100%; !* Ensures that the text container doesn't exceed the card's width *!
         }
         .header-bg h1 {
             font-size: 3.5rem;
@@ -119,7 +116,7 @@
         a.card-link:hover .card {
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             transform: translateY(-5px);
-        }
+        }*/
 
         /*.footer {
             background-color: #343a40;
@@ -127,7 +124,7 @@
             padding: 1rem 0;
             text-align: center;
         }*/
-        .countdown-timer-bar {
+        /*.countdown-timer-bar {
             text-align: center;
             padding: 20px 0;
         }
@@ -143,15 +140,15 @@
             align-items: center;
         }
         .countdown-timer-bar .number {
-            font-size: 4rem; /* Bigger number size */
+            font-size: 4rem; !* Bigger number size *!
             font-weight: normal;
-            color: #000000; /* You can customize this color */
+            color: #000000; !* You can customize this color *!
             margin-bottom: 0.5rem;
         }
         .countdown-timer-bar .label {
             font-size: 1rem;
             text-transform: uppercase;
-            color: #6c757d; /* Slightly gray label text */
+            color: #6c757d; !* Slightly gray label text *!
         }
         .countdown-timer-container {
             max-width: 600px;
@@ -189,9 +186,9 @@
             width: 300px;
             margin-right: 10px;
             margin-left: 10px;
-        }
-        .navbar {
-            background-color: rgb(119, 172, 162); /* Navbar background color */
+        }*/
+        /*.navbar {
+            background-color: rgb(119, 172, 162); !* Navbar background color *!
         }
         .nav-link {
             color: white;
@@ -199,7 +196,7 @@
         }
 
         .footer {
-            background-color: rgb(119, 172, 162); /* Footer background color */
+            background-color: rgb(119, 172, 162); !* Footer background color *!
             color: white;
             padding: 1rem 0;
             text-align: center;
@@ -235,7 +232,7 @@
             border-radius: 4px;
             padding: 8px 16px;
             text-align: center;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -430,6 +427,29 @@
                             </div>
                         </div>
                     </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="bg-light py-5" th:if="${isPhaseII && alreadyEntered && !isJuror && !isOrganizer}">
+    <div class="container">
+        <h2 class="text-center section-title">Contest Status</h2>
+        <div class="row">
+            <!-- Information for participants in Phase II -->
+            <div class="col-12 text-center">
+                <p class="lead">Thank you for participating in the contest! You must now wait for the jurors to rate all entries.</p>
+                <p class="lead">The results will be announced after the countdown ends.</p>
+            </div>
+            <div class="scrolling-container">
+                <div class="col-md-4 card" th:each="entryRate : ${entries}">
+                    <!-- Wrap the card in an anchor tag -->
+                        <div class="mb-4">
+                            <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

@@ -7,8 +7,9 @@
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="/static/css/bgNavAndFootStyle.css">
     <style>
-        a {
+        /*a {
             color: rgba(0, 0, 0);
             text-decoration: none;
         }
@@ -44,7 +45,7 @@
 
         .no-underline {
             text-decoration: none;
-            color: inherit; /* Or specify the color you prefer */
+            color: inherit; !* Or specify the color you prefer *!
         }
 
         .no-underline {
@@ -52,42 +53,42 @@
         }
 
         .modal-body-scrollable {
-            max-height: 400px; /* Set a max height for scrolling */
-            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 400px; !* Set a max height for scrolling *!
+            overflow-y: auto; !* Enable vertical scrolling *!
         }
 
         .list-unstyled li:hover {
-            background-color: #f1f1f1; /* Light gray background on hover */
-            cursor: pointer; /* Pointer cursor on hover */
-            transition: background-color 0.3s ease; /* Smooth background color transition */
+            background-color: #f1f1f1; !* Light gray background on hover *!
+            cursor: pointer; !* Pointer cursor on hover *!
+            transition: background-color 0.3s ease; !* Smooth background color transition *!
         }
 
         .list-unstyled li a {
             display: flex;
             align-items: center;
-            text-decoration: none; /* Remove underline from links */
-            color: inherit; /* Inherit color from parent */
+            text-decoration: none; !* Remove underline from links *!
+            color: inherit; !* Inherit color from parent *!
         }
 
-        /* Optional: Add a slight shadow to the list items */
+        !* Optional: Add a slight shadow to the list items *!
         .list-unstyled li {
             transition: box-shadow 0.3s ease;
         }
 
         .list-unstyled li:hover {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+        }*/
 
-        body {
-            background-color: rgb(244, 233, 205); /* Set the background color */
+        /*body {
+            background-color: rgb(244, 233, 205); !* Set the background color *!
         }
 
         .navbar {
-            background-color: rgb(119, 172, 162); /* Navbar background color */
+            background-color: rgb(119, 172, 162); !* Navbar background color *!
         }
 
         .footer {
-            background-color: rgb(119, 172, 162); /* Footer background color */
+            background-color: rgb(119, 172, 162); !* Footer background color *!
             color: white;
             padding: 1rem 0;
             text-align: center;
@@ -130,25 +131,25 @@
         }
 
         .scrolling-container {
-            overflow: auto; /* Allows scrolling */
-            white-space: nowrap; /* Keeps the content in one line */
+            overflow: auto; !* Allows scrolling *!
+            white-space: nowrap; !* Keeps the content in one line *!
         }
 
         .scrolling-container::-webkit-scrollbar {
-            display: none; /* Hides the scrollbar for WebKit browsers (Chrome, Safari) */
+            display: none; !* Hides the scrollbar for WebKit browsers (Chrome, Safari) *!
         }
 
         .scrolling-container {
-            -ms-overflow-style: none; /* Hides the scrollbar for Internet Explorer and Edge */
-            scrollbar-width: none; /* Hides the scrollbar for Firefox */
+            -ms-overflow-style: none; !* Hides the scrollbar for Internet Explorer and Edge *!
+            scrollbar-width: none; !* Hides the scrollbar for Firefox *!
         }
 
         .bg-dark {
             --bs-bg-opacity: 1;
             background-color: rgb(119, 172, 162);
-        }
+        }*/
 
-        .container-big {
+        /*.container-big {
             max-width: 1600px;
             margin: 0 auto;
             margin-bottom: 20px;
@@ -181,7 +182,7 @@
             padding-left: 0;
             margin-bottom: 0;
             border-radius: var(--bs-list-group-border-radius);
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -228,10 +229,9 @@
             </div>
 
             <!-- Leaderboard -->
-            <div class="col-md-4" style="max-height: 120px; margin-top: 0">
+            <div class="col-md-4 lead">
                 <h1 class="text-center" style="color:black;">User Leaderboard</h1>
-                <div class="card mb-4"
-                     style="cursor: auto; background: rgb(244, 233, 205); transform: none; box-shadow: none; max-height: 370px; min-height: 370px; overflow-y: auto;">
+                <div class="card mb-4 scroll-lead" style="transform: none; box-shadow: none">
                     <ul class="list-group">
                         <!-- Each list item is now wrapped in an anchor tag to make it clickable -->
                         <li th:each="user, iterStat : ${userLeaderboard}"

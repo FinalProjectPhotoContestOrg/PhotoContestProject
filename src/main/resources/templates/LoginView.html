@@ -7,11 +7,12 @@
   <!-- Bootstrap CSS from local file -->
   <link th:href="@{/css/bootstrap.css}" href="/static/css/bootstrap.css" rel="stylesheet">
   <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+  <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="/static/css/bgNavAndFootStyle.css">
   <style>
-    body {
+    /*body {
       background-color: rgb(244, 233, 205);;
-    }
-    .login-container {
+    }*/
+    /*.login-container {
       max-width: 400px;
       margin: 100px auto;
       padding: 20px;
@@ -21,9 +22,9 @@
     }
     .login-container h2 {
       margin-bottom: 20px;
-    }
-    .navbar {
-      background-color: rgb(119, 172, 162); /* Navbar background color */
+    }*/
+    /*.navbar {
+      background-color: rgb(119, 172, 162); !* Navbar background color *!
     }
     footer {
       background-color: rgb(119, 172, 162);;
@@ -61,7 +62,7 @@
       --bs-btn-disabled-color: #fff;
       --bs-btn-disabled-bg: rgb(3, 25, 38);
       --bs-btn-disabled-border-color: rgb(3, 25, 38);
-    }
+    }*/
   </style>
 </head>
 <body>
@@ -84,9 +85,9 @@
     <div class="d-grid">
       <button type="submit" class="btn btn-primary">Login</button>
     </div>
-    <div class="text-center mt-3">
-      <p>Don't have an account? <a th:href="@{/register}">Register Here</a></p>
-      <p>Forgot password? <a th:href="@{/reset-password}">Click Here</a></p>
+    <div class="text-center mt-3 ">
+      <p>Don't have an account? <a class="login-text" th:href="@{/register}">Register Here</a></p>
+      <p>Forgot password? <a class="login-text" th:href="@{/reset-password}">Click Here</a></p>
     </div>
   </form>
 </div>

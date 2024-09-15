@@ -1,0 +1,598 @@
+.navbar {
+    background-color: rgb(70,129,137); /* Navbar background color */
+}
+
+.footer {
+    background-color: rgb(70,129,137); /* Footer background color */
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: rgb(70, 129, 137);
+}
+.bg-light {
+    --bs-bg-opacity: 1;
+    margin: 50px;
+    background-color: rgb(244, 233, 205);
+}
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: rgb(3, 25, 38);
+    --bs-btn-border-color: rgb(3, 25, 38);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: rgb(70, 100, 100);
+    --bs-btn-hover-border-color: rgb(70, 100, 100);
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: rgb(70, 100, 100);
+    --bs-btn-active-border-color: rgb(70, 100, 100);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: rgb(3, 25, 38);
+    --bs-btn-disabled-border-color: rgb(3, 25, 38);
+}
+.nav-link {
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.nav-link:hover {
+    background-color: rgb(3, 25, 38);
+    color: white;
+    border-radius: 4px;
+    padding: 8px 16px;
+    text-align: center;
+}
+.table {
+    --bs-table-color-type: initial;
+    --bs-table-bg-type: initial;
+    --bs-table-color-state: initial;
+    --bs-table-bg-state: initial;
+    --bs-table-color: var(--bs-body-color);
+    --bs-table-bg: rgb(244, 233, 205);
+    --bs-table-border-color: var(--bs-border-color);
+    --bs-table-accent-bg: transparent;
+    --bs-table-striped-color: var(--bs-body-color);
+    --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
+    --bs-table-active-color: var(--bs-body-color);
+    --bs-table-active-bg: rgba(0, 0, 0, 0.1);
+    --bs-table-hover-color: var(--bs-body-color);
+    --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
+    width: 100%;
+    margin-bottom: 1rem;
+    vertical-align: top;
+    border-color: var(--bs-table-border-color);
+}
+body {
+    background-color: rgb(244, 233, 205);
+}
+.user-rank-tooltip[data-bs-toggle="tooltip"] {
+    cursor: pointer; /* Show pointer cursor for hover effect */
+}
+.details-container, .rating-container, .ratings-list-container {
+    background-color: rgb(244, 233, 205);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.entry-container {
+    max-width: 85%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgb(244, 233, 205);
+    border-radius: 10px;
+    box-shadow: 0 0 130px rgba(0, 0, 0, 0.2);
+}
+.rating-box {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: rgb(244, 233, 205);
+}
+.header-bg {
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 900;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+.header-bg h1 {
+    font-size: 3.5rem;
+    text-align: center;
+    margin: 0;
+}
+
+.section-title {
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgb(244, 233, 205);
+    border: 1px solid gray;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.view-button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    display: inline-block;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.view-button:hover {
+    background-color: #0056b3;
+}
+
+.section-content {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.entry-form label {
+    font-weight: 600;
+}
+
+.entry-form .form-control,
+.entry-form .form-select,
+.entry-form .form-text {
+    border-radius: 5px;
+}
+a.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+a.card-link:hover .card {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transform: translateY(-5px);
+}
+.countdown-timer-bar {
+    text-align: center;
+    padding: 20px 0;
+}
+.countdown-timer-bar .time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.countdown-timer-bar .time-part {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.countdown-timer-bar .number {
+    font-size: 4rem; /* Bigger number size */
+    font-weight: normal;
+    color: #000000; /* You can customize this color */
+    margin-bottom: 0.5rem;
+}
+.countdown-timer-bar .label {
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: #6c757d; /* Slightly gray label text */
+}
+.countdown-timer-container {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.countdown-timer-container h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+.countdown-timer-bar .colon {
+    font-size: 4rem;
+    font-weight: normal;
+    color: #000000;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: top;
+    transform: translateY(-25%);
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.btn {
+    margin: 1rem;
+}
+.card .dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+}
+.btn-primary {
+    margin-right: 10px;
+}
+.card-title, .card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-body {
+    max-width: 100%;
+}
+/*.card .dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}*/
+.card:hover .dark-overlay {
+    opacity: 1;
+}
+.overlay-text {
+    font-size: 1.2rem;
+    text-align: center;
+}
+.countdown-timer {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.countdown-timer span {
+    display: block;
+}
+
+.card-body {
+    min-height: 150px;
+}
+.participating-card {
+    position: relative;
+}
+.participating-card:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.scrolling-container .card {
+    display: inline-block;
+    width: 300px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.participating-card:hover .remaining-time {
+    display: block;
+}
+.scrolling-container {
+    overflow: auto; /* Allows scrolling */
+    white-space: nowrap; /* Keeps the content in one line */
+}
+
+.scrolling-container::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar for WebKit browsers (Chrome, Safari) */
+}
+
+.scrolling-container {
+    -ms-overflow-style: none;  /* Hides the scrollbar for Internet Explorer and Edge */
+    scrollbar-width: none;  /* Hides the scrollbar for Firefox */
+}
+.scrolling-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+.scrolling-container .card {
+    display: inline-block;
+    width: 300px;
+    margin-right: 10px;
+    margin-left: 10px;
+    background-color: rgb(244, 233, 205);
+    border: 1px solid gray;
+}
+.photo-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.details-container h2 {
+    margin-bottom: 20px;
+    overflow: hidden; /* Ensures text does not overflow */
+    white-space: nowrap; /* Prevents text wrapping */
+    text-overflow: ellipsis; /* Adds ellipsis (...) if text overflows */
+    max-width: 100%; /* Ensures it doesn’t exceed container width */
+}
+.progress-bar-container {
+    height: 30px;
+    margin: 10px 0;
+}
+
+.rating-box h4 {
+    margin-top: 0;
+}
+.rating-box p {
+    margin-bottom: 0;
+}
+.entry-details p {
+    word-wrap: break-word; /* Added to break long words */
+}
+/* Optional: Add a slight shadow to the list items */
+
+a {
+    color: rgba(0, 0, 0);
+    text-decoration: none;
+}
+
+.container-big {
+    max-width: 1600px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 130px rgba(0, 0, 0, 0.2);
+}
+
+.card {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    min-height: 88px;
+}
+
+.card-img-top {
+    object-fit: cover;
+    height: 200px;
+}
+
+.no-underline {
+    text-decoration: none;
+    color: inherit; /* Or specify the color you prefer */
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+.modal-body-scrollable {
+    max-height: 400px; /* Set a max height for scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.list-unstyled li:hover {
+    background-color: #f1f1f1; /* Light gray background on hover */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.list-unstyled li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Inherit color from parent */
+}
+
+/* Optional: Add a slight shadow to the list items */
+.list-unstyled li {
+    transition: box-shadow 0.3s ease;
+}
+
+.list-unstyled li:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.container-big {
+    max-width: 1600px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: rgb(244, 233, 205);
+    border-radius: 10px;
+    box-shadow: 0 0 130px rgba(0, 0, 0, 0.2);
+}
+
+.list-group {
+    --bs-list-group-color: var(--bs-body-color);
+    --bs-list-group-bg: rgb(244, 233, 205);
+    --bs-list-group-border-color: var(--bs-border-color);
+    --bs-list-group-border-width: var(--bs-border-width);
+    --bs-list-group-border-radius: var(--bs-border-radius);
+    --bs-list-group-item-padding-x: 1rem;
+    --bs-list-group-item-padding-y: 0.5rem;
+    --bs-list-group-action-color: var(--bs-secondary-color);
+    --bs-list-group-action-hover-color: var(--bs-emphasis-color);
+    --bs-list-group-action-hover-bg: var(--bs-tertiary-bg);
+    --bs-list-group-action-active-color: var(--bs-body-color);
+    --bs-list-group-action-active-bg: var(--bs-secondary-bg);
+    --bs-list-group-disabled-color: var(--bs-secondary-color);
+    --bs-list-group-disabled-bg: var(--bs-body-bg);
+    --bs-list-group-active-color: #fff;
+    --bs-list-group-active-bg: #0d6efd;
+    --bs-list-group-active-border-color: #0d6efd;
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    border-radius: var(--bs-list-group-border-radius);
+}
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.login-container h2 {
+    margin-bottom: 20px;
+}
+.register-container {
+    max-width: 500px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.register-container h2 {
+    margin-bottom: 20px;
+}
+/*html{
+    height: 100%;
+    margin: 0;
+}*/
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the wrapper takes up at least the full viewport height */
+}
+
+.content {
+    flex: 1; /* Allows content to expand and push footer to the bottom */
+}
+
+.user-table {
+    margin-top: 20px;
+}
+
+.user-table th, .user-table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.action-btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.action-btns .btn {
+    padding: 5px 10px;
+}
+.lead {
+    max-height: 120px;
+    margin-top: 0
+}
+
+.scroll-lead{
+    cursor: auto;
+    background: rgb(244, 233, 205);
+    transform: none;
+    box-shadow: none;
+    max-height: 370px;
+    min-height: 370px;
+    overflow-y: auto;
+}
+.scroll-lead::-webkit-scrollbar {
+    display: none;
+}
+.login-text{
+    color: #007bff;
+    text-decoration: underline;
+}
+.reset-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.reset-container h2 {
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 768px)  {
+    .action-btns {
+        flex-direction: column;
+    }
+    .col-md-4 {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .scroll-lead{
+        cursor: auto;
+        background: rgb(244, 233, 205);
+        transform: none;
+        box-shadow: none;
+        max-height: 15vh;
+        min-height: 15vh;
+        overflow-y: auto;
+    }
+    footer {
+        height: 24vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
