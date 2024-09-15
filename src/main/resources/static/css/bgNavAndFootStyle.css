@@ -569,7 +569,24 @@ a {
 .reset-container h2 {
     margin-bottom: 20px;
 }
+body.dark-theme {
+    background-color: rgb(70, 129, 137);
+    color: rgb(255, 255, 255);
+    --primary-color: #0D1E23;
+    --secondary-color: #DCE0D9;
+    --accent-color: #628395;
+    --shadow-color: rgba(165, 195, 215, 0.5);
+}
 
+body.dark-theme .navbar,
+body.dark-theme .footer {
+    background-color: rgb(3, 25, 38);
+}
+
+body.dark-theme .btn-primary {
+    background-color: rgb(244, 233, 205);
+    color: rgb(3, 25, 38);
+}
 @media screen and (max-width: 768px)  {
     .action-btns {
         flex-direction: column;
