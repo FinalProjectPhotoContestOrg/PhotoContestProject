@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -286,9 +287,9 @@ public class ContestServiceImpl implements ContestService {
         }
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.SECONDS)
     @Transactional
-    public void scheduledTask() {
+    public void updateContestPhaseAndScoring() {
         List<Contest> contests = contestRepository.findAll();
 
         for (Contest contest : contests) {
@@ -390,13 +391,12 @@ public class ContestServiceImpl implements ContestService {
         return 0;
     }
 
-    public Entry createDefaultRatingForEntry(Entry entry, User user) {
+    public void createDefaultRatingForEntry(Entry entry, User user) {
         RatingDto ratingDto = new RatingDto();
         ratingDto.setComment("Default rating");
         ratingDto.setScore(3);
         ratingDto.setCategoryMismatch(false);
         Rating rating = ratingMapper.fromDto(ratingDto, entry, user.getId());
         ratingService.createRating(rating);
-        return entry;
     }
 }

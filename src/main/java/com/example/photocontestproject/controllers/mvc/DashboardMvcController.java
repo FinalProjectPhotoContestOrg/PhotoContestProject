@@ -69,8 +69,8 @@ public class DashboardMvcController {
         Ranking currentRank = user.getRanking();
         int nextRankPoints = userService.getNextRankPoints(currentPoints);
 
-        model.addAttribute("activeContests", contestUserIsNorParticipatingIn);
         model.addAttribute("participatingContests", participatingContests);
+        model.addAttribute("activeContests", contestUserIsNorParticipatingIn);
         model.addAttribute("finishedContests", finishedContestsForUser);
         model.addAttribute("jurorContests", jurorContests);
         model.addAttribute("currentPoints", currentPoints);

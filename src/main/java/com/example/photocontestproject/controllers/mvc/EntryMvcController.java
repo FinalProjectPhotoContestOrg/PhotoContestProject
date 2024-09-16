@@ -34,7 +34,8 @@ public class EntryMvcController {
     public EntryMvcController(EntryService entryService,
                               AuthenticationHelper authenticationHelper,
                               RatingMapper ratingMapper,
-                              RatingService ratingService, UserService userService) {
+                              RatingService ratingService,
+                              UserService userService) {
         this.entryService = entryService;
         this.authenticationHelper = authenticationHelper;
         this.ratingMapper = ratingMapper;
@@ -44,8 +45,7 @@ public class EntryMvcController {
 
 
     @GetMapping("/{id}")
-    public String getEntryView(@ModelAttribute("entry") Entry entry,
-                               BindingResult bindingResult,
+    public String getEntryView(BindingResult bindingResult,
                                @PathVariable int id,
                                HttpSession session,
                                Model model) {
@@ -54,10 +54,10 @@ public class EntryMvcController {
         }
 
         User user;
-        Entry entry1;
+        Entry entry;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
-            entry1 = entryService.getEntryById(id);
+            entry = entryService.getEntryById(id);
         } catch (AuthorizationException e) {
             session.setAttribute("redirectUrl", "/entries/" + id);
             return "redirect:/login";
@@ -65,15 +65,15 @@ public class EntryMvcController {
             return "redirect:/";
         }
 
-        String entryAvgScore = entryService.getAverageRating(entry1);
-        Set<Rating> ratings = entry1.getRatings();
-        boolean isJurorToContest = userService.isUserJurorToContest(user, entry1);
+        String entryAvgScore = entryService.getAverageRating(entry);
+        Set<Rating> ratings = entry.getRatings();
+        boolean isJurorToContest = userService.isUserJurorToContest(user, entry);
         boolean alreadyRated = ratings.stream().anyMatch(rating -> rating.getJuror().getId().equals(user.getId()));
-        int rank = entryService.getEntryRankInContest(entry1);
+        int rank = entryService.getEntryRankInContest(entry);
 
         model.addAttribute("entryAvgScore", entryAvgScore);
         model.addAttribute("allRatings", ratings);
-        model.addAttribute("entry", entry1);
+        model.addAttribute("entry", entry);
         model.addAttribute("ratingDto", new RatingDto());
         model.addAttribute("isOrganizer", user.getRole().equals(Role.Organizer));
         model.addAttribute("isJurorToContest", isJurorToContest);

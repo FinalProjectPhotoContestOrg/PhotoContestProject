@@ -2,14 +2,17 @@ package com.example.photocontestproject.dtos.in;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class RatingDto {
     @Min(value = 1, message = "Score must be at least 1")
-    @Max(value = 11, message = "Score must be at bellow 11")
+    @Max(value = 10, message = "Score must be below 10")
     private int score;
-    @NotNull(message = "Comment can't be empty")
+
+    @NotEmpty(message = "Comment can't be empty")
     private String comment;
+
     private boolean categoryMismatch;
 
     public RatingDto() {

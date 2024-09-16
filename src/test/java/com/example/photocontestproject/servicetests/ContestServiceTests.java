@@ -586,7 +586,7 @@ class ContestServiceTests {
         when(contest.getPhase1End()).thenReturn(Timestamp.from(Instant.now().minusSeconds(10)));
         when(contestRepository.findAll()).thenReturn(Arrays.asList(contest));
 
-        contestService.scheduledTask();
+        contestService.updateContestPhaseAndScoring();
 
         verify(contest).setContestPhase(ContestPhase.PhaseII);
         verify(contestRepository).save(contest);
@@ -599,7 +599,7 @@ class ContestServiceTests {
         when(contest.getPhase2End()).thenReturn(Timestamp.from(Instant.now().minusSeconds(10)));
         when(contestRepository.findAll()).thenReturn(Arrays.asList(contest));
 
-        contestService.scheduledTask();
+        contestService.updateContestPhaseAndScoring();
 
         verify(contest).setContestPhase(ContestPhase.Finished);
         verify(contestRepository).save(contest);
@@ -612,7 +612,7 @@ class ContestServiceTests {
         when(contest.getPhase1End()).thenReturn(Timestamp.from(Instant.now().plusSeconds(10)));
         when(contestRepository.findAll()).thenReturn(Arrays.asList(contest));
 
-        contestService.scheduledTask();
+        contestService.updateContestPhaseAndScoring();
 
         verify(contest, never()).setContestPhase(any());
         verify(contestRepository, never()).save(contest);
@@ -700,7 +700,7 @@ class ContestServiceTests {
         when(contestRepository.findAll()).thenReturn(contests);
         when(ratingMapper.fromDto(any(), any())).thenReturn(new Rating());
 
-        contestService.scheduledTask();
+        contestService.updateContestPhaseAndScoring();
 
         verify(contest1).setContestPhase(ContestPhase.PhaseII);
         verify(contestRepository, times(2)).save(any(Contest.class));

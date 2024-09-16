@@ -3,6 +3,7 @@ package com.example.photocontestproject.services.contracts;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface EntryService {
 
     Entry updateEntry(Entry entry);
 
-    List<Entry> getAllEntries(String title);
+    List<Entry> getAllEntries(@Nullable String title);
 
     void deleteEntryById(int id, User user);
 

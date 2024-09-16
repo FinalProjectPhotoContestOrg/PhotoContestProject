@@ -11,6 +11,7 @@ import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.repositories.EntryRepository;
 import com.example.photocontestproject.repositories.UserRepository;
 import com.example.photocontestproject.services.contracts.EntryService;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ public class EntryServiceImpl implements EntryService {
     }
 
     @Override
-    public List<Entry> getAllEntries(String title) {
+    public List<Entry> getAllEntries(@Nullable String title) {
         return entryRepository.findAll((root, query, cb) -> {
             Predicate predicate = cb.conjunction();
             if (title != null && !title.isEmpty()) {

@@ -1,9 +1,11 @@
 package com.example.photocontestproject.helpers;
+
 import com.example.photocontestproject.exceptions.AuthenticationFailureException;
 import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.UserService;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,10 +22,12 @@ public class AuthenticationHelper {
     private static final String INVALID_AUTHENTICATION_ERROR = "Invalid authentication.";
 
     private final UserService userService;
+
     @Autowired
-    public AuthenticationHelper(UserService userService){
+    public AuthenticationHelper(UserService userService) {
         this.userService = userService;
     }
+
     public User tryGetUser(HttpHeaders headers) {
         String userInfo = headers.getFirst(AUTHORIZATION_HEADER_NAME);
         if (userInfo == null || !userInfo.startsWith("Basic ")) {
@@ -51,22 +55,22 @@ public class AuthenticationHelper {
             throw new AuthorizationException(INVALID_AUTHENTICATION_ERROR);
         }
     }
-    public User tryGetCurrentUser(HttpSession session) {
-        User currentUser = (User) session.getAttribute("currentUser");
 
-        if (currentUser == null) {
+    public User tryGetCurrentUser(HttpSession session) {
+        @Nullable Object currentUser = session.getAttribute("currentUser");
+
+        if (!(currentUser instanceof User)) {
             throw new AuthorizationException("Invalid authentication. Please log in.");
         }
-
-        return currentUser;
+        return (User) currentUser;
     }
 
-    private String hashPassword(String password)  {
+    private String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(hash);
-        } catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error hashing password", e);
         }
     }
