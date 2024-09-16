@@ -141,7 +141,6 @@ public class ContestMvcController {
             }
             return "redirect:/";
         } catch (IOException e) {
-            e.printStackTrace();
             return "redirect:/contests/create";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
@@ -169,7 +168,6 @@ public class ContestMvcController {
             model.addAttribute("isOrganizer", e.getMessage());
             return "ErrorView"; // Ensure you have an ErrorView.html template for this.
         } catch (IOException e) {
-            e.printStackTrace();
             return "redirect:/contests/" + contestId;
         }
     }

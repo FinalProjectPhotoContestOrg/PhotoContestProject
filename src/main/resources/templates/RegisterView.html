@@ -73,11 +73,13 @@
     <form action="#" th:action="@{/register}" th:object="${register}" th:method="post">
         <div class="mb-3">
             <label for="firstname" class="form-label">First Name</label>
-            <input th:field="*{firstName}" type="text" class="form-control" id="firstname" placeholder="Enter your first name" required>
+            <input th:field="*{firstName}" minlength="2" type="text" class="form-control" id="firstname" placeholder="Enter your first name" required>
+            <div class="error" style="color: red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name Error</div>
         </div>
         <div class="mb-3">
             <label for="lastname" class="form-label">Last Name</label>
-            <input th:field="*{lastName}" type="text" class="form-control" id="lastname" placeholder="Enter your last name" required>
+            <input th:field="*{lastName}" minlength="2" type="text" class="form-control" id="lastname" placeholder="Enter your last name" required>
+            <div class="error" style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name Error</div>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email address</label>
@@ -87,17 +89,18 @@
         </div>
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
-            <input th:field="*{username}" type="text" class="form-control" id="username" placeholder="Enter your username" required>
+            <input th:field="*{username}" minlength="2" type="text" class="form-control" id="username" placeholder="Enter your username" required>
             <div class="error" style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input th:field="*{password}" type="password" class="form-control" id="password" placeholder="Enter your password" required>
+            <input th:field="*{password}" minlength="6" type="password" class="form-control" id="password" placeholder="Enter your password" required>
+            <div class="error" style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
         </div>
         <div class="mb-3">
             <label for="confirm-password" class="form-label">Confirm Password</label>
-            <input th:field="*{confirmPassword}" type="password" class="form-control" id="confirm-password" placeholder="Confirm your password" required>
-            <div class="error" style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+            <input th:field="*{confirmPassword}" minlength="6" type="password" class="form-control" id="confirm-password" placeholder="Confirm your password" required>
+            <div class="error" style="color: red" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Password Error</div>
         </div>
         <div class="d-grid">
             <button type="submit" class="btn btn-primary">Register</button>

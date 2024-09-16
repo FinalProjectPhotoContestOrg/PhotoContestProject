@@ -49,7 +49,6 @@ public class ResetPasswordMvcController {
             return "ResetPasswordView";
         }
         String encodedPasswordHash = URLEncoder.encode(user.getPasswordHash(), StandardCharsets.UTF_8);
-        System.out.println(encodedPasswordHash);
         String resetLink = String.format("http://localhost:8080/reset-password/form?userId=%d&hash=%s",
                 user.getId(),
                 encodedPasswordHash);

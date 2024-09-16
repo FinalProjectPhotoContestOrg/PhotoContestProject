@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 @Controller
 @RequestMapping("/")
@@ -74,7 +76,7 @@ public class AuthMvcController {
 
             return "redirect:" + redirectUrl;
         } catch (AuthenticationFailureException e) {
-            bindingResult.rejectValue("username", "auth_error", e.getMessage());
+            bindingResult.rejectValue("password", "auth_error", e.getMessage());
             return "LoginView";
         }
     }
@@ -104,6 +106,7 @@ public class AuthMvcController {
             bindingResult.rejectValue("email", "email_error", e.getMessage());
             return "RegisterView";
         }
+        session.removeAttribute("redirectUrl");
         return "redirect:/login";
     }
 

@@ -64,7 +64,6 @@ public class ContestMapper {
             LocalDateTime localDateTime = LocalDateTime.parse(dateTime, formatter);
             return Timestamp.valueOf(localDateTime);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new IllegalArgumentException("Invalid date-time format: " + dateTime);
         }
     }
