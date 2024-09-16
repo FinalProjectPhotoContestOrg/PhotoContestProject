@@ -4477,6 +4477,12 @@ textarea.form-control-lg {
 }
 .card-footer:last-child {
   border-radius: 0 0 var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius);
+  background-color: rgb(221 208 173);
+}
+
+body.dark-theme .card-footer:last-child {
+  border-radius: 0 0 var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius);
+  background-color: rgb(56 111 119);
 }
 
 .card-header-tabs {
@@ -5071,7 +5077,7 @@ textarea.form-control-lg {
   padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
   color: var(--bs-list-group-color);
   text-decoration: none;
-  background-color: var(--bs-list-group-bg);
+  background-color: rgb(221 208 173);
   border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
 }
 .list-group-item:first-child {

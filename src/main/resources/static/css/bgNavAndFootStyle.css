@@ -159,10 +159,21 @@ body {
 }
 
 .section-content {
-    background-color: #f8f9fa;
+    background-color: rgb(221 208 173);
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    max-height: 280px;
+    min-height: 240px;
+}
+
+body.dark-theme .section-content {
+    background-color: rgb(56 111 119);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    max-height: 280px;
+    min-height: 240px;
 }
 
 .entry-form label {
@@ -213,15 +224,24 @@ a.card-link:hover .card {
     max-width: 600px;
     margin: 0 auto 30px;
     padding: 20px;
-    background-color: #f8f9fa;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    background-color: rgb(221 208 173);
+}
+
+body.dark-theme .countdown-timer-container {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: rgb(56 111 119);
 }
 
 .countdown-timer-container h2 {
     text-align: center;
     font-size: 1.8rem;
-    margin-bottom: 20px;
+
 }
 .countdown-timer-bar .colon {
     font-size: 4rem;
@@ -319,6 +339,7 @@ html, body {
     width: 300px;
     margin-right: 10px;
     margin-left: 10px;
+    background-color: rgb(221 208 173);
 }
 .participating-card:hover .remaining-time {
     display: block;
@@ -347,7 +368,7 @@ html, body {
     width: 300px;
     margin-right: 10px;
     margin-left: 10px;
-    background-color: rgb(244, 233, 205);
+    background-color: rgb(221 208 173);
     border: 1px solid gray;
 }
 .photo-container img {
@@ -405,7 +426,12 @@ a {
 }
 
 .card-body {
+    background-color: rgb(221 208 173);
     min-height: 88px;
+}
+
+body.dark-theme .card-body {
+    background-color: rgb(56 111 119);
 }
 
 .card-img-top {
@@ -606,7 +632,7 @@ body.dark-theme .card {
     transition: 0.3s;
     border-radius: 10px;
     overflow: hidden;
-    background-color: rgb(70, 129, 137);
+    background-color: rgb(56 111 119);
     border: 1px solid black;
 }
 body.dark-theme .list-group-item {
