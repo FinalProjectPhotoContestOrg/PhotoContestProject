@@ -378,11 +378,13 @@ html, body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .details-container h2 {
-    margin-bottom: 20px;
+    font-size: 38px;
+    margin-bottom: 14px;
     overflow: hidden; /* Ensures text does not overflow */
     white-space: nowrap; /* Prevents text wrapping */
     text-overflow: ellipsis; /* Adds ellipsis (...) if text overflows */
     max-width: 100%; /* Ensures it doesn’t exceed container width */
+    padding-bottom: 6px;
 }
 .progress-bar-container {
     height: 30px;
@@ -550,6 +552,7 @@ body.dark-theme .card-body {
 
 .user-table {
     margin-top: 20px;
+
 }
 
 .user-table th, .user-table td {
@@ -598,9 +601,14 @@ body.dark-theme .card-body {
 .reset-container h2 {
     margin-bottom: 20px;
 }
-body, .list-group, .card, .container-big, .scroll-lead, .bg-dark, .navbar, .footer, .btn-primary, .table, .bg-light, .rating-box, .ratings-list-container, .entry-container, .rating-container, .details-container, .nav-link {
+body, .list-group, .card, .container-big, .scroll-lead, .bg-dark, .navbar, .footer, .btn-primary, .table, .bg-light, .rating-box, .ratings-list-container, .entry-container, .rating-container, .details-container, .nav-link, .card-body, .card-footer:last-child, .list-group-item, .section-content, .countdown-timer-container, .table-striped, .user-table {
     /* Apply a smooth transition to background, color, and border changes */
     transition: background-color 0.9s ease, color 0.9s ease, border-color 0.9s ease, box-shadow 0.9s ease;
+}
+
+body.dark-theme, .list-group, .card, .container-big, .scroll-lead, .bg-dark, .navbar, .footer, .btn-primary, .table, .bg-light, .rating-box, .ratings-list-container, .entry-container, .rating-container, .details-container, .nav-link, .card-body, .card-footer:last-child, .list-group-item, .section-content, .countdown-timer-container, .table-striped, .user-table {
+    /* Apply a smooth transition to background, color, and border changes */
+    transition: 0.3s, background-color 0.9s ease, color 0.9s, border-color 0.9s ease, box-shadow 0.9s ease;
 }
 
 body.dark-theme .list-group {
