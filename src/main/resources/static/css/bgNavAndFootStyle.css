@@ -426,6 +426,9 @@ a {
     max-height: 400px; /* Set a max height for scrolling */
     overflow-y: auto; /* Enable vertical scrolling */
 }
+.modal-body-scrollable::-webkit-scrollbar {
+    display: none;
+}
 
 .list-unstyled li:hover {
     background-color: #f1f1f1; /* Light gray background on hover */
@@ -569,6 +572,11 @@ a {
 .reset-container h2 {
     margin-bottom: 20px;
 }
+body, .list-group, .card, .container-big, .scroll-lead, .bg-dark, .navbar, .footer, .btn-primary, .table, .bg-light, .rating-box, .ratings-list-container, .entry-container, .rating-container, .details-container, .nav-link {
+    /* Apply a smooth transition to background, color, and border changes */
+    transition: background-color 0.9s ease, color 0.9s ease, border-color 0.9s ease, box-shadow 0.9s ease;
+}
+
 body.dark-theme .list-group {
     --bs-list-group-color: var(--bs-body-color);
     --bs-list-group-bg:rgb(70, 129, 137);

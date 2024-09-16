@@ -445,12 +445,14 @@
             <div class="scrolling-container">
                 <div class="col-md-4 card" th:each="entryRate : ${entries}">
                     <!-- Wrap the card in an anchor tag -->
+                    <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link" style="text-decoration: none; color: inherit;">
                         <div class="mb-4">
                             <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
                             </div>
                         </div>
+                    </a>
                 </div>
             </div>
         </div>

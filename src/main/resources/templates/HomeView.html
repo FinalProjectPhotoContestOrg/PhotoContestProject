@@ -312,7 +312,7 @@
                                                    title="View Contest">
                                                     <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}"
                                                          alt="Photo" class="img-thumbnail me-3"
-                                                         style="max-width: 100px; max-height: 75px;">
+                                                         style="width: 85px; height: 85px;">
                                                     <div class="d-flex flex-column">
                                                         <span th:text="${contest.title}" class="fw-bold d-block">Contest Name</span>
                                                         <span th:text="${contest.category}" class="text-muted d-block">Category</span>
@@ -332,7 +332,7 @@
                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="View Entry">
                                                     <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}"
                                                          alt="Photo" class="img-thumbnail me-3"
-                                                         style="max-width: 100px; max-height: 75px;">
+                                                         style="width: 85px; height: 85px;">
                                                     <div class="d-flex flex-column">
                                                         <span th:text="${entry.title}" class="fw-bold d-block">Photo Title</span>
                                                         <span th:text="${entry.story}"

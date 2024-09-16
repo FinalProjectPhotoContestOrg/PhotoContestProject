@@ -68,7 +68,6 @@ public class RatingServiceImpl implements RatingService {
         entryRepository.save(entry);
         userService.updateUser(user);
         return ratingRepository.save(rating);
-        //TODO separate the logic for the user and the juror into methods
     }
 
     @Override
