@@ -219,12 +219,17 @@
                     <div class="progress progress-bar-container">
                         <div class="progress-bar" role="progressbar" th:style="'width: ' + (${entryAvgScore} * 10) + '%'" aria-valuenow="${entryAvgScore}" aria-valuemin="0" aria-valuemax="10"></div>
                     </div>
-                    <div th:if="${entry.getParticipant().id.equals(user.id)} and (${rank} == 1 or ${rank} == 2 or ${rank} == 3)" class="text-center mb-4">
-                        <div class="fb-share-button"
-                             th:data-href="'https://photo-contest1-135837c18081.herokuapp.com/entries/' + ${entry.id}"
-                             data-layout="button_count">
-                        </div>
+                    <div th:if="${entry.getParticipant().id.equals(user.id)} and (${rank} == 1 or ${rank} == 2 or ${rank} == 3)"
+                         style="text-align: center; margin-bottom: 1.5rem;">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=https://photo-contest1-135837c18081.herokuapp.com/entries/${entry.id}"
+                           target="_blank"
+                           style="display: inline-block; padding: 10px 20px; font-size: 1.2em; background-color: #1877F2; color: white; text-decoration: none; border-radius: 5px;">
+                            Share on Facebook
+                        </a>
                     </div>
+
+
+
                 </div>
             </div>
         </div>

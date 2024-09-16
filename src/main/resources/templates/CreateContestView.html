@@ -87,13 +87,12 @@
     </style>
 </head>
 <body>
-<div class="wrapper">
 
     <nav th:replace="~{ForumForms.html :: navbar}"></nav>
     <div class="container mt-5">
         <h2>Create a New Contest</h2>
 
-        <form th:action="@{/contests/create}" method="post" th:object="${contest}" enctype="multipart/form-data">
+        <form th:action="@{/contests/create}" method="post" th:object="${contest}" enctype="multipart/form-data" style="margin-bottom: 24px;">
 
 
             <div class="form-group">
@@ -183,7 +182,6 @@
     </div>
     <footer th:replace="~{ForumForms.html :: footer}"></footer>
 
-</div>
 
 
 <script src="/js/createContest.js"></script>
