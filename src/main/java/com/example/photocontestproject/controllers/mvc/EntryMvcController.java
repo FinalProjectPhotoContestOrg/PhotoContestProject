@@ -45,13 +45,9 @@ public class EntryMvcController {
 
 
     @GetMapping("/{id}")
-    public String getEntryView(BindingResult bindingResult,
-                               @PathVariable int id,
+    public String getEntryView(@PathVariable int id,
                                HttpSession session,
                                Model model) {
-        if (bindingResult.hasErrors()) {
-            return "EntryView";
-        }
 
         User user;
         Entry entry;

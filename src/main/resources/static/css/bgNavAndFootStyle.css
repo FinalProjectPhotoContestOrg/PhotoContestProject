@@ -92,7 +92,9 @@ body {
     border-radius: 4px;
     padding: 15px;
     margin-bottom: 10px;
-    background-color: rgb(244, 233, 205);
+    background-color: rgb(221 208 173);
+    text-wrap: pretty;
+    height: 250px;
 }
 .header-bg {
     background-size: cover;
