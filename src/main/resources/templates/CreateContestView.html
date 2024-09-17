@@ -7,111 +7,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="../static/css/bgNavAndFootStyle.css">
-    <style>
-
-        /* Optional: Adjust tooltip appearance delay and smooth hover effect */
-
-        /*html {
-            height: 100%;
-            margin: 0;
-        }*/
-        /*body {
-            height: 100%;
-            margin: 0;
-            background-color: rgb(244, 233, 205);
-        }*/
-
-        /*footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }*/
-
-        /*.wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .btn {
-            margin: 1rem;
-        }*/
-        /*.navbar {
-            background-color: rgb(119, 172, 162); !* Navbar background color *!
-        }
-
-        .footer {
-            background-color: rgb(119, 172, 162); !* Footer background color *!
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .bg-light {
-            --bs-bg-opacity: 1;
-            margin: 50px;
-            background-color: rgb(244, 233, 205);
-        }
-        .btn-primary {
-            --bs-btn-color: #fff;
-            --bs-btn-bg: rgb(3, 25, 38);
-            --bs-btn-border-color: rgb(3, 25, 38);
-            --bs-btn-hover-color: #fff;
-            --bs-btn-hover-bg: rgb(70, 100, 100);
-            --bs-btn-hover-border-color: rgb(70, 100, 100);
-            --bs-btn-focus-shadow-rgb: 49, 132, 253;
-            --bs-btn-active-color: #fff;
-            --bs-btn-active-bg: rgb(70, 100, 100);
-            --bs-btn-active-border-color: rgb(70, 100, 100);
-            --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-            --bs-btn-disabled-color: #fff;
-            --bs-btn-disabled-bg: rgb(3, 25, 38);
-            --bs-btn-disabled-border-color: rgb(3, 25, 38);
-        }
-        .nav-link {
-            transition: all 0.3s ease;
-            color: white;
-        }
-
-        .nav-link:hover {
-            background-color: rgb(3, 25, 38);
-            color: white;
-            border-radius: 4px;
-            padding: 8px 16px;
-            text-align: center;
-        }*/
-    </style>
 </head>
 <body>
 
     <nav th:replace="~{ForumForms.html :: navbar}"></nav>
     <div class="container mt-5">
-        <h2>Create a New Contest</h2>
+        <h2 class="text-color">Create a New Contest</h2>
 
         <form th:action="@{/contests/create}" method="post" th:object="${contest}" enctype="multipart/form-data" style="margin-bottom: 24px;">
 
 
             <div class="form-group">
-                <label for="title">Title:</label>
+                <label for="title" class="text-color">Title:</label>
                 <input type="text" class="form-control" maxlength="60" id="title" name="title" th:value="${contest.title}" required>
-                <small id="title-count" class="form-text text-muted">0/60</small>
+                <small id="title-count " class="form-text text-muted text-color">0/60</small>
             </div>
 
 
             <div class="form-group">
-                <label for="category">Category:</label>
+                <label for="category" class="text-color">Category:</label>
                 <input type="text" maxlength="30" class="form-control" id="category" name="category" th:value="${contest.category}" required>
-                <small id="category-count" class="form-text text-muted">0/30</small>
-
+                <small id="category-count" class="form-text text-muted text-color">0/30</small>
             </div>
 
 
             <div class="form-group">
-                <label for="contestType">Contest Type:</label>
+                <label for="contestType" class="text-color">Contest Type:</label>
                 <select class="form-control" id="contestType" name="contestType" required>
                     <option th:each="type : ${T(com.example.photocontestproject.enums.ContestType).values()}"
                             th:value="${type.name()}"
@@ -121,27 +42,27 @@
 
 
             <div class="form-group">
-                <label for="phase1End">Phase 1 End Date:</label>
+                <label for="phase1End" class="text-color">Phase 1 End Date:</label>
                 <input type="datetime-local" class="form-control" id="phase1End" name="phase1End"
                        th:value="${contest.phase1End}" required>
             </div>
 
 
             <div class="form-group">
-                <label for="phase2End">Phase 2 End Date:</label>
+                <label for="phase2End" class="text-color">Phase 2 End Date:</label>
                 <input type="datetime-local" class="form-control" id="phase2End" name="phase2End"
                        th:value="${contest.phase2End}" required>
             </div>
 
 
             <div class="form-group" style="margin: 10px">
-                <label for="coverPhoto">Cover Photo (10MB limit):</label>
-                <input type="file" class="form-control-file" id="coverPhoto" name="coverPhoto" accept="image/*"
+                <label for="coverPhoto" class="text-color">Cover Photo (10MB limit):</label>
+                <input type="file" class="form-control-file text-color" id="coverPhoto" name="coverPhoto" accept="image/*"
                        required>
             </div>
 
             <div class="mb-3" id="jurors">
-                <label for="jurors" class="form-label">Select Jurors</label>
+                <label for="jurors" class="form-label text-color">Select Jurors</label>
                 <div th:each="juror : ${masters}">
                     <div class="form-check">
                         <input class="form-check-input juror-checkbox" type="checkbox"
@@ -149,7 +70,7 @@
                                th:name="jurorIds"
                                th:value="${juror.id}"
                                th:data-participant-id="${'participant-' + juror.id}">
-                        <label class="form-check-label" th:for="${'juror-' + juror.id}"
+                        <label class="form-check-label text-color" th:for="${'juror-' + juror.id}"
                                th:text="${juror.firstName + ' ' + juror.lastName}"></label>
                     </div>
                 </div>
@@ -157,7 +78,7 @@
 
 
             <div id="participantBlock" class="mb-3" style="display: none;">
-                <label for="participantBlock" class="form-label">Select Participants (for invitational contest)</label>
+                <label for="participantBlock" class="form-label text-color">Select Participants (for invitational contest)</label>
                 <div th:each="junkie : ${junkies}">
                     <div class="form-check">
                         <input class="form-check-input participant-checkbox" type="checkbox"
@@ -165,7 +86,7 @@
                                th:name="participantIds"
                                th:value="${junkie.id}"
                                th:data-juror-id="${'juror-' + junkie.id}">
-                        <label class="form-check-label user-rank-tooltip"
+                        <label class="form-check-label user-rank-tooltip text-color"
                                th:for="${'participant-' + junkie.id}"
                                th:text="${junkie.firstName + ' ' + junkie.lastName}"
                                data-bs-toggle="tooltip"

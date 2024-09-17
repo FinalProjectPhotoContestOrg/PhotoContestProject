@@ -14,142 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="../static/css/bgNavAndFootStyle.css">
-    <style>
-        /*.scrolling-container {
-            overflow: auto; !* Allows scrolling *!
-            white-space: nowrap; !* Keeps the content in one line *!
-        }
-
-        .scrolling-container::-webkit-scrollbar {
-            display: none; !* Hides the scrollbar for WebKit browsers (Chrome, Safari) *!
-        }
-
-        .scrolling-container {
-            -ms-overflow-style: none;  !* Hides the scrollbar for Internet Explorer and Edge *!
-            scrollbar-width: none;  !* Hides the scrollbar for Firefox *!
-        }
-        .scrolling-container {
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 10px 0;
-        }
-
-        .scrolling-container .card {
-            display: inline-block;
-            width: 300px;
-            margin-right: 10px;
-            margin-left: 10px;
-            background-color: rgb(244, 233, 205);
-        }
-
-        a {
-            color: #000;
-            text-decoration: none;
-        }
-        !*body {
-            background-color: #f8f9fa;
-        }*!
-        .photo-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .details-container h2 {
-            margin-bottom: 20px;
-            overflow: hidden; !* Ensures text does not overflow *!
-            white-space: nowrap; !* Prevents text wrapping *!
-            text-overflow: ellipsis; !* Adds ellipsis (...) if text overflows *!
-            max-width: 100%; !* Ensures it doesn’t exceed container width *!
-        }
-        .progress-bar-container {
-            height: 30px;
-            margin: 10px 0;
-        }
-
-        .rating-box h4 {
-            margin-top: 0;
-        }
-        .rating-box p {
-            margin-bottom: 0;
-        }
-        .entry-details p {
-            word-wrap: break-word; !* Added to break long words *!
-        }
-        .modal-body-scrollable {
-            max-height: 400px; !* Set a max height for scrolling *!
-            overflow-y: auto; !* Enable vertical scrolling *!
-        }
-        .list-unstyled li:hover {
-            background-color: #f1f1f1; !* Light gray background on hover *!
-            cursor: pointer; !* Pointer cursor on hover *!
-            transition: background-color 0.3s ease; !* Smooth background color transition *!
-        }
-        .list-unstyled li a {
-            display: flex;
-            align-items: center;
-            text-decoration: none; !* Remove underline from links *!
-            color: inherit; !* Inherit color from parent *!
-        }
-        !* Optional: Add a slight shadow to the list items *!
-        .list-unstyled li {
-            transition: box-shadow 0.3s ease;
-        }
-        .list-unstyled li:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }*/
-        /*body {
-            background-color: rgb(244, 233, 205); !* Set the background color *!
-        }
-        .navbar {
-            background-color: rgb(119, 172, 162); !* Navbar background color *!
-        }
-        .nav-link {
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .footer {
-            background-color: rgb(119, 172, 162); !* Footer background color *!
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .bg-light {
-            --bs-bg-opacity: 1;
-            margin: 50px;
-            background-color: rgb(244, 233, 205);
-        }
-        .btn-primary {
-            --bs-btn-color: #fff;
-            --bs-btn-bg: rgb(3, 25, 38);
-            --bs-btn-border-color: rgb(3, 25, 38);
-            --bs-btn-hover-color: #fff;
-            --bs-btn-hover-bg: rgb(70, 100, 100);
-            --bs-btn-hover-border-color: rgb(70, 100, 100);
-            --bs-btn-focus-shadow-rgb: 49, 132, 253;
-            --bs-btn-active-color: #fff;
-            --bs-btn-active-bg: rgb(70, 100, 100);
-            --bs-btn-active-border-color: rgb(70, 100, 100);
-            --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-            --bs-btn-disabled-color: #fff;
-            --bs-btn-disabled-bg: rgb(3, 25, 38);
-            --bs-btn-disabled-border-color: rgb(3, 25, 38);
-        }
-        .nav-link {
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background-color: rgb(3, 25, 38);
-            color: white;
-            border-radius: 4px;
-            padding: 8px 16px;
-            text-align: center;
-        }*/
-    </style>
 </head>
 <body>
 
@@ -170,40 +34,40 @@
         <div class="col-md-6">
             <!-- Details Container -->
             <div class="details-container">
-                <h2 class="display-4 font-weight-bold mb-3 text-center" th:text="${entry.title}">Entry Title Here</h2>
+                <h2 class="display-4 font-weight-bold mb-3 text-center text-color" th:text="${entry.title}">Entry Title Here</h2>
 
                 <div class="entry-details">
-                    <p class="lead" th:text="'Story: ' + ${entry.story}">
+                    <p class="lead text-color" th:text="'Story: ' + ${entry.story}">
                         <strong>Story:</strong> This is a description of the entry, highlighting the photographer's intent, techniques used, and other relevant details.
                     </p>
 
-                    <p class="mb-2" th:text="'Category: ' + ${entry.contest.category}">
+                    <p class="mb-2 text-color" style="padding-top: 10px" th:text="'Category: ' + ${entry.contest.category}">
                         <strong>Category:</strong> Landscapes
                     </p>
 
-                    <p th:text="'Photographer: ' + ${entry.participant.firstName} + ' ' + ${entry.participant.lastName}">
+                    <p class="text-color" th:text="'Photographer: ' + ${entry.participant.firstName} + ' ' + ${entry.participant.lastName}">
                         <strong>Submitted by:</strong> Photographer's Name
                     </p>
                 </div>
             </div>
 
             <!-- Rating Form Container -->
-            <div class="rating-container" th:if="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() != 'Finished' } and ${!alreadyRated}">
-                <h3 class="text-center">Rate This Entry</h3>
+            <div class="rating-container" th:if="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() == 'Phase II' } and ${!alreadyRated}">
+                <h3 class="text-center text-color">Rate This Entry</h3>
 
                 <form action="#" method="POST" th:action="@{'/entries/' + ${entry.id}}" th:object="${ratingDto}">
                     <div class="error" style="color: red" th:if="${#fields.hasErrors('score')}" th:errors="*{score}"></div>
                     <div class="mb-3">
-                        <label for="score" class="form-label">Rating Score (1-10)</label>
+                        <label for="score" class="form-label text-color">Rating Score (1-10)</label>
                         <input th:field="*{score}" type="number" class="form-control" id="score" name="score" min="1" max="10" required>
                     </div>
                     <div class="mb-3">
-                        <label for="comment" class="form-label">Comment</label>
+                        <label for="comment" class="form-label text-color">Comment</label>
                         <textarea th:field="*{comment}" class="form-control" id="comment" name="comment" rows="4" placeholder="Enter your comment here..." required></textarea>
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="categoryMismatch" name="categoryMismatch">
-                        <label th:field="*{categoryMismatch}" class="form-check-label" for="categoryMismatch">Category Mismatch</label>
+                        <label th:field="*{categoryMismatch}" class="form-check-label text-color" for="categoryMismatch">Category Mismatch</label>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit Rating</button>
                 </form>
@@ -211,9 +75,9 @@
 
             <!-- Rating Display Container -->
             <div class="rating-container" th:if="${entry.contest.getContestPhase().toString() == 'Finished'}">
-                <h3 class="text-center">Entry Overall Rating</h3>
+                <h3 class="text-center text-color">Entry Overall Rating</h3>
                 <div class="text-center">
-                    <p class="lead mb-2" th:text="'Rating: ' + ${entryAvgScore}">
+                    <p class="lead mb-2 text-color" th:text="'Rating: ' + ${entryAvgScore}">
                         <strong>Rating:</strong> 8.5
                     </p>
                     <div class="progress progress-bar-container">
@@ -238,7 +102,7 @@
 
 <!-- Ratings List Section -->
 <div class="ratings-list-container p-4" style="margin-bottom: 0;" th:if="${entry.contest.getContestPhase().toString() == 'Finished' }">
-    <h3 class="text-center">Ratings</h3>
+    <h3 class="text-center text-color">Ratings</h3>
     <div class="row">
         <div class="scrolling-container">
             <div th:each="rating, iterStat : ${entry.ratings}" class="col-md-4 mb-4 card">
@@ -247,17 +111,17 @@
                     <h4>
                         <span th:if="${!rating.juror.getRole().equals(organizer)}">
                         <a href="#" data-bs-toggle="modal" th:data-bs-target="'#jurorModal' + ${iterStat.index}">
-                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="View Profile" th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}">John Doe</span>
+                            <span class="text-color" data-bs-toggle="tooltip" data-bs-placement="top" title="View Profile" th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}">John Doe</span>
                         </a>
                         </span>
                         <span th:if="${rating.juror.getRole().equals(organizer)}">
-                            <span th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}">John Doe</span>
+                            <span class="text-color" th:text="${rating.juror.firstName} + ' ' + ${rating.juror.lastName}">John Doe</span>
                         </span>
                     </h4>
-                    <p><strong>Score:</strong> <span th:text="${rating.score}">8</span></p>
-                    <p><strong>Comment:</strong> <span th:text="${rating.comment}">Great photo!</span></p>
-                    <p><strong>Reviewed At:</strong> <span th:text="${#dates.format(rating.reviewedAt, 'dd MMM yyyy HH:mm')}">10 Sep 2024 14:00</span></p>
-                    <p><strong>Category Mismatch:</strong> <span th:text="${rating.categoryMismatch ? 'Yes' : 'No'}">No</span></p>
+                    <p class="text-color"><strong>Score:</strong> <span th:text="${rating.score}">8</span></p>
+                    <p class="text-color"><strong>Comment:</strong> <span th:text="${rating.comment}">Great photo!</span></p>
+                    <p class="text-color"><strong>Reviewed At:</strong> <span th:text="${#dates.format(rating.reviewedAt, 'dd MMM yyyy HH:mm')}">10 Sep 2024 14:00</span></p>
+                    <p class="text-color"><strong>Category Mismatch:</strong> <span th:text="${rating.categoryMismatch ? 'Yes' : 'No'}">No</span></p>
                 </div>
             </div>
         </div>

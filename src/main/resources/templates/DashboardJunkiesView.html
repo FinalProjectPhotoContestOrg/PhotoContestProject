@@ -8,164 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="../static/css/bgNavAndFootStyle.css">
-    <style>
-        /*.scrolling-container {
-            overflow: auto; !* Allows scrolling *!
-            white-space: nowrap; !* Keeps the content in one line *!
-        }
-
-        .scrolling-container::-webkit-scrollbar {
-            display: none; !* Hides the scrollbar for WebKit browsers (Chrome, Safari) *!
-        }
-
-        .scrolling-container {
-            -ms-overflow-style: none;  !* Hides the scrollbar for Internet Explorer and Edge *!
-            scrollbar-width: none;  !* Hides the scrollbar for Firefox *!
-        }
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .card {
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .card-title, .card-text {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-body {
-            max-width: 100%;
-        }
-        .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .card .dark-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 2;
-        }
-        .card:hover .dark-overlay {
-            opacity: 1;
-        }
-        .overlay-text {
-            font-size: 1.2rem;
-            text-align: center;
-        }
-        .countdown-timer {
-            font-size: 1.2rem;
-            text-align: center;
-        }
-
-        .countdown-timer span {
-            display: block;
-        }
-
-        .card-body {
-            min-height: 150px;
-        }
-
-        .card-img-top {
-            object-fit: cover;
-            height: 200px;
-        }
-        .participating-card {
-            position: relative;
-        }
-        .participating-card:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-        .scrolling-container {
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 10px 0;
-        }
-
-        .scrolling-container .card {
-            display: inline-block;
-            width: 300px;
-            margin-right: 10px;
-            margin-left: 10px;
-        }
-        .participating-card:hover .remaining-time {
-            display: block;
-        }*/
-        /*
-        body {
-            background-color: rgb(244, 233, 205); !* Set the background color *!
-        }
-        .navbar {
-            background-color: rgb(119, 172, 162); !* Navbar background color *!
-        }
-        */
-
-        /*.footer {
-            background-color: rgb(119, 172, 162); !* Footer background color *!
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .bg-light {
-            --bs-bg-opacity: 1;
-            margin: 50px;
-            background-color: rgb(244, 233, 205);
-        }
-        .btn-primary {
-            --bs-btn-color: #fff;
-            --bs-btn-bg: rgb(3, 25, 38);
-            --bs-btn-border-color: rgb(3, 25, 38);
-            --bs-btn-hover-color: #fff;
-            --bs-btn-hover-bg: rgb(70, 100, 100);
-            --bs-btn-hover-border-color: rgb(70, 100, 100);
-            --bs-btn-focus-shadow-rgb: 49, 132, 253;
-            --bs-btn-active-color: #fff;
-            --bs-btn-active-bg: rgb(70, 100, 100);
-            --bs-btn-active-border-color: rgb(70, 100, 100);
-            --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-            --bs-btn-disabled-color: #fff;
-            --bs-btn-disabled-bg: rgb(3, 25, 38);
-            --bs-btn-disabled-border-color: rgb(3, 25, 38);
-        }
-        .nav-link {
-            transition: all 0.3s ease;
-            color: white;
-
-        }
-
-        .nav-link:hover {
-            background-color: rgb(3, 25, 38);
-            color: white;
-            border-radius: 4px;
-            padding: 8px 16px;
-            text-align: center;
-        }*/
-    </style>
 </head>
 <body>
 <div class="wrapper">
 <nav th:replace="~{ForumForms.html :: navbar}"></nav>
 <div class="container mt-5">
-    <h1 class="text-center">Welcome to Your Dashboard</h1>
+    <h1 class="text-center text-color">Welcome to Your Dashboard</h1>
 
     <!-- User Ranking and Points Section -->
     <section class="my-4">
-        <h2>Current Ranking and Points</h2>
-        <p>
+        <h2 class="text-color">Current Ranking and Points</h2>
+        <p class="text-color">
             Rank: <strong th:text="${currentRank}">Gold</strong><br>
             Points: <strong th:text="${currentPoints}">1500</strong><br>
             Points until next rank: <strong th:text="${nextRankPoints}">200</strong>
@@ -174,7 +27,7 @@
 
     <!-- Active Open Contests -->
     <section class="my-4">
-        <h2>Active Open Contests</h2>
+        <h2 class="text-color">Active Open Contests</h2>
         <div class="scrolling-container">
             <div class="card" th:each="contest : ${activeContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}"
@@ -183,8 +36,8 @@
                     <div class=" mb-3">
                         <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${contest.title}">Nature Photography Contest</h5>
-                            <p class="card-text">
+                            <h5 class="card-title text-color" th:text="${contest.title}">Nature Photography Contest</h5>
+                            <p class="card-text text-color">
                                 Category: <span th:text="${contest.category}">Wildlife</span><br>
                                 Ends on: <span th:text="${#dates.format(contest.phase1End, 'MMMM d, yyyy')}">November 30</span>
                             </p>
@@ -203,7 +56,7 @@
 
     <!-- Contests Junkie is Participating In -->
     <section class="my-4">
-        <h2>Your Participating Contests</h2>
+        <h2 class="text-color">Your Participating Contests</h2>
         <div class="scrolling-container">
             <div class="card" th:each="contest : ${participatingContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark contest-link"
@@ -211,8 +64,8 @@
                     <div class="mb-3 participating-card">
                         <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${contest.title}">Landscape Photography Contest</h5>
-                            <p class="card-text">
+                            <h5 class="card-title text-color" th:text="${contest.title}">Landscape Photography Contest</h5>
+                            <p class="card-text text-color">
                                 Category: <span th:text="${contest.category}">Landscapes</span><br>
                                 Phase: <span th:text="${contest.contestPhase}">Phase I</span>
                             </p>
@@ -227,15 +80,15 @@
 
     <!-- Contests Junkie is Juror In -->
     <section class="my-4" th:if="${jurorContests != null && !jurorContests.isEmpty()}">
-        <h2>Contests You're Judging</h2>
+        <h2 class="text-color">Contests You're Judging</h2>
         <div class="scrolling-container">
             <div class="card" th:each="contest : ${jurorContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
                     <div class="mb-3">
                         <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${contest.title}">Contest Title</h5>
-                            <p class="card-text">
+                            <h5 class="card-title text-color" th:text="${contest.title}">Contest Title</h5>
+                            <p class="card-text text-color">
                                 Category: <span th:text="${contest.category}">Category</span><br>
                                 Phase: <span th:text="${contest.contestPhase}">Phase I</span>
                             </p>
@@ -254,15 +107,15 @@
 
     <!-- Finished Contests -->
     <section class="my-4">
-        <h2>Finished Contests</h2>
+        <h2 class="text-color">Finished Contests</h2>
         <div class="scrolling-container">
             <div class="card" th:each="contest : ${finishedContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
                     <div class="mb-3">
                         <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${contest.title}">Portrait Photography Contest</h5>
-                            <p class="card-text">
+                            <h5 class="card-title text-color" th:text="${contest.title}">Portrait Photography Contest</h5>
+                            <p class="card-text text-color">
                                 Category: <span th:text="${contest.category}">Portraits</span><br>
                                 Finished on: <span th:text="${#dates.format(contest.phase2End, 'MMMM d, yyyy')}">August 10</span>
                             </p>

@@ -52,7 +52,7 @@
     --bs-table-bg-state: initial;
     --bs-table-color: var(--bs-body-color);
     --bs-table-bg: rgb(244, 233, 205);
-    --bs-table-border-color: var(--bs-border-color);
+    --bs-table-border-color: black;
     --bs-table-accent-bg: transparent;
     --bs-table-striped-color: var(--bs-body-color);
     --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
@@ -78,6 +78,9 @@ body {
     padding: 20px;
     margin-bottom: 20px;
     overflow: hidden;
+}
+.details-container, .rating-container{
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4)
 }
 .entry-container {
     max-width: 85%;
@@ -124,6 +127,7 @@ body {
     overflow: hidden;
     background-color: rgb(244, 233, 205);
     border: 1px solid gray;
+    cursor: auto;
 }
 
 .card:hover {
@@ -168,7 +172,12 @@ body {
     max-height: 280px;
     min-height: 240px;
 }
-
+.text-color{
+   color: black;
+}
+body.dark-theme .text-color{
+    color: ghostwhite;
+}
 body.dark-theme .section-content {
     background-color: rgb(56 111 119);
     padding: 2rem;
@@ -603,12 +612,12 @@ body.dark-theme .card-body {
 .reset-container h2 {
     margin-bottom: 20px;
 }
-body, .list-group, .card, .container-big, .scroll-lead, .bg-dark, .navbar, .footer, .btn-primary, .table, .bg-light, .rating-box, .ratings-list-container, .entry-container, .rating-container, .details-container, .nav-link, .card-body, .card-footer:last-child, .list-group-item, .section-content, .countdown-timer-container, .table-striped, .user-table {
+body, .list-group, .card, .container-big, .scroll-lead, .bg-dark, .navbar, .footer, .btn-primary, .table, .bg-light, .rating-box, .ratings-list-container, .entry-container, .rating-container, .details-container, .nav-link, .card-body, .card-footer:last-child, .list-group-item, .section-content, .countdown-timer-container, .table-striped, .user-table, .text-color {
     /* Apply a smooth transition to background, color, and border changes */
     transition: background-color 0.9s ease, color 0.9s ease, border-color 0.9s ease, box-shadow 0.9s ease;
 }
 
-body.dark-theme, .list-group, .card, .container-big, .scroll-lead, .bg-dark, .navbar, .footer, .btn-primary, .table, .bg-light, .rating-box, .ratings-list-container, .entry-container, .rating-container, .details-container, .nav-link, .card-body, .card-footer:last-child, .list-group-item, .section-content, .countdown-timer-container, .table-striped, .user-table {
+body.dark-theme, .list-group, .card, .container-big, .scroll-lead, .bg-dark, .navbar, .footer, .btn-primary, .table, .bg-light, .rating-box, .ratings-list-container, .entry-container, .rating-container, .details-container, .nav-link, .card-body, .card-footer:last-child, .list-group-item, .section-content, .countdown-timer-container, .table-striped, .user-table, .text-color {
     /* Apply a smooth transition to background, color, and border changes */
     transition: 0.3s, background-color 0.9s ease, color 0.9s, border-color 0.9s ease, box-shadow 0.9s ease;
 }
@@ -644,6 +653,7 @@ body.dark-theme .card {
     overflow: hidden;
     background-color: rgb(56 111 119);
     border: 1px solid black;
+    cursor: auto;
 }
 body.dark-theme .list-group-item {
     position: relative;
@@ -652,7 +662,7 @@ body.dark-theme .list-group-item {
     color: var(--bs-list-group-color);
     text-decoration: none;
     background-color: var(--bs-list-group-bg);
-    border: var(--bs-list-group-border-width) solid black;
+    /*border: var(--bs-list-group-border-width) solid black;*/
 }
 body.dark-theme .container-big {
     max-width: 1600px;
@@ -737,7 +747,7 @@ body.dark-theme .rating-box {
     border-radius: 4px;
     padding: 15px;
     margin-bottom: 10px;
-    background-color: rgb(70, 129, 137);
+    background-color: rgb(56 111 119);
 }
 body.dark-theme .ratings-list-container {
     background-color: rgb(70, 129, 137);
@@ -758,7 +768,7 @@ body.dark-theme .entry-container {
 body.dark-theme .rating-container{
     background-color: rgb(70, 129, 137);;
     border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
     padding: 20px;
     margin-bottom: 20px;
     overflow: hidden;
@@ -766,7 +776,7 @@ body.dark-theme .rating-container{
 body.dark-theme .details-container{
     background-color: rgb(70, 129, 137);;
     border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
     padding: 20px;
     margin-bottom: 20px;
     overflow: hidden;

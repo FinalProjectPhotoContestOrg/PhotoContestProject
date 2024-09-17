@@ -8,233 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="/static/css/bgNavAndFootStyle.css">
-    <style>
-        /*.scrolling-container {
-            overflow: auto; !* Allows scrolling *!
-            white-space: nowrap; !* Keeps the content in one line *!
-        }
-
-        .scrolling-container::-webkit-scrollbar {
-            display: none; !* Hides the scrollbar for WebKit browsers (Chrome, Safari) *!
-        }
-
-        .scrolling-container {
-            -ms-overflow-style: none;  !* Hides the scrollbar for Internet Explorer and Edge *!
-            scrollbar-width: none;  !* Hides the scrollbar for Firefox *!
-        }
-        .header-bg {
-            background-size: cover;
-            background-position: center;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 900;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
-        }
-        .card-title, .card-text {
-            white-space: nowrap; !* Prevents the text from breaking into multiple lines *!
-            overflow: hidden;    !* Hides the overflowing content *!
-            text-overflow: ellipsis; !* Adds '...' at the end if the text overflows *!
-        }
-
-        .card-body {
-            max-width: 100%; !* Ensures that the text container doesn't exceed the card's width *!
-        }
-        .header-bg h1 {
-            font-size: 3.5rem;
-            text-align: center;
-            margin: 0;
-        }
-
-        .section-title {
-            margin-bottom: 1.5rem;
-        }
-        .card {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            border: none;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-img-top {
-            height: 300px;
-            object-fit: cover;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        .view-button {
-            background-color: #007bff;
-            border: none;
-            color: white;
-            padding: 0.5rem 1rem;
-            text-align: center;
-            display: inline-block;
-            font-size: 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .view-button:hover {
-            background-color: #0056b3;
-        }
-
-        .section-content {
-            background-color: #f8f9fa;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .entry-form label {
-            font-weight: 600;
-        }
-
-        .entry-form .form-control,
-        .entry-form .form-select,
-        .entry-form .form-text {
-            border-radius: 5px;
-        }
-        a.card-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        a.card-link:hover .card {
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            transform: translateY(-5px);
-        }*/
-
-        /*.footer {
-            background-color: #343a40;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }*/
-        /*.countdown-timer-bar {
-            text-align: center;
-            padding: 20px 0;
-        }
-        .countdown-timer-bar .time {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-        .countdown-timer-bar .time-part {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .countdown-timer-bar .number {
-            font-size: 4rem; !* Bigger number size *!
-            font-weight: normal;
-            color: #000000; !* You can customize this color *!
-            margin-bottom: 0.5rem;
-        }
-        .countdown-timer-bar .label {
-            font-size: 1rem;
-            text-transform: uppercase;
-            color: #6c757d; !* Slightly gray label text *!
-        }
-        .countdown-timer-container {
-            max-width: 600px;
-            margin: 0 auto 30px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .countdown-timer-container h2 {
-            text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-        .countdown-timer-bar .colon {
-            font-size: 4rem;
-            font-weight: normal;
-            color: #000000;
-            margin: 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            vertical-align: top;
-            transform: translateY(-25%);
-        }
-        .scrolling-container {
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 10px 0;
-        }
-
-        .scrolling-container .card {
-            display: inline-block;
-            width: 300px;
-            margin-right: 10px;
-            margin-left: 10px;
-        }*/
-        /*.navbar {
-            background-color: rgb(119, 172, 162); !* Navbar background color *!
-        }
-        .nav-link {
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .footer {
-            background-color: rgb(119, 172, 162); !* Footer background color *!
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .bg-light {
-            --bs-bg-opacity: 1;
-            margin: 50px;
-            background-color: rgb(244, 233, 205);
-        }
-        .btn-primary {
-            --bs-btn-color: #fff;
-            --bs-btn-bg: rgb(3, 25, 38);
-            --bs-btn-border-color: rgb(3, 25, 38);
-            --bs-btn-hover-color: #fff;
-            --bs-btn-hover-bg: rgb(70, 100, 100);
-            --bs-btn-hover-border-color: rgb(70, 100, 100);
-            --bs-btn-focus-shadow-rgb: 49, 132, 253;
-            --bs-btn-active-color: #fff;
-            --bs-btn-active-bg: rgb(70, 100, 100);
-            --bs-btn-active-border-color: rgb(70, 100, 100);
-            --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-            --bs-btn-disabled-color: #fff;
-            --bs-btn-disabled-bg: rgb(3, 25, 38);
-            --bs-btn-disabled-border-color: rgb(3, 25, 38);
-        }
-        .nav-link {
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background-color: rgb(3, 25, 38);
-            color: white;
-            border-radius: 4px;
-            padding: 8px 16px;
-            text-align: center;
-        }*/
-    </style>
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -253,31 +26,31 @@
 <!-- Contest Details Section -->
 <section id="contest-details" class="py-5">
     <div class="container">
-        <h2 class="text-center section-title">Contest Details</h2>
+        <h2 class="text-center section-title text-color">Contest Details</h2>
         <div class="row">
             <div class="col-md-6">
                 <div class="section-content">
-                    <h5><strong>Contest duration:</strong></h5>
-                    <p th:text="${#dates.format(contest.createdAt, 'MMMM d')} + ' - ' + ${#dates.format(contest.phase2End, 'MMMM d')}">October 1 - November 30</p>
+                    <h5 class="text-color"><strong>Contest duration:</strong></h5>
+                    <p class="text-color" th:text="${#dates.format(contest.createdAt, 'MMMM d')} + ' - ' + ${#dates.format(contest.phase2End, 'MMMM d')}">October 1 - November 30</p>
 
-                    <h5><strong>Category:</strong></h5>
-                    <p th:text="${contest.category}">Wildlife, Landscapes, Plants</p>
+                    <h5 class="text-color"><strong>Category:</strong></h5>
+                    <p class="text-color" th:text="${contest.category}">Wildlife, Landscapes, Plants</p>
 
-                    <h5 th:if="${isPhaseI}"><strong>Submission Guidelines:</strong></h5>
-                    <ul th:if="${isPhaseI}">
-                        <li>File size should not exceed 10 MB per image</li>
-                        <li>Entries must be original and not previously published</li>
+                    <h5 class="text-color" th:if="${isPhaseI}"><strong>Submission Guidelines:</strong></h5>
+                    <ul class="text-color" th:if="${isPhaseI}">
+                        <li class="text-color">File size should not exceed 10 MB per image</li>
+                        <li class="text-color">Entries must be original and not previously published</li>
                     </ul>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="section-content">
-                    <h5><strong>Judging Criteria:</strong></h5>
+                    <h5 class="text-color"><strong>Judging Criteria:</strong></h5>
                     <ul>
-                        <li>Originality and creativity</li>
-                        <li>Technical excellence</li>
-                        <li>Composition and artistic merit</li>
-                        <li>Overall impact</li>
+                        <li class="text-color">Originality and creativity</li>
+                        <li class="text-color">Technical excellence</li>
+                        <li class="text-color">Composition and artistic merit</li>
+                        <li class="text-color">Overall impact</li>
                     </ul>
                 </div>
             </div>
@@ -285,28 +58,28 @@
     </div>
 </section>
 <div class="countdown-timer-container" th:if="${!isFinished}">
-    <h2 th:text="${isPhaseI} ? 'Phase I Ends In:' : (isPhaseII ? 'Phase II Ends In:' : '')"></h2>
+    <h2 class="text-color" th:text="${isPhaseI} ? 'Phase I Ends In:' : (isPhaseII ? 'Phase II Ends In:' : '')"></h2>
     <div class="countdown-timer-bar" th:id="'countdown-'+${contest.id}"
          th:data-end-time="${isPhaseI} ? ${contest.phase1End.getTime()} : (isPhaseII ? ${contest.phase2End.getTime()} : '')">
-        <div class="time">
-            <div class="time-part">
-                <div class="number">00</div>
-                <div class="label">Days</div>
+        <div class="time ">
+            <div class="time-part ">
+                <div class="number text-color">00</div>
+                <div class="label text-color">Days</div>
             </div>
-            <div class="colon">:</div>
-            <div class="time-part">
-                <div class="number">00</div>
-                <div class="label">Hours</div>
+            <div class="colon text-color">:</div>
+            <div class="time-part ">
+                <div class="number text-color">00</div>
+                <div class="label text-color">Hours</div>
             </div>
-            <div class="colon">:</div>
+            <div class="colon text-color">:</div>
             <div class="time-part">
-                <div class="number">00</div>
-                <div class="label">Minutes</div>
+                <div class="number text-color">00</div>
+                <div class="label text-color">Minutes</div>
             </div>
-            <div class="colon">:</div>
-            <div class="time-part">
-                <div class="number">00</div>
-                <div class="label">Seconds</div>
+            <div class="colon text-color">:</div>
+            <div class="time-part ">
+                <div class="number text-color">00</div>
+                <div class="label text-color">Seconds</div>
             </div>
         </div>
     </div>
@@ -314,36 +87,36 @@
 
 <!-- Show "Contest Ended" if the contest is finished -->
 <div class="countdown-timer-container" th:if="${isFinished}">
-    <h2>Contest Ended</h2>
+    <h2 class="text-color">Contest Ended</h2>
 </div>
 
 <!-- Entry Form Section -->
 <section id="enter-contest" class="bg-light py-5"
          th:if="${!isOrganizer && !isJuror && isPhaseI && (!isInvitational || (isInvitational && isInvited)) && !alreadyEntered}">
     <div class="container">
-        <h2 class="text-center section-title">Enter the Contest</h2>
-        <p class="lead text-center">Submit your entries using the form below.</p>
+        <h2 class="text-center section-title text-color">Enter the Contest</h2>
+        <p class="lead text-center text-color">Submit your entries using the form below.</p>
         <form th:action="@{/contests/{contestId}/entries(contestId=${contest.id})}" th:method="post" th:object="${entry}" enctype="multipart/form-data" class="entry-form">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
+                        <label for="title" class="form-label text-color">Title</label>
                         <input type="text" maxlength="60" class="form-control" id="title" name="title" th:field="${entry.title}" required>
-                        <small id="title-count" class="form-text text-muted">0/60</small>
+                        <small id="title-count" class="form-text text-muted text-color">0/60</small>
                     </div>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">Photo Description (Story)</label>
+                <label for="description" class="form-label text-color">Photo Description (Story)</label>
                 <textarea class="form-control" maxlength="200" id="description" name="description" th:field="${entry.story}" rows="3" required></textarea>
-                <small id="description-count" class="form-text text-muted">0/200</small>
+                <small id="description-count" class="form-text text-muted text-color">0/200</small>
             </div>
 
             <div class="mb-3">
-                <label for="coverPhoto" class="form-label">Upload Photo</label>
+                <label for="coverPhoto" class="form-label text-color">Upload Photo</label>
                 <input type="file" class="form-control" id="coverPhoto" name="photo" accept="image/jpeg" required>
-                <div class="form-text">Maximum file size: 10 MB. JPEG format only.</div>
+                <div class="form-text text-color">Maximum file size: 10 MB. JPEG format only.</div>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit Entry</button>
@@ -354,7 +127,7 @@
 <section class="bg-light py-5"
          th:if="${!isOrganizer && !isJuror && isPhaseI && (!isInvitational || (isInvitational && isInvited)) && alreadyEntered}">
     <div class="container">
-        <h2 class="text-center section-title">All Entries in contest:</h2>
+        <h2 class="text-center section-title text-color">All Entries in contest:</h2>
         <div class="row">
             <div class="scrolling-container">
                 <div class="col-md-4 card" th:each="entryView : ${entries}">
@@ -363,7 +136,7 @@
                                 <img th:src="'data:image/jpeg;base64,' + ${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
                                 <div class="card-body">
                                     <!-- Entry Title -->
-                                    <h5 class="card-title" th:text="${entryView.title}">Sample Entry Title</h5>
+                                    <h5 class="card-title text-color" th:text="${entryView.title}">Sample Entry Title</h5>
                                 </div>
                         </div>
                     </a>
@@ -375,7 +148,6 @@
 <section class="bg-light py-5"
          th:if="${!isOrganizer && !isJuror && isPhaseI && (isInvitational && !isInvited)}">
     <div class="container">
-        <h2 class="text-center section-title">WARNING!</h2>
         <div class="row">
             <div class="alert alert-warning text-center" role="alert">
                 <h4 class="alert-heading">Apologies!</h4>
@@ -386,27 +158,32 @@
         </div>
     </div>
 </section>
-<section class="py-5" th:if="${isJuror && isPhaseI}">
+<section class="py-5" th:if="${(isOrganizer || isJuror) && isPhaseI}">
     <div class="container text-center">
-        <h2 class="section-title">You Have Been Selected as a Juror</h2>
-        <p class="lead">
+        <div th:if="${isJuror}">
+        <h2 class="section-title text-color">You Have Been Selected as a Juror</h2>
+        <p class="lead text-color">
             You have been selected to judge this contest. Please wait until the contest enters Phase II
             to begin the judging process.
         </p>
+        </div>
     </div>
     <div class="container">
-        <h2 class="text-center section-title">All Entries in contest:</h2>
+        <h2 class="text-center section-title text-color">All Entries in contest:</h2>
         <div class="row">
             <div class="scrolling-container">
-                <div class="col-md-4 card" th:each="entryView : ${entries}">
+                    <div class="col-md-4 card" style="cursor: default" th:each="entryView : ${entries}">
+                        <a th:href="@{/entries/{entryId}(entryId=${entryView.id})}" class="card-link">
+
                         <div class="mb-4">
-                            <img th:src="'data:image/jpeg;base64,' + ${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
-                            <div class="card-body">
-                                <!-- Entry Title -->
-                                <h5 class="card-title" th:text="${entryView.title}">Sample Entry Title</h5>
+                                <img th:src="'data:image/jpeg;base64,' + ${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
+                                <div class="card-body">
+                                    <!-- Entry Title -->
+                                    <h5 class="card-title text-color" th:text="${entryView.title}">Sample Entry Title</h5>
+                                </div>
                             </div>
-                        </div>
-                </div>
+                        </a>
+                    </div>
             </div>
         </div>
     </div>
@@ -414,7 +191,7 @@
 
 <section id="view-entries" class="bg-light py-5" th:if="${isPhaseII && (isJuror || isOrganizer)}">
     <div class="container">
-        <h2 class="text-center section-title">Contest Entries</h2>
+        <h2 class="text-center section-title text-color">Contest Entries</h2>
         <div class="row">
             <!-- Display each entry in a card layout -->
             <div class="scrolling-container">
@@ -424,7 +201,7 @@
                         <div class="mb-4">
                             <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+                                <h5 class="card-title text-color" th:text="${entryRate.title}">Sample Entry Title</h5>
                             </div>
                         </div>
                     </a>
@@ -435,12 +212,12 @@
 </section>
 <section class="bg-light py-5" th:if="${isPhaseII && alreadyEntered && !isJuror && !isOrganizer}">
     <div class="container">
-        <h2 class="text-center section-title">Contest Status</h2>
+        <h2 class="text-center section-title text-color">Contest Status</h2>
         <div class="row">
             <!-- Information for participants in Phase II -->
             <div class="col-12 text-center">
-                <p class="lead">Thank you for participating in the contest! You must now wait for the jurors to rate all entries.</p>
-                <p class="lead">The results will be announced after the countdown ends.</p>
+                <p class="lead text-color">Thank you for participating in the contest! You must now wait for the jurors to rate all entries.</p>
+                <p class="lead text-color">The results will be announced after the countdown ends.</p>
             </div>
             <div class="scrolling-container">
                 <div class="col-md-4 card" th:each="entryRate : ${entries}">
@@ -449,7 +226,7 @@
                         <div class="mb-4">
                             <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+                                <h5 class="card-title text-color" th:text="${entryRate.title}">Sample Entry Title</h5>
                             </div>
                         </div>
                     </a>
@@ -460,7 +237,7 @@
 </section>
 <section id="ranked-entries" style="padding-bottom: 30px" class="py-5 bg-light" th:if="${isFinished}">
     <div class="container">
-        <h2 class="text-center section-title">Ranked Entries by Points</h2>
+        <h2 class="text-center section-title text-color">Ranked Entries by Points</h2>
         <div class="row">
             <!-- Sorted by points, with ranks displayed -->
             <div class="scrolling-container">
@@ -470,9 +247,9 @@
                             <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
                             <div class="card-body">
                                 <!-- Rank (1st, 2nd, etc.) -->
-                                <h5 class="rank-place" th:text="${iterStat.index + 1} + ' ' + ${ranks[iterStat.index + 1]}">1st</h5>
+                                <h5 class="rank-place text-color" th:text="${iterStat.index + 1} + ' ' + ${ranks[iterStat.index + 1]}">1st</h5>
                                 <!-- Entry Title -->
-                                <h5 class="card-title" th:text="${entryRate.title}">Sample Entry Title</h5>
+                                <h5 class="card-title text-color" th:text="${entryRate.title}">Sample Entry Title</h5>
                             </div>
                         </div>
                     </a>

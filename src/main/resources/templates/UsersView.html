@@ -8,85 +8,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/bgNavAndFootStyle.css}" href="../static/css/bgNavAndFootStyle.css">
-    <style>
-        /*html{
-            height: 100%;
-            margin: 0;
-        }
-
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh; !* Ensure the wrapper takes up at least the full viewport height *!
-        }
-
-        .content {
-            flex: 1; !* Allows content to expand and push footer to the bottom *!
-        }
-
-        .user-table {
-            margin-top: 20px;
-        }
-
-        .user-table th, .user-table td {
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        .action-btns {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .action-btns .btn {
-            padding: 5px 10px;
-        }*/
-
-        /*footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        */
-    </style>
 </head>
 <body>
 <div class="wrapper">
     <nav th:replace="~{ForumForms.html :: navbar}"></nav>
 
     <div class="container mt-5 content">
-        <h1 class="text-center">Admin - User Management</h1>
+        <h1 class="text-center text-color">Admin - User Management</h1>
 
         <table class="table table-striped table-bordered user-table" style="transition: 0.3s, background-color 0.9s ease, color 0.9s, border-color 0.9s ease, box-shadow 0.9s ease;">
             <thead class="thead-dark">
             <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Ranking</th>
-                <th>Points</th>
-                <th>Actions</th>
+                <th class="text-color">ID</th>
+                <th class="text-color">Username</th>
+                <th class="text-color">First Name</th>
+                <th class="text-color">Last Name</th>
+                <th class="text-color">Email</th>
+                <th class="text-color">Role</th>
+                <th class="text-color">Ranking</th>
+                <th class="text-color">Points</th>
+                <th class="text-color">Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
-                <td th:text="${user.id}">1</td>
-                <td th:text="${user.username}">johndoe</td>
-                <td th:text="${user.firstName}">John</td>
-                <td th:text="${user.lastName}">Doe</td>
-                <td th:text="${user.email}">john@example.com</td>
-                <td th:text="${user.role}">Organizer</td>
-                <td th:text="${user.ranking}">Gold</td>
-                <td th:text="${user.points}">1000</td>
-                <td>
+                <td class="text-color" th:text="${user.id}">1</td>
+                <td class="text-color" th:text="${user.username}">johndoe</td>
+                <td class="text-color" th:text="${user.firstName}">John</td>
+                <td class="text-color" th:text="${user.lastName}">Doe</td>
+                <td class="text-color" th:text="${user.email}">john@example.com</td>
+                <td class="text-color" th:text="${user.role}">Organizer</td>
+                <td class="text-color" th:text="${user.ranking}">Gold</td>
+                <td class="text-color" th:text="${user.points}">1000</td>
+                <td class="text-color">
                     <div class="action-btns">
                         <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post" onsubmit="return confirm('Are you sure?');">
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-danger text-color">Delete</button>
                         </form>
                     </div>
                 </td>
