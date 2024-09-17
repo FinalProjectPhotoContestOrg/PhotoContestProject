@@ -43,6 +43,9 @@ public class AuthMvcController {
         /*String theme = "light-theme";
 
         model.addAttribute("theme", theme);*/
+
+        model.addAttribute("sentEmail", session.getAttribute("sentEmail"));
+        session.removeAttribute("sentEmail");
         model.addAttribute("login", new LogInDto());
         return "LoginView";
     }

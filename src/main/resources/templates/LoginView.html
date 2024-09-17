@@ -16,6 +16,7 @@
 
 <div class="login-container">
   <h2 class="text-center">Login</h2>
+  <h3 class="text-center" th:if="${sentEmail}" style="color: green">Password reset e-mail sent.</h3>
   <form action="#" th:action="@{/login}" th:method="post" th:object="${login}">
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>

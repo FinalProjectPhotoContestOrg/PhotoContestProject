@@ -7,6 +7,7 @@ import com.example.photocontestproject.external.service.EmailService;
 import com.example.photocontestproject.mappers.UserMapper;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +38,9 @@ public class ResetPasswordMvcController {
 
 
     @PostMapping()
-    public String handleSendResetPasswordEmail(@ModelAttribute("email") EmailDto email, BindingResult bindingResult) {
+    public String handleSendResetPasswordEmail(@ModelAttribute("email") EmailDto email,
+                                               BindingResult bindingResult,
+                                               HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "ResetPasswordView";
         }
@@ -53,6 +56,7 @@ public class ResetPasswordMvcController {
                 user.getId(),
                 encodedPasswordHash);
         emailService.sendPasswordResetEmail(user.getEmail(), user.getUsername(), resetLink);
+        session.setAttribute("sentEmail", true);
         return "redirect:/login";
     }
 
@@ -94,6 +98,10 @@ public class ResetPasswordMvcController {
                     .replace(" ", "+");
             if (!user.getPasswordHash().equals(decodedPasswordHash)) {
                 return "redirect:/";
+            }
+            if (!passwordDto.getPassword().equals(passwordDto.getConfirmPassword())) {
+                bindingResult.rejectValue("confirmPassword", "error.confirmPassword", "Passwords do not match");
+                return "NewPasswordView";
             }
         } catch (EntityNotFoundException e) {
             return "redirect:/";
