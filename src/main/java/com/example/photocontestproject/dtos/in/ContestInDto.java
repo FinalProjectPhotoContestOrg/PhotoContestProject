@@ -1,16 +1,16 @@
 package com.example.photocontestproject.dtos.in;
 
-import com.example.photocontestproject.enums.ContestPhase;
-import com.example.photocontestproject.enums.ContestType;
-
 import java.sql.Timestamp;
 
 public class ContestInDto {
+
     private String title;
+
     private String category;
+
     private Timestamp phase1End;
+
     private Timestamp phase2End;
-    //private int organizerId;
 
 
     public ContestInDto() {
@@ -48,11 +48,4 @@ public class ContestInDto {
         this.phase2End = phase2End;
     }
 
-    /*public int getOrganizerId() {
-        return organizerId;
-    }
-
-    public void setOrganizerId(int organizerId) {
-        this.organizerId = organizerId;
-    }*/
 }

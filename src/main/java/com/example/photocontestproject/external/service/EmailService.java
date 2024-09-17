@@ -13,7 +13,8 @@ public class EmailService {
     public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
-    public void sendEmailForRegister(String to, String username){
+
+    public void sendEmailForRegister(String to, String username) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -42,6 +43,7 @@ public class EmailService {
             throw new RuntimeException(e);
         }
     }
+
     public void sendEmailForEnteringInContest(String to, String username, String contestName, String entryName) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();

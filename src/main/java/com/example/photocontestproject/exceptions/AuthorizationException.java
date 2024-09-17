@@ -1,7 +1,8 @@
 package com.example.photocontestproject.exceptions;
 
 public class AuthorizationException extends RuntimeException {
-    public AuthorizationException(String message){
+
+    public AuthorizationException(String message) {
         super(message);
     }
 }

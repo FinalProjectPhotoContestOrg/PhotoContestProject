@@ -127,12 +127,6 @@ public class EntryServiceImpl implements EntryService {
         }
     }
 
-//    private void throwIfUserIsNotOrganizer(User user) {
-//        if (!user.getRole().equals(Role.Organizer)) {
-//            throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);
-//        }
-//    }
-
     private void throwIfUserIsNotOrganizerOrAuthor(User user, Entry entry) {
         if (!user.getRole().equals(Role.Organizer) && !entry.getParticipant().getId().equals(user.getId())) {
             throw new AuthorizationException(ERROR_NO_PERMISSION_MESSAGE);

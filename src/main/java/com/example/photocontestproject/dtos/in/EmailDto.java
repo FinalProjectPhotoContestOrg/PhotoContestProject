@@ -1,6 +1,7 @@
 package com.example.photocontestproject.dtos.in;
 
 public class EmailDto {
+
     private String email;
 
     public EmailDto() {

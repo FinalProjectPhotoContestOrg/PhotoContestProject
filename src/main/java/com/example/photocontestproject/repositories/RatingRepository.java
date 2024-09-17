@@ -11,7 +11,10 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
+
     Set<Rating> findByEntryId(int entryId);
+
     Set<Rating> findAll(Specification<Rating> specification, Pageable pageable);
+
     Optional<Rating> findByJurorAndEntry(User juror, Entry entry);
 }

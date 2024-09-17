@@ -10,6 +10,7 @@ import java.net.URL;
 public class EmailValidator {
     private static final String ZERBOUNCE_URL = "https://api.zerobounce.net/v2/validate";
     private static final String API_KEY = "0e58dbc6631143039c425a8de4684db6";
+
     public static boolean validateEmail(String email) {
         try {
             URL url = new URL(ZERBOUNCE_URL + "?api_key=" + API_KEY + "&email=" + email);

@@ -7,8 +7,6 @@ import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
 import com.example.photocontestproject.services.contracts.ContestService;
-import com.example.photocontestproject.services.contracts.EntryService;
-import com.example.photocontestproject.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +15,11 @@ import java.time.Instant;
 
 @Component
 public class EntryMapper {
-    private final UserService userService;
+
     private final ContestService contestService;
+
     @Autowired
-    public EntryMapper(UserService userService, ContestService contestService) {
-        this.userService = userService;
+    public EntryMapper(ContestService contestService) {
         this.contestService = contestService;
     }
 
@@ -35,12 +33,12 @@ public class EntryMapper {
             entry.setPhotoUrl("http://example.com/photo6.jpg");
             Contest contest = contestService.getContestById(contestId);
             entry.setContest(contest);
-//            contest.getParticipants().add(user);
             return entry;
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException(e.getMessage());
         }
     }
+
     public Entry fromDto(EntryDto entryDto, User user) {
         try {
             Entry entry = new Entry();

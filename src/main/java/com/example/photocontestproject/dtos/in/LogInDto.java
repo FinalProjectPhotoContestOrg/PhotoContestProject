@@ -15,11 +15,6 @@ public class LogInDto {
     public LogInDto() {
     }
 
-    public LogInDto(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     public String getUsername() {
         return username;
     }

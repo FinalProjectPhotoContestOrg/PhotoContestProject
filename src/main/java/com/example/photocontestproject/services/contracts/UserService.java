@@ -7,6 +7,7 @@ import com.example.photocontestproject.models.User;
 import java.util.List;
 
 public interface UserService {
+
     List<User> getAllUsers(String username, String firstname, String lastName);
 
     User getByUsername(String username);
@@ -19,7 +20,7 @@ public interface UserService {
 
     User createUser(User user);
 
-    public void deleteUserById(int id);
+    void deleteUserById(int id);
 
     List<User> getMasters();
 

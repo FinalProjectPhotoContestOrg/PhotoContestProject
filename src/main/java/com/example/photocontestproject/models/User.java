@@ -4,12 +4,8 @@ import com.example.photocontestproject.enums.Ranking;
 import com.example.photocontestproject.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-/*import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;*/
 
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 
@@ -49,9 +45,11 @@ public class User {
 
     @Column(name = "created_at")
     private Timestamp createdAt;
+
     @JsonIgnore
     @OneToMany(mappedBy = "juror", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -176,7 +174,4 @@ public class User {
     public void setParticipantContests(Set<Contest> participantContests) {
         this.participantContests = participantContests;
     }
-    /*public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }*/
 }

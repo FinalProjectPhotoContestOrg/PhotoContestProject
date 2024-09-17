@@ -72,9 +72,9 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating getRatingById(int id, User user) {
-        /*Rating rating = getRatingById(id);
+        Rating rating = getRatingById(id);
         Contest contest = rating.getEntry().getContest();
-        throwIfNotOrganizerOrJuror(user, contest);*/
+        throwIfNotOrganizerOrJuror(user, contest);
         return ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rating"));
     }
 
@@ -131,7 +131,6 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Set<Rating> getRatingsForEntry(int entryId, User user) {
-        //throwIfNotOrganizer(user);
         return ratingRepository.findByEntryId(entryId);
     }
 

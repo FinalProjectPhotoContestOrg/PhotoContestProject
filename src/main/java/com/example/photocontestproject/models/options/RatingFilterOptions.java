@@ -4,14 +4,29 @@ import java.util.Optional;
 
 public class RatingFilterOptions {
     private Optional<Integer> minScore;
+
     private Optional<Integer> maxScore;
+
     private Optional<String> comment;
+
     private Optional<Boolean> categoryMismatch;
+
     private Optional<String> sortBy;
+
     private Optional<String> sortOrder;
+
     private Optional<Integer> page;
+
     private Optional<Integer> size;
-    public RatingFilterOptions(Integer minScore, Integer maxScore, String comment, Boolean categoryMismatch, String sortBy, String sortOrder, Integer page, Integer size) {
+
+    public RatingFilterOptions(Integer minScore,
+                               Integer maxScore,
+                               String comment,
+                               Boolean categoryMismatch,
+                               String sortBy,
+                               String sortOrder,
+                               Integer page,
+                               Integer size) {
         this.minScore = Optional.ofNullable(minScore);
         this.maxScore = Optional.ofNullable(maxScore);
         this.comment = Optional.ofNullable(comment);

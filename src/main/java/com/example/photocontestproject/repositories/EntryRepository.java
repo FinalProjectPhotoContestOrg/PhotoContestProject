@@ -1,6 +1,5 @@
 package com.example.photocontestproject.repositories;
 
-import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

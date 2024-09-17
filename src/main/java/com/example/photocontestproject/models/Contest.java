@@ -5,7 +5,6 @@ import com.example.photocontestproject.enums.ContestType;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,17 +53,20 @@ public class Contest {
     @ManyToMany
     @JoinTable(
             name = "contest_jurors",
-            joinColumns =@JoinColumn(name = "contest_id"),
+            joinColumns = @JoinColumn(name = "contest_id"),
             inverseJoinColumns = @JoinColumn(name = "juror_id")
     )
-    private Set<User> jurors= new HashSet<>();;
+    private Set<User> jurors = new HashSet<>();
+    ;
     @ManyToMany
     @JoinTable(
             name = "contest_participants",
             joinColumns = @JoinColumn(name = "contest_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> participants= new HashSet<>();;
+    private Set<User> participants = new HashSet<>();
+    ;
+
     public Contest() {
     }
 

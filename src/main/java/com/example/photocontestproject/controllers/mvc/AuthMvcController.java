@@ -40,9 +40,6 @@ public class AuthMvcController {
         if (resetRedirectUrl) {
             session.removeAttribute("redirectUrl");
         }
-        /*String theme = "light-theme";
-
-        model.addAttribute("theme", theme);*/
 
         model.addAttribute("sentEmail", session.getAttribute("sentEmail"));
         session.removeAttribute("sentEmail");

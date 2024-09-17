@@ -89,7 +89,7 @@ public class EntryMvcController {
                             HttpSession session,
                             Model model) {
         User user;
-        Entry entry = null;
+        Entry entry;
         try {
             entry = entryService.getEntryById(id);
         } catch (EntityNotFoundException e) {

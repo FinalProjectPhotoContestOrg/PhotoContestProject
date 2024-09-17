@@ -1,6 +1,5 @@
 package com.example.photocontestproject.dtos.in;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 public class RegisterDto extends UserInDto {

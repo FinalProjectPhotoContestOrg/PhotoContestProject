@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public interface EntryService {
+
     Entry createEntry(Entry entry, User user);
 
     Entry getEntryById(int id);

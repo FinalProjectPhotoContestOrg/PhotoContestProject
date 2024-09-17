@@ -132,7 +132,7 @@ public class ContestServiceImpl implements ContestService {
                 break;
             }
         }
-        
+
         if (recentWinners.size() < 3) {
             for (Contest contest : finishedContests) {
                 if (contest.getEntries().size() < 2) {
@@ -229,12 +229,6 @@ public class ContestServiceImpl implements ContestService {
         }
         return ranks;
     }
-    /*@Override
-    public Entry createEntryForContest(Entry entry, User user*//*, Contest contest*//*) {
-        throwIfUserIsOrganizer(user);
-        //entry.setContest(contest);
-        return entryRepository.save(entry);
-    }*/
 
     @Override
     public void deleteContest(int id, User user) {

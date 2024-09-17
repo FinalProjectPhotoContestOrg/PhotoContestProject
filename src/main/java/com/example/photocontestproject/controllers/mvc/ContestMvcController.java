@@ -59,7 +59,9 @@ public class ContestMvcController {
     }
 
     @GetMapping("/{contestId}")
-    public String showSingleContest(@PathVariable Integer contestId, Model model, HttpSession session) {
+    public String showSingleContest(@PathVariable Integer contestId,
+                                    Model model,
+                                    HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
@@ -166,7 +168,7 @@ public class ContestMvcController {
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("isOrganizer", e.getMessage());
-            return "ErrorView"; // Ensure you have an ErrorView.html template for this.
+            return "redirect:/";
         } catch (IOException e) {
             return "redirect:/contests/" + contestId;
         }

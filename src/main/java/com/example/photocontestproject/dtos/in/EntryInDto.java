@@ -1,9 +1,10 @@
 package com.example.photocontestproject.dtos.in;
 
 public class EntryInDto {
-    private String title;
-    private String story;
 
+    private String title;
+
+    private String story;
 
     public EntryInDto() {
     }

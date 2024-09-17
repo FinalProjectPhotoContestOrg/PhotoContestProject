@@ -3,7 +3,6 @@ package com.example.photocontestproject.dtos.in;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 public class RatingDto {
     @Min(value = 1, message = "Score must be at least 1")

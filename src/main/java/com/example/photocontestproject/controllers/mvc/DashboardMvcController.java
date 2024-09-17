@@ -25,13 +25,14 @@ public class DashboardMvcController {
     private final ContestService contestService;
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
-    private final EntryService entryService;
 
-    public DashboardMvcController(ContestService contestService, UserService userService, AuthenticationHelper authenticationHelper, EntryService entryService) {
+
+    public DashboardMvcController(ContestService contestService,
+                                  UserService userService,
+                                  AuthenticationHelper authenticationHelper) {
         this.contestService = contestService;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
-        this.entryService = entryService;
     }
 
     @GetMapping

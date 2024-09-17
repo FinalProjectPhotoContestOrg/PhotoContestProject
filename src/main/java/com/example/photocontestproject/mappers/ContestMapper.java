@@ -9,8 +9,6 @@ import com.example.photocontestproject.exceptions.AuthorizationException;
 import com.example.photocontestproject.exceptions.EntityNotFoundException;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.User;
-import com.example.photocontestproject.services.contracts.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -20,10 +18,8 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 public class ContestMapper {
-    private final UserService userService;
-    @Autowired
-    public ContestMapper(UserService userService) {
-        this.userService = userService;
+
+    public ContestMapper() {
     }
 
     public Contest fromDto(ContestInDto contestInDto, User user) {
@@ -46,6 +42,7 @@ public class ContestMapper {
 
         return contest;
     }
+
     public Contest fromDto(ContestDto contestInDto) {
         Contest contest = new Contest();
         contest.setTitle(contestInDto.getTitle());
@@ -58,6 +55,7 @@ public class ContestMapper {
         contest.setCreatedAt(Timestamp.from(Instant.now()));
         return contest;
     }
+
     private Timestamp parseDateTimeToTimestamp(String dateTime) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");

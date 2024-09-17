@@ -5,13 +5,13 @@ import com.example.photocontestproject.enums.ContestType;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public interface ContestService {
+
     List<Contest> getAllContests(String title, String category, ContestType type, ContestPhase phase);
 
     Contest getContestById(int id);
