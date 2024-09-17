@@ -45,6 +45,10 @@
                         <strong>Category:</strong> Landscapes
                     </p>
 
+                    <p class="mb-2 text-color" th:text="'Uploaded at: ' + ${#dates.format(entry.uploadedAt, 'yyyy-MM-dd')}">
+                        <strong>Uploaded at:</strong> Landscapes
+                    </p>
+
                     <p class="text-color" th:text="'Photographer: ' + ${entry.participant.firstName} + ' ' + ${entry.participant.lastName}">
                         <strong>Submitted by:</strong> Photographer's Name
                     </p>
@@ -195,8 +199,6 @@
         </div>
     </div>
 </div>
-
-<!--<div style="height: 280px" th:unless="${isOrganizer || isJurorToContest} and ${entry.contest.getContestPhase().toString() != 'Finished' } and ${!alreadyRated}"></div>-->
 
 <!-- Footer -->
 <footer th:replace="~{ForumForms.html :: footer}"></footer>

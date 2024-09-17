@@ -41,7 +41,7 @@ public class HomeMvcController {
         model.addAttribute("userLeaderboard", userLeaderboard);
         model.addAttribute("featuredContest", featuredContest);
         model.addAttribute("recentWinners", recentWinners);
-        model.addAttribute("entryService", entryService); //TODO tova ne znam dali e ok
+        model.addAttribute("entryService", entryService);
 
         return "HomeView";
     }

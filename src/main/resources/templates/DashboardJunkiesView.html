@@ -56,12 +56,12 @@
 
     <!-- Contests Junkie is Participating In -->
     <section class="my-4">
-        <h2 class="text-color">Your Participating Contests</h2>
+        <h2 class="text-color">Contests You Are Participating In</h2>
         <div class="scrolling-container">
             <div class="card" th:each="contest : ${participatingContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark contest-link"
                    data-th-id="${contest.id}">
-                    <div class="mb-3 participating-card">
+                    <div class="mb-3">
                         <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title text-color" th:text="${contest.title}">Landscape Photography Contest</h5>
