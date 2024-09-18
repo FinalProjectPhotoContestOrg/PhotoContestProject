@@ -138,8 +138,14 @@ public class RatingServiceTests {
     @Test
     public void getRatingById_Should_Return_Rating_By_Id() {
         User user = TestHelper.createOrganizerUser();
+        user.setJurorContests(new HashSet<>());
         int id = 1;
         Rating mockRating = new Rating();
+        Contest mockContest = TestHelper.createFinishedContest(1);
+        mockRating.setJuror(user);
+        Entry mockEntry = new Entry();
+        mockRating.setEntry(mockEntry);
+        mockEntry.setContest(mockContest);
         when(ratingRepository.findById(id)).thenReturn(Optional.of(mockRating));
 
         Rating result = ratingService.getRatingById(id, user);
