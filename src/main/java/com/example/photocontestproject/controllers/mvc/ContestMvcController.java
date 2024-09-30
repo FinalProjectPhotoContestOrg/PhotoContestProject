@@ -13,6 +13,8 @@ import com.example.photocontestproject.mappers.EntryMapper;
 import com.example.photocontestproject.models.Contest;
 import com.example.photocontestproject.models.Entry;
 import com.example.photocontestproject.models.User;
+import com.example.photocontestproject.services.CloudinaryImageService;
+import com.example.photocontestproject.services.CloudinaryImageServiceImpl;
 import com.example.photocontestproject.services.contracts.ContestService;
 import com.example.photocontestproject.services.contracts.EntryService;
 import com.example.photocontestproject.services.contracts.ImageService;
@@ -41,6 +43,7 @@ public class ContestMvcController {
     private final ContestMapper contestMapper;
     private final UserService userService;
     private final ImageService imageService;
+    private final CloudinaryImageService cloudinaryImageService;
 
     public ContestMvcController(ContestService contestService,
                                 EntryService entryService,
@@ -48,7 +51,8 @@ public class ContestMvcController {
                                 AuthenticationHelper authenticationHelper,
                                 ContestMapper contestMapper,
                                 UserService userService,
-                                ImageService imageService) {
+                                ImageService imageService,
+                                CloudinaryImageService cloudinaryImageService) {
         this.contestService = contestService;
         this.entryService = entryService;
         this.entryMapper = entryMapper;
@@ -56,6 +60,7 @@ public class ContestMvcController {
         this.contestMapper = contestMapper;
         this.userService = userService;
         this.imageService = imageService;
+        this.cloudinaryImageService = cloudinaryImageService;
     }
 
     @GetMapping("/{contestId}")
@@ -123,9 +128,11 @@ public class ContestMvcController {
                                         @SessionAttribute("currentUser") User user,
                                         Model model) {
         try {
-            byte[] resizedImage = imageService.resizeImage(photoFile);
-            String base64Image = Base64.getEncoder().encodeToString(resizedImage);
-            contestDto.setCoverPhotoUrl(base64Image);
+//            byte[] resizedImage = imageService.resizeImage(photoFile);
+//            String base64Image = Base64.getEncoder().encodeToString(resizedImage);
+//            contestDto.setCoverPhotoUrl(base64Image);
+            String imageUrl = cloudinaryImageService.uploadImage(photoFile.getBytes());
+            contestDto.setCoverPhotoUrl(imageUrl);
             Contest contest = contestMapper.fromDto(contestDto);
             contest.setOrganizer(user);
             contestService.createContest(contest, user);
@@ -158,9 +165,8 @@ public class ContestMvcController {
                               @SessionAttribute("currentUser") User user,
                               Model model) {
         try {
-            byte[] resizedImage = imageService.resizeImage(photoFile);
-            String base64Image = Base64.getEncoder().encodeToString(resizedImage);
-            entryDto.setPhotoUrl(base64Image);
+            String imageUrl = cloudinaryImageService.uploadImage(photoFile.getBytes());
+            entryDto.setPhotoUrl(imageUrl);
             Entry entry = entryMapper.fromDto(entryDto, user);
             entry.setContest(contestService.getContestById(contestId));
             entryService.createEntry(entry, user);

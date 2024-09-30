@@ -16,7 +16,7 @@
 <!-- Contest Details Header -->
 <div style="background-color: rgb(0, 0, 0, 0.5); z-index: 1000">
     <header class="bg-dark text-white text-center header-bg"
-            th:style="'background-image: url(\'data:image/jpeg;base64,' + ${contest.coverPhotoUrl} + '\')'">
+            th:style="'background-image: url(' + ${contest.coverPhotoUrl} + ')'">
         <div>
             <h1 th:text="${contest.title}">Nature Photography Contest</h1>
         </div>
@@ -133,7 +133,7 @@
                 <div class="col-md-4 card" th:each="entryView : ${entries}">
                     <a th:href="@{/entries/{entryId}(entryId=${entryView.id})}" class="card-link" style="text-decoration: none; color: inherit;">
                         <div class="mb-4">
-                                <img th:src="'data:image/jpeg;base64,' + ${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
+                                <img th:src="${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
                                 <div class="card-body">
                                     <!-- Entry Title -->
                                     <h5 class="card-title text-color" th:text="${entryView.title}">Sample Entry Title</h5>
@@ -176,7 +176,7 @@
                         <a th:href="@{/entries/{entryId}(entryId=${entryView.id})}" class="card-link">
 
                         <div class="mb-4">
-                                <img th:src="'data:image/jpeg;base64,' + ${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
+                                <img th:src="${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
                                 <div class="card-body">
                                     <!-- Entry Title -->
                                     <h5 class="card-title text-color" th:text="${entryView.title}">Sample Entry Title</h5>
@@ -199,7 +199,7 @@
                     <!-- Wrap the card in an anchor tag -->
                     <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link" style="text-decoration: none; color: inherit;">
                         <div class="mb-4">
-                            <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
+                            <img th:src="${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
                             <div class="card-body">
                                 <h5 class="card-title text-color" th:text="${entryRate.title}">Sample Entry Title</h5>
                             </div>
@@ -224,7 +224,7 @@
                     <!-- Wrap the card in an anchor tag -->
                     <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link" style="text-decoration: none; color: inherit;">
                         <div class="mb-4">
-                            <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
+                            <img th:src="${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
                             <div class="card-body">
                                 <h5 class="card-title text-color" th:text="${entryRate.title}">Sample Entry Title</h5>
                             </div>
@@ -244,7 +244,7 @@
                 <div class="col-md-4 card" th:each="entryRate, iterStat : ${sortedEntries}">
                     <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link">
                         <div class="mb-4">
-                            <img th:src="'data:image/jpeg;base64,' + ${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
+                            <img th:src="${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
                             <div class="card-body">
                                 <!-- Rank (1st, 2nd, etc.) -->
                                 <h5 class="rank-place text-color" th:text="${iterStat.index + 1} + ' ' + ${ranks[iterStat.index + 1]}">1st</h5>

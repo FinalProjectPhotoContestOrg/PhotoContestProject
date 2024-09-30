@@ -39,7 +39,7 @@
                     <a th:href="@{/contests/{contestId}(contestId=${featuredContest.id})}" class="no-underline">
                         <h1 class="text-center text-color">Featured Contest</h1>
                         <div th:if="${featuredContest}" class="card mb-4" style="min-height: 370px;  max-height: 370px;">
-                            <img th:src="@{'data:image/jpeg;base64,' + ${featuredContest.coverPhotoUrl}}"
+                            <img th:src="@{${featuredContest.coverPhotoUrl}}"
                                  class="card-img-top" alt="Featured Contest Image">
                             <div class="card-body">
                                 <h5 class="card-title text-color" th:text="'Title: ' + ${featuredContest.title}"></h5>
@@ -134,7 +134,7 @@
                                                    class="text-decoration-none d-flex align-items-center w-100"
                                                    data-bs-toggle="tooltip" data-bs-placement="top"
                                                    title="View Contest">
-                                                    <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}"
+                                                    <img th:src="${contest.coverPhotoUrl}"
                                                          alt="Photo" class="img-thumbnail me-3"
                                                          style="width: 85px; height: 85px;">
                                                     <div class="d-flex flex-column">
@@ -154,7 +154,7 @@
                                                 <a th:href="@{'/entries/' + ${entry.id}}"
                                                    class="text-decoration-none d-flex align-items-center w-100"
                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="View Entry">
-                                                    <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}"
+                                                    <img th:src="${entry.photoUrl}"
                                                          alt="Photo" class="img-thumbnail me-3"
                                                          style="width: 85px; height: 85px;">
                                                     <div class="d-flex flex-column">
@@ -192,7 +192,7 @@
                 <a th:href="@{/entries/{entryId}(entryId=${entry.id})}" class="no-underline">
                     <div class="card h-100">
                         <!-- Image -->
-                        <img th:src="@{'data:image/jpeg;base64,' + ${entry.photoUrl}}" class="card-img-top"
+                        <img th:src="@{${entry.photoUrl}}" class="card-img-top"
                              alt="Photo by [[${entry.participant.username}]]">
                         <!-- Card Body -->
                         <div class="card-body">

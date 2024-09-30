@@ -44,7 +44,7 @@
 </nav>
 
 <div class="card h-100" th:fragment="contest-view">
-    <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" class="card-img-top" alt="Contest 1">
+    <img th:src="${contest.coverPhotoUrl}" class="card-img-top" alt="Contest 1">
     <div class="card-body">
         <h5 class="card-title" th:text="${contest.title}">Nature Photography Contest</h5>
         <p class="card-text" th:text="'Category: ' + ${contest.category}"></p>
@@ -56,7 +56,7 @@
 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark"
    th:fragment="contest-card">
 <div class="">
-    <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+    <img th:src="${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
     <div class="card-body">
         <h5 class="card-title text-color" th:text="${contest.title}">Landscape Photography Contest</h5>
         <p class="card-text text-color" style="margin-bottom: 0">

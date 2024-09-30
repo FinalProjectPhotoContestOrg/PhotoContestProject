@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" th:content="${entry.title}" />
     <meta property="og:description" th:content="${entry.story}" />
-    <meta property="og:image" th:content="'data:image/jpeg;base64,' + ${entry.photoUrl}" />
+    <meta property="og:image" th:content="${entry.photoUrl}" />
     <meta property="og:url" th:content="'https://photo-contest1-135837c18081.herokuapp.com/entries/' + ${entry.id}" />
     <meta property="og:type" content="website" />
     <title>Entry View - Photography Contest</title>
@@ -26,7 +26,7 @@
         <!-- Photo on the left -->
         <div class="col-md-6 text-center">
             <div class="photo-container">
-                <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}" alt="Sample Photo" src="https://wallup.net/wp-content/uploads/2019/09/891675-nature-river-landscape.jpg" class="img-fluid rounded shadow-sm">
+                <img th:src="${entry.photoUrl}" alt="Sample Photo" src="https://wallup.net/wp-content/uploads/2019/09/891675-nature-river-landscape.jpg" class="img-fluid rounded shadow-sm">
             </div>
         </div>
 
@@ -166,7 +166,7 @@
                             <ul class="list-unstyled">
                                 <li th:each="contest : ${entryService.findContestsByUserId(rating.getJuror().getId())}" class="d-flex align-items-center border-bottom mb-2 pb-2">
                                     <a th:href="@{'/contests/' + ${contest.id}}" class="text-decoration-none d-flex align-items-center w-100"  data-bs-toggle="tooltip" data-bs-placement="top" title="View Contest">
-                                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Photo" class="img-thumbnail me-3" style="width: 85px; height: 85px;">
+                                        <img th:src="${contest.coverPhotoUrl}" alt="Photo" class="img-thumbnail me-3" style="width: 85px; height: 85px;">
                                         <div class="d-flex flex-column">
                                             <span th:text="${contest.title}"  class="fw-bold d-block">Contest Name</span>
                                             <span th:text="${contest.category}" class="text-muted d-block">Category</span>
@@ -180,7 +180,7 @@
                             <ul th:each="entry : ${entryService.getAllEntries(null)}" class="list-unstyled">
                                 <li th:if="${entry.getParticipant().getId().equals(rating.getJuror().getId())}" class="d-flex align-items-center border-bottom mb-2 pb-2">
                                     <a th:href="@{'/entries/' + ${entry.id}}" class="text-decoration-none d-flex align-items-center w-100"  data-bs-toggle="tooltip" data-bs-placement="top" title="View Entry">
-                                        <img th:src="'data:image/jpeg;base64,' + ${entry.photoUrl}" alt="Photo" class="img-thumbnail me-3" style="width: 85px; height: 85px;">
+                                        <img th:src="${entry.photoUrl}" alt="Photo" class="img-thumbnail me-3" style="width: 85px; height: 85px;">
                                         <div class="d-flex flex-column">
                                             <span th:text="${entry.title}" class="fw-bold d-block">Photo Title</span>
                                             <span th:text="${entry.story}" class="text-muted d-block"></span>

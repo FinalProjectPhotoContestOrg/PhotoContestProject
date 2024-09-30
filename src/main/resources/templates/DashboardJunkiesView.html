@@ -34,7 +34,7 @@
                    class="text-decoration-none text-dark contest-link"
                    data-th-id="${contest.id}">
                     <div class=" mb-3">
-                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+                        <img th:src="${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title text-color" th:text="${contest.title}">Nature Photography Contest</h5>
                             <p class="card-text text-color">
@@ -62,7 +62,7 @@
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark contest-link"
                    data-th-id="${contest.id}">
                     <div class="mb-3">
-                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+                        <img th:src="${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title text-color" th:text="${contest.title}">Landscape Photography Contest</h5>
                             <p class="card-text text-color">
@@ -85,7 +85,7 @@
             <div class="card" th:each="contest : ${jurorContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
                     <div class="mb-3">
-                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+                        <img th:src="${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title text-color" th:text="${contest.title}">Contest Title</h5>
                             <p class="card-text text-color">
@@ -112,7 +112,7 @@
             <div class="card" th:each="contest : ${finishedContests}">
                 <a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark">
                     <div class="mb-3">
-                        <img th:src="'data:image/jpeg;base64,' + ${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
+                        <img th:src="${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title text-color" th:text="${contest.title}">Portrait Photography Contest</h5>
                             <p class="card-text text-color">
