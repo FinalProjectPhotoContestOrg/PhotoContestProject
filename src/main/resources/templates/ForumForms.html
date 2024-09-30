@@ -53,8 +53,7 @@
 </div>
 
 
-<a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark"
-   th:fragment="contest-card">
+<a th:href="@{/contests/{contestId}(contestId=${contest.id})}" class="text-decoration-none text-dark" th:fragment="contest-card">
 <div class="">
     <img th:src="${contest.coverPhotoUrl}" alt="Contest Photo" class="card-img-top">
     <div class="card-body">
@@ -71,6 +70,26 @@
         </p>
     </div>
 </div>
+</a>
+
+<a th:href="@{/entries/{entryId}(entryId=${entry.id})}" class="no-underline" th:fragment="entryView">
+    <div class="h-100">
+        <!-- Image -->
+        <img th:src="@{${entry.photoUrl}}" class="card-img-top"
+             alt="Photo by [[${entry.participant.username}]]">
+        <!-- Card Body -->
+        <div class="card-body">
+            <!-- Title -->
+            <h5 class="card-title text-color" th:text="${entry.title}"></h5>
+            <!-- Story -->
+            <p class="card-text text-color" th:text="${entry.story}"></p>
+        </div>
+        <!-- Card Footer -->
+        <div class="card-footer text-muted text-color">
+            Uploaded by <span th:text="${entry.participant.username}"></span> on
+            <span th:text="${#dates.format(entry.uploadedAt, 'yyyy-MM-dd')}"></span>
+        </div>
+    </div>
 </a>
 
 <footer th:fragment="footer" class="footer bg-dark text-white text-center py-3">

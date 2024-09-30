@@ -130,16 +130,10 @@
         <h2 class="text-center section-title text-color">All Entries in contest:</h2>
         <div class="row">
             <div class="scrolling-container">
-                <div class="col-md-4 card" th:each="entryView : ${entries}">
-                    <a th:href="@{/entries/{entryId}(entryId=${entryView.id})}" class="card-link" style="text-decoration: none; color: inherit;">
-                        <div class="mb-4">
-                                <img th:src="${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
-                                <div class="card-body">
-                                    <!-- Entry Title -->
-                                    <h5 class="card-title text-color" th:text="${entryView.title}">Sample Entry Title</h5>
-                                </div>
-                        </div>
-                    </a>
+                <div class="col-md-4 card" th:each="entry : ${entries}">
+
+                    <a th:replace="~{ForumForms :: entryView}"></a>
+
                 </div>
             </div>
         </div>
@@ -172,17 +166,10 @@
         <h2 class="text-center section-title text-color">All Entries in contest:</h2>
         <div class="row">
             <div class="scrolling-container">
-                    <div class="col-md-4 card" style="cursor: default" th:each="entryView : ${entries}">
-                        <a th:href="@{/entries/{entryId}(entryId=${entryView.id})}" class="card-link">
+                    <div class="col-md-4 card" style="cursor: default" th:each="entry : ${entries}">
 
-                        <div class="mb-4">
-                                <img th:src="${entryView.photoUrl}" alt="Entry Photo" class="card-img-top">
-                                <div class="card-body">
-                                    <!-- Entry Title -->
-                                    <h5 class="card-title text-color" th:text="${entryView.title}">Sample Entry Title</h5>
-                                </div>
-                            </div>
-                        </a>
+                        <a th:replace="~{ForumForms :: entryView}"></a>
+
                     </div>
             </div>
         </div>
@@ -193,18 +180,12 @@
     <div class="container">
         <h2 class="text-center section-title text-color">Contest Entries</h2>
         <div class="row">
-            <!-- Display each entry in a card layout -->
+
             <div class="scrolling-container">
-                <div class="col-md-4 card" th:each="entryRate : ${entries}">
-                    <!-- Wrap the card in an anchor tag -->
-                    <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link" style="text-decoration: none; color: inherit;">
-                        <div class="mb-4">
-                            <img th:src="${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title text-color" th:text="${entryRate.title}">Sample Entry Title</h5>
-                            </div>
-                        </div>
-                    </a>
+                <div class="col-md-4 card" th:each="entry : ${entries}">
+
+                    <a th:replace="~{ForumForms :: entryView}"></a>
+
                 </div>
             </div>
         </div>
@@ -220,16 +201,10 @@
                 <p class="lead text-color">The results will be announced after the countdown ends.</p>
             </div>
             <div class="scrolling-container">
-                <div class="col-md-4 card" th:each="entryRate : ${entries}">
-                    <!-- Wrap the card in an anchor tag -->
-                    <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link" style="text-decoration: none; color: inherit;">
-                        <div class="mb-4">
-                            <img th:src="${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title text-color" th:text="${entryRate.title}">Sample Entry Title</h5>
-                            </div>
-                        </div>
-                    </a>
+                <div class="col-md-4 card" th:each="entry : ${entries}">
+
+                    <a th:replace="~{ForumForms :: entryView}"></a>
+
                 </div>
             </div>
         </div>
