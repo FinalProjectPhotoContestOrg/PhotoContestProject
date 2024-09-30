@@ -80,6 +80,7 @@
         <!-- Card Body -->
         <div class="card-body">
             <!-- Title -->
+            <h5 class="rank-place text-color" th:if="${isFinished}" th:text="${iterStat.index + 1} + ${ranks[iterStat.index + 1]}">1st</h5>
             <h5 class="card-title text-color" th:text="${entry.title}"></h5>
             <!-- Story -->
             <p class="card-text text-color" th:text="${entry.story}"></p>

@@ -216,18 +216,8 @@
         <div class="row">
             <!-- Sorted by points, with ranks displayed -->
             <div class="scrolling-container">
-                <div class="col-md-4 card" th:each="entryRate, iterStat : ${sortedEntries}">
-                    <a th:href="@{/entries/{entryId}(entryId=${entryRate.id})}" class="card-link">
-                        <div class="mb-4">
-                            <img th:src="${entryRate.photoUrl}" alt="Entry Photo" class="card-img-top">
-                            <div class="card-body">
-                                <!-- Rank (1st, 2nd, etc.) -->
-                                <h5 class="rank-place text-color" th:text="${iterStat.index + 1} + ' ' + ${ranks[iterStat.index + 1]}">1st</h5>
-                                <!-- Entry Title -->
-                                <h5 class="card-title text-color" th:text="${entryRate.title}">Sample Entry Title</h5>
-                            </div>
-                        </div>
-                    </a>
+                <div class="col-md-4 card" th:each="entry, iterStat : ${sortedEntries}">
+                    <a th:replace="~{ForumForms :: entryView}"></a>
                 </div>
             </div>
         </div>
